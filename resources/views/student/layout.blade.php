@@ -168,7 +168,7 @@
 
     {{-- CONTEÚDO --}}
     <main class="flex-1 p-8">
-        @if(session('success'))
+        @if(session('success') && empty($hideSuccess))
             <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
                 {{ session('success') }}
             </div>

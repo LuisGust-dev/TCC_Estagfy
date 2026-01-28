@@ -10,16 +10,26 @@ use Illuminate\Support\Facades\Auth;
 
 class JobBrowseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->string('q')->trim();
+
         $jobs = Job::withCount('applications')
             ->whereHas('company.user', function ($query) {
                 $query->where('active', true);
             })
+            ->when($search->isNotEmpty(), function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', '%' . $search . '%')
+                        ->orWhereHas('company.user', function ($q2) use ($search) {
+                            $q2->where('name', 'like', '%' . $search . '%');
+                        });
+                });
+            })
             ->latest()
             ->get();
 
-        return view('student.jobs.index', compact('jobs'));
+        return view('student.jobs.index', compact('jobs', 'search'));
     }
 
     public function apply(Job $job)

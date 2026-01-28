@@ -1,8 +1,28 @@
 @extends('student.layout')
+@php($hideSuccess = true)
 
 @section('title', 'Vagas de Estágio')
 
 @section('content')
+
+@if(session('success'))
+    <style>
+        @keyframes toast-in {
+            0% { transform: translateY(-12px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes toast-out {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-12px); opacity: 0; }
+        }
+        .toast-success {
+            animation: toast-in 320ms ease-out, toast-out 320ms ease-in 3.2s forwards;
+        }
+    </style>
+    <div class="toast-success mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700 shadow-sm">
+        ✅ {{ session('success') }}
+    </div>
+@endif
 
 {{-- HEADER --}}
 <h1 class="text-2xl font-bold mb-1">Vagas de Estágio</h1>
@@ -12,13 +32,15 @@
 
 {{-- BUSCA + FILTROS (VISUAL) --}}
 <div class="bg-white border rounded-xl p-4 mb-8">
-    <div class="flex flex-wrap gap-3 items-center">
+    <form method="GET" action="{{ route('student.jobs.index') }}" class="flex flex-wrap gap-3 items-center">
 
         {{-- BUSCA --}}
         <div class="flex items-center gap-2 flex-1 border rounded-lg px-3 py-2">
             🔍
             <input
                 type="text"
+                name="q"
+                value="{{ $search }}"
                 placeholder="Buscar por cargo ou empresa..."
                 class="w-full focus:outline-none text-sm"
             >
@@ -45,7 +67,7 @@
             Design
         </button>
 
-    </div>
+    </form>
 </div>
 
 {{-- LISTA DE VAGAS --}}

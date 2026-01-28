@@ -69,7 +69,12 @@
             </div>
 
             {{-- MENSAGENS --}}
-            <div class="flex-1 overflow-y-auto p-6 space-y-3">
+            <div
+                id="company-chat-messages"
+                data-last-id="{{ $messages->last()->id ?? 0 }}"
+                data-current-user-id="{{ auth()->id() }}"
+                class="flex-1 overflow-y-auto p-6 space-y-3"
+            >
 
                 @foreach($messages as $message)
                     <div class="flex {{ $message->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
@@ -113,5 +118,72 @@
 
     </div>
 </div>
+
+@if($student)
+    <script>
+        // --- Configuração básica do polling (empresa) ---
+        const companyChatMessages = document.getElementById('company-chat-messages');
+        const currentCompanyUserId = Number(companyChatMessages?.dataset.currentUserId || 0);
+        let companyLastId = Number(companyChatMessages?.dataset.lastId || 0);
+
+        // --- Utilitário: cria o balão de mensagem ---
+        function createCompanyMessageBubble(message) {
+            const isMe = message.sender_id === currentCompanyUserId;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${isMe ? 'justify-end' : 'justify-start'}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = [
+                'max-w-[75%] px-4 py-2 rounded-2xl text-sm leading-relaxed shadow-sm',
+                isMe ? 'bg-emerald-600 text-white rounded-br-md' : 'bg-white text-gray-800 rounded-bl-md'
+            ].join(' ');
+
+            // Texto da mensagem (seguro contra HTML)
+            const text = document.createElement('div');
+            text.textContent = message.message;
+
+            // Horário da mensagem
+            const time = document.createElement('div');
+            time.className = 'text-[11px] opacity-70 mt-1 text-right';
+            time.textContent = message.time;
+
+            bubble.appendChild(text);
+            bubble.appendChild(time);
+            wrapper.appendChild(bubble);
+
+            return wrapper;
+        }
+
+        // --- Polling: busca novas mensagens e adiciona no final ---
+        async function pollCompanyMessages() {
+            try {
+                const response = await fetch(
+                    `{{ route('company.chat.poll', [$job->id, $student->id]) }}?last_id=${companyLastId}`,
+                    { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+                );
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                if (!data.messages || data.messages.length === 0) return;
+
+                data.messages.forEach((msg) => {
+                    companyChatMessages.appendChild(createCompanyMessageBubble(msg));
+                    companyLastId = Math.max(companyLastId, msg.id);
+                });
+
+                // Mantém o scroll no final
+                companyChatMessages.scrollTop = companyChatMessages.scrollHeight;
+            } catch (error) {
+                // Silencioso para não quebrar a tela caso o fetch falhe
+                console.warn('Falha no polling do chat (empresa).', error);
+            }
+        }
+
+        // --- Dispara o polling a cada 4 segundos ---
+        setInterval(pollCompanyMessages, 4000);
+    </script>
+@endif
 
 @endsection

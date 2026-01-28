@@ -7,6 +7,7 @@ use App\Models\Message;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class CompanyChatController extends Controller
 {
@@ -81,5 +82,34 @@ class CompanyChatController extends Controller
         ]);
 
         return back();
+    }
+
+    /**
+     * 🔄 Polling para buscar novas mensagens (empresa)
+     */
+    public function poll(Request $request, $jobId, $studentId)
+    {
+        $companyId = Auth::user()->company->id;
+        $lastId = (int) $request->query('last_id', 0);
+
+        $messages = Message::where('job_id', $jobId)
+            ->where('student_id', $studentId)
+            ->where('company_id', $companyId)
+            ->when($lastId > 0, function ($query) use ($lastId) {
+                $query->where('id', '>', $lastId);
+            })
+            ->orderBy('created_at')
+            ->get();
+
+        return response()->json([
+            'messages' => $messages->map(function ($message) {
+                return [
+                    'id' => $message->id,
+                    'sender_id' => $message->sender_id,
+                    'message' => $message->message,
+                    'time' => $message->created_at->format('H:i'),
+                ];
+            }),
+        ]);
     }
 }

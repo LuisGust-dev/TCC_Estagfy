@@ -258,6 +258,8 @@ Route::get('/chat/{job}/{student}', [CompanyChatController::class, 'show'])
 
 Route::post('/chat/{job}/{student}', [CompanyChatController::class, 'send'])
     ->name('chat.send');
+Route::get('/chat/{job}/{student}/poll', [CompanyChatController::class, 'poll'])
+    ->name('chat.poll');
 
 
     });
@@ -284,6 +286,8 @@ Route::middleware(['auth', 'active', 'student'])
 
         Route::post('/chat/{job}', [StudentChatController::class, 'send'])
             ->name('chat.send');
+        Route::get('/chat/{job}/poll', [StudentChatController::class, 'poll'])
+            ->name('chat.poll');
     });
 
 

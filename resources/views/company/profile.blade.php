@@ -16,8 +16,18 @@
 
         {{-- Header verde --}}
         <div class="bg-gradient-to-r from-emerald-600 to-emerald-400 p-8 text-center text-white">
-            <div class="mx-auto w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
-                🏢
+            <div class="mx-auto w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
+                @if(auth()->user()->photo)
+                    <img
+                        src="{{ asset('storage/' . auth()->user()->photo) }}"
+                        alt="Foto da empresa"
+                        class="w-full h-full object-cover"
+                    >
+                @else
+                    <span class="text-2xl font-semibold">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </span>
+                @endif
             </div>
             <h2 class="text-xl font-semibold">
                 {{ auth()->user()->name }}
@@ -35,12 +45,13 @@
                 <h3 class="text-lg font-semibold text-gray-800">
                     Informações da Empresa
                 </h3>
-
-                <a href="{{ route('company.profile.edit') }}"
-                   class="flex items-center gap-2 border px-4 py-1.5 rounded-lg text-sm hover:bg-gray-50">
-                    ✏️ Editar
-                </a>
             </div>
+
+            @if(session('success'))
+                <div class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             {{-- Formulário --}}
             <form action="{{ route('company.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
@@ -51,7 +62,7 @@
                 <div>
                     <label class="text-sm text-gray-600">Nome da empresa</label>
                     <input type="text" name="name"
-                           value="{{ auth()->user()->name }}"
+                           value="{{ old('name', auth()->user()->name) }}"
                            class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
                 </div>
 
@@ -59,7 +70,7 @@
                 <div>
                     <label class="text-sm text-gray-600">CNPJ</label>
                     <input type="text" name="cnpj"
-                           value="{{ $company->cnpj }}"
+                           value="{{ old('cnpj', $company->cnpj) }}"
                            class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
                 </div>
 
@@ -68,14 +79,14 @@
                     <div>
                         <label class="text-sm text-gray-600">E-mail</label>
                         <input type="email" name="email"
-                               value="{{ auth()->user()->email }}"
+                               value="{{ old('email', auth()->user()->email) }}"
                                class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
                     </div>
 
                     <div>
                         <label class="text-sm text-gray-600">Telefone</label>
                         <input type="text" name="phone"
-                               value="{{ $company->phone }}"
+                               value="{{ old('phone', $company->phone) }}"
                                class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
                     </div>
                 </div>
@@ -84,25 +95,55 @@
                 <div>
                     <label class="text-sm text-gray-600">Descrição</label>
                     <textarea name="description" rows="4"
-                              class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">{{ $company->description }}</textarea>
+                              class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">{{ old('description', $company->description) }}</textarea>
                 </div>
 
                 {{-- Logo --}}
                 <div class="pt-6 border-t">
                     <h4 class="font-semibold text-gray-800 mb-3">
-                        Logo da Empresa
+                        Foto de Perfil da Empresa
                     </h4>
 
                     <div class="border-2 border-dashed rounded-xl p-6 text-center bg-gray-50">
+                        @if(auth()->user()->photo)
+                            <div class="mb-4 flex items-center justify-center">
+                                <img
+                                    src="{{ asset('storage/' . auth()->user()->photo) }}"
+                                    alt="Foto atual da empresa"
+                                    class="h-20 w-20 rounded-2xl object-cover"
+                                >
+                            </div>
+                        @endif
                         <div class="text-3xl mb-2">⬆️</div>
                         <p class="text-gray-500 text-sm mb-3">
                             Arraste uma imagem ou clique para fazer upload
                         </p>
-                        <input type="file" name="logo" class="hidden" id="logo">
-                        <label for="logo"
+                        <input type="file" name="photo" accept="image/png,image/jpeg" class="hidden" id="photo">
+                        <label for="photo"
                                class="inline-block border px-4 py-2 rounded-lg text-sm cursor-pointer hover:bg-gray-100">
-                            Enviar Logo
+                            Enviar Foto
                         </label>
+                    </div>
+                </div>
+
+                {{-- Senha --}}
+                <div class="pt-6 border-t">
+                    <h4 class="font-semibold text-gray-800 mb-3">
+                        Atualizar Senha
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-sm text-gray-600">Nova senha</label>
+                            <input type="password" name="password"
+                                   class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50"
+                                   placeholder="Deixe em branco para manter">
+                        </div>
+                        <div>
+                            <label class="text-sm text-gray-600">Confirmar nova senha</label>
+                            <input type="password" name="password_confirmation"
+                                   class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50"
+                                   placeholder="Repita a nova senha">
+                        </div>
                     </div>
                 </div>
 

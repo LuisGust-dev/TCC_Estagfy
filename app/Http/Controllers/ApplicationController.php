@@ -51,7 +51,7 @@ class ApplicationController extends Controller
              );
          }
 
-         return back()->with('success', 'Candidatura realizada com sucesso!');
+         return back()->with('success', 'Candidatura enviada! Fique no aguardo.');
      }
 
 

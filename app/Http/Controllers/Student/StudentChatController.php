@@ -73,4 +73,32 @@ class StudentChatController extends Controller
 
         return back();
     }
+
+    /**
+     * 🔄 Polling para buscar novas mensagens (aluno)
+     */
+    public function poll(Request $request, Job $job)
+    {
+        $studentId = auth()->id();
+        $lastId = (int) $request->query('last_id', 0);
+
+        $messages = Message::where('job_id', $job->id)
+            ->where('student_id', $studentId)
+            ->when($lastId > 0, function ($query) use ($lastId) {
+                $query->where('id', '>', $lastId);
+            })
+            ->orderBy('created_at')
+            ->get();
+
+        return response()->json([
+            'messages' => $messages->map(function ($message) {
+                return [
+                    'id' => $message->id,
+                    'sender_id' => $message->sender_id,
+                    'message' => $message->message,
+                    'time' => $message->created_at->format('H:i'),
+                ];
+            }),
+        ]);
+    }
 }
