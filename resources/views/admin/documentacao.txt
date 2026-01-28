@@ -1,0 +1,132 @@
+DOCUMENTACAO DO MODULO ADMIN - ESTAGFY
+
+1) OBJETIVO DO MODULO
+O modulo de Admin foi criado para dar controle total do sistema a um usuario
+com papel "admin". Esse usuario nao participa de vagas, mas gerencia usuarios,
+alunos e empresas, garantindo governanca e seguranca da plataforma.
+
+2) CAMPO DE STATUS (ACTIVE) NO USUARIO
+Para permitir ativar/desativar contas sem apagar dados:
+- Foi criado o campo booleano "active" na tabela users.
+  Arquivo: database/migrations/2026_01_12_000001_add_active_to_users_table.php
+  Comportamento: por padrao active = true.
+- No modelo User, o campo foi adicionado aos fillables e casts.
+  Arquivo: app/Models/User.php
+  Assim o Laravel trata active como booleano e permite update.
+
+3) BLOQUEIO DE LOGIN PARA USUARIOS INATIVOS
+Regra: usuario com active = false nao consegue acessar o sistema.
+- Foi adicionada validacao no fluxo de login:
+  Arquivo: app/Http/Requests/Auth/LoginRequest.php
+  Se o usuario for inativo, ele e deslogado e recebe mensagem de erro.
+
+4) BLOQUEIO DE SESSAO PARA USUARIO INATIVO
+Regra: se o admin desativar um usuario ja logado, ele e forçado a sair.
+- Criado middleware ActiveUserMiddleware.
+  Arquivo: app/Http/Middleware/ActiveUserMiddleware.php
+  Esse middleware verifica o status active em toda requisicao e, se estiver
+  falso, faz logout e redireciona para login com mensagem.
+- Registrado no Kernel:
+  Arquivo: app/Http/Kernel.php (alias "active")
+- Aplicado nas rotas de student, company e admin:
+  Arquivo: routes/web.php
+
+5) REGRA: EMPRESA DESATIVADA -> VAGAS INVISIVEIS
+Regra: se a empresa esta inativa, as vagas dela nao aparecem para alunos.
+- Filtro aplicado na listagem de vagas do aluno:
+  Arquivo: app/Http/Controllers/Student/JobBrowseController.php
+  Uso de whereHas('company.user', active = true)
+- Bloqueio na pagina de detalhes da vaga:
+  Arquivo: app/Http/Controllers/Student/JobBrowseController.php
+  Se a empresa estiver inativa, retorna 404.
+- Bloqueio na candidatura:
+  Arquivo: app/Http/Controllers/ApplicationController.php
+  Se a empresa estiver inativa, retorna 404.
+- Ajuste no dashboard do aluno para contar e listar apenas vagas de empresas
+  ativas:
+  Arquivo: app/Http/Controllers/Student/DashboardController.php
+
+6) MODULO ADMIN - ROTAS
+Todas as rotas do admin estao protegidas por:
+  auth + active + admin
+Assim so um admin ativo acessa o painel.
+Arquivo: routes/web.php
+Rotas principais:
+- /admin/dashboard
+- /admin/users
+- /admin/companies
+- /admin/students
+- /admin/users/{user}/toggle (ativa/desativa)
+
+7) CONTROLLERS DO ADMIN
+Foram criados controllers especificos:
+- DashboardController
+  Arquivo: app/Http/Controllers/Admin/DashboardController.php
+  Responsavel por calcular os cards da tela inicial:
+  total de usuarios, alunos, empresas, vagas e candidaturas.
+
+- UserController
+  Arquivo: app/Http/Controllers/Admin/UserController.php
+  Lista usuarios com filtro por role (student, company, admin).
+  Permite ativar/desativar usuarios.
+  Regra extra: o admin nao pode desativar a propria conta.
+
+- CompanyController
+  Arquivo: app/Http/Controllers/Admin/CompanyController.php
+  Lista empresas com:
+  nome, cnpj, email, telefone, descricao, status, vagas e candidatos.
+  Contagens:
+  jobs_count (vagas publicadas)
+  applications_count (candidatos recebidos)
+
+- StudentController
+  Arquivo: app/Http/Controllers/Admin/StudentController.php
+  Lista alunos com:
+  nome, curso, periodo, email, curriculo, total de candidaturas e status.
+
+8) RELACOES NECESSARIAS
+Para contar candidatos por empresa foi criada relacao:
+- Company::applications()
+  Arquivo: app/Models/Company.php
+  Usa hasManyThrough para contar candidaturas ligadas as vagas da empresa.
+
+9) TELAS (VIEWS) DO ADMIN
+Foi criado um layout proprio e as telas principais:
+- Layout base:
+  Arquivo: resources/views/admin/layout.blade.php
+  Contem menu superior com links do admin e botao de sair.
+  Exibe mensagens de sucesso/erro.
+
+- Dashboard:
+  Arquivo: resources/views/admin/dashboard.blade.php
+  Cards de resumo com os totais do sistema.
+
+- Usuarios:
+  Arquivo: resources/views/admin/users/index.blade.php
+  Tabela com nome, email, perfil, status, data de cadastro e acao.
+  Filtro por perfil (todos, aluno, empresa, admin).
+  Botao para ativar/desativar.
+
+- Empresas:
+  Arquivo: resources/views/admin/companies/index.blade.php
+  Tabela com dados da empresa, descricao, vagas, candidatos e status.
+  Botao para ativar/desativar (via usuario da empresa).
+
+- Alunos:
+  Arquivo: resources/views/admin/students/index.blade.php
+  Tabela com dados do aluno, curriculo, candidaturas e status.
+  Botao para ativar/desativar.
+
+10) COMO CRIAR UM ADMIN (EMAIL E SENHA PROPRIOS)
+Existem duas formas:
+1) Criar diretamente no banco (users):
+   role = 'admin'
+   active = true
+2) Criar via seeder (recomendado para padronizar).
+Se quiser, posso adicionar um seeder pronto.
+
+11) OBSERVACOES IMPORTANTES
+- Usuarios nunca sao apagados, apenas desativados.
+- Desativar empresa oculta suas vagas dos alunos.
+- Desativar aluno impede login e candidatura.
+- Admin tambem pode ser desativado por outro admin (exceto a propria conta).
