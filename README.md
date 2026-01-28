@@ -3,7 +3,10 @@
 > Uma plataforma web para conectar estudantes, empresas e instituições, centralizando todo o ciclo do estágio em um só lugar.
 
 <p align="center">
-  <img src="public/logo.png" alt="Estagfy" width="140" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" width="48" height="48" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="48" height="48" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="48" height="48" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="48" height="48" />
 </p>
 
 <p align="center">
@@ -36,6 +39,12 @@ O Estagfy propõe um fluxo claro e auditável, do cadastro da vaga até a finali
 - Fluxo de aprovação do estágio
 - Acompanhamento de etapas e prazos
 - Painel por perfil (estudante, empresa, coordenação)
+
+## Linguagens usadas
+- PHP
+- JavaScript
+- HTML
+- CSS
 
 ## Stack e tecnologias
 - **Backend:** Laravel (PHP)
@@ -95,10 +104,10 @@ public/         # Arquivos públicos
 **Objetivo:** Propor e implementar uma plataforma que reduza burocracia e aumente transparência no processo de estágio.
 
 ## Autoria
-- **Autor(a):** [Seu nome]
-- **Orientador(a):** [Nome do orientador]
-- **Instituição:** [Nome da instituição]
-- **Curso:** [Nome do curso]
+- **Autor(a):** Luis Gustavo Cardoso da Silva
+- **Orientador(a):** Professor Mestre George Mendes Dourado
+- **Instituição:** Instituto Federal Baiano
+- **Curso:** Análise e Desenvolvimento de Sistemas
 - **Ano:** 2026
 
 ---
