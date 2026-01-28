@@ -50,9 +50,8 @@ O Estagfy propõe um fluxo claro e auditável, do cadastro da vaga até a finali
 - **Backend:** Laravel (PHP)
 - **Frontend:** Blade + Tailwind CSS
 - **Build:** Vite
-- **Banco de dados:** MySQL (ou compatível)
+- **Banco de dados:** MySQL 
 
-> Ajuste esta seção conforme o stack real do seu projeto.
 
 ## Como rodar localmente
 > Pré‑requisitos: PHP, Composer, Node.js e um banco de dados.
@@ -92,14 +91,12 @@ public/         # Arquivos públicos
 - Dashboard com métricas
 
 ## Demonstração
-> Adicione aqui prints, vídeos ou GIFs do sistema.
-
 ```
 📸 /public/demo
 ```
 
 ## Sobre o TCC
-**Tema:** Gestão de estágios com fluxo digital e rastreável
+**Tema:** 
 
 **Objetivo:** Propor e implementar uma plataforma que reduza burocracia e aumente transparência no processo de estágio.
 
