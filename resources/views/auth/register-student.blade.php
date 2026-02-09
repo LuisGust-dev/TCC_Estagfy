@@ -77,10 +77,24 @@ rgb(74, 71, 228)
                         <label class="block text-sm font-medium text-gray-700">
                             Nome completo
                         </label>
-                        <input type="text" name="name" value="{{ old('name') }}"
+                        <input type="text" name="name" value="{{ old('name') }}" required maxlength="255"
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="Seu nome completo">
                         @error('name')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- CPF --}}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            CPF
+                        </label>
+                        <input type="text" name="cpf" value="{{ old('cpf') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="11"
+                               data-only-digits data-maxlen="11"
+                               class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                               placeholder="00000000000">
+                        @error('cpf')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
@@ -90,7 +104,7 @@ rgb(74, 71, 228)
                         <label class="block text-sm font-medium text-gray-700">
                             E-mail
                         </label>
-                        <input type="email" name="email" value="{{ old('email') }}"
+                        <input type="email" name="email" value="{{ old('email') }}" required maxlength="255"
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="seu@email.com">
                         @error('email')
@@ -103,7 +117,7 @@ rgb(74, 71, 228)
                         <label class="block text-sm font-medium text-gray-700">
                             Senha
                         </label>
-                        <input type="password" name="password"
+                        <input type="password" name="password" required minlength="6" maxlength="255"
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="••••••••">
                         @error('password')
@@ -117,7 +131,7 @@ rgb(74, 71, 228)
                             <label class="block text-sm font-medium text-gray-700">
                                 Curso
                             </label>
-                            <input type="text" name="course" value="{{ old('course') }}"
+                            <input type="text" name="course" value="{{ old('course') }}" required maxlength="255"
                                    class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                    placeholder="Ex: Eng. Software">
                         </div>
@@ -126,7 +140,7 @@ rgb(74, 71, 228)
                             <label class="block text-sm font-medium text-gray-700">
                                 Período
                             </label>
-                            <input type="text" name="period" value="{{ old('period') }}"
+                            <input type="text" name="period" value="{{ old('period') }}" required maxlength="50"
                                    class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                    placeholder="Ex: 6º período">
                         </div>
@@ -217,4 +231,17 @@ rgb(74, 71, 228)
 </div>
 
 </body>
+<script>
+    (function () {
+        const inputs = document.querySelectorAll('input[data-only-digits]');
+        inputs.forEach((input) => {
+            const maxLen = Number(input.getAttribute('data-maxlen')) || null;
+            input.addEventListener('input', () => {
+                let v = input.value.replace(/\D/g, '');
+                if (maxLen) v = v.slice(0, maxLen);
+                if (input.value !== v) input.value = v;
+            });
+        });
+    })();
+</script>
 </html>

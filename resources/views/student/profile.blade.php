@@ -73,6 +73,12 @@
                     </div>
                 </div>
 
+                <div>
+                    <label class="text-sm text-gray-600">CPF</label>
+                    <input type="text" name="cpf" value="{{ old('cpf', $student?->cpf) }}"
+                           class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="text-sm text-gray-600">Curso</label>

@@ -182,7 +182,7 @@
         }
 
         // --- Dispara o polling a cada 4 segundos ---
-        setInterval(pollCompanyMessages, 4000);
+        setInterval(pollCompanyMessages, 2000);
     </script>
 @endif
 

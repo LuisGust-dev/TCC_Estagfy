@@ -36,6 +36,12 @@
         <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-blue-200/40 blur-3xl"></div>
         <div class="absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-indigo-200/40 blur-3xl"></div>
 
+        <a href="{{ url('/') }}"
+           class="absolute top-6 left-6 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm backdrop-blur transition hover:bg-white">
+            <span class="text-base leading-none">←</span>
+            Voltar
+        </a>
+
         <div class="w-full max-w-5xl text-center">
 
 

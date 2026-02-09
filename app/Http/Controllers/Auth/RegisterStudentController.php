@@ -13,10 +13,15 @@ class RegisterStudentController extends Controller
 {
     public function store(Request $request)
     {
+        $request->merge([
+            'cpf' => preg_replace('/\\D/', '', (string) $request->cpf),
+        ]);
+
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|string|min:6|max:255',
+            'cpf'      => 'required|digits:11|unique:students,cpf',
             'course'   => 'required|string|max:255',
             'period'   => 'required|string|max:50',
             'resume'   => 'required|file|mimes:pdf,doc,docx|max:2048',
@@ -46,6 +51,7 @@ if ($request->hasFile('photo')) {
         // cria aluno
         Student::create([
             'user_id' => $user->id,
+            'cpf'     => $request->cpf,
             'course'  => $request->course,
             'period'  => $request->period,
             'resume'  => $resumePath,

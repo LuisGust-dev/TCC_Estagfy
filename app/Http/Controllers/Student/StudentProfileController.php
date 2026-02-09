@@ -20,6 +20,11 @@ class StudentProfileController extends Controller
     public function update(Request $request)
     {
         $user = Auth::user();
+        $student = $user->student;
+
+        $request->merge([
+            'cpf' => preg_replace('/\\D/', '', (string) $request->cpf),
+        ]);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -28,6 +33,11 @@ class StudentProfileController extends Controller
                 'email',
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
+            ],
+            'cpf' => [
+                'required',
+                'digits:11',
+                Rule::unique('students', 'cpf')->ignore($student?->id),
             ],
             'course' => 'nullable|string|max:255',
             'period' => 'nullable|string|max:50',
@@ -40,6 +50,7 @@ class StudentProfileController extends Controller
         ]);
 
         $studentData = [
+            'cpf' => $validated['cpf'],
             'course' => $validated['course'] ?? null,
             'period' => $validated['period'] ?? null,
         ];
@@ -48,7 +59,6 @@ class StudentProfileController extends Controller
             $studentData['resume'] = $request->file('resume')->store('resumes', 'public');
         }
 
-        $student = $user->student;
         if ($student) {
             $student->update($studentData);
         } else {

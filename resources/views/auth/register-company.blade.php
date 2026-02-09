@@ -18,12 +18,12 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-50 text-gray-900">
+<body class="h-screen overflow-hidden bg-slate-50 text-gray-900">
 
-<div class="min-h-screen lg:h-screen lg:overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+<div class="h-screen overflow-hidden grid grid-cols-1 lg:grid-cols-2">
     {{-- LADO ESQUERDO --}}
     <div class="relative flex items-center justify-center px-6 py-10 lg:py-12 overflow-hidden">
-        <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-blue-200/40 blur-3xl"></div>
+    <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-blue-200/40 blur-3xl"></div>
         <div class="absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-emerald-200/40 blur-3xl"></div>
 
         <div class="w-full max-w-2xl">
@@ -35,7 +35,7 @@
         </a>
 
         {{-- logo --}}
-        <div class="flex items-center gap-3 mt-6 mb-8">
+        <div class="flex items-center gap-3 mt-6 mb-6">
         </div>
 
         <h1 class="text-2xl font-bold text-gray-800 mb-1">
@@ -48,7 +48,7 @@
         <form method="POST"
               action="{{ route('register.company.store') }}"
               enctype="multipart/form-data"
-              class="space-y-4">
+              class="space-y-3">
 
 
             @csrf
@@ -76,7 +76,7 @@
                 <label class="block text-sm font-medium text-gray-700">
                     Nome da empresa
                 </label>
-                <input type="text" name="name" value="{{ old('name') }}"
+                <input type="text" name="name" value="{{ old('name') }}" required maxlength="255"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="Nome da sua empresa">
             </div>
@@ -84,9 +84,10 @@
             {{-- CNPJ --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700">CNPJ</label>
-                <input type="text" name="cnpj" value="{{ old('cnpj') }}"
+                <input type="text" name="cnpj" value="{{ old('cnpj') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="14"
+                       data-only-digits data-maxlen="14"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                       placeholder="00.000.000/0000-00">
+                       placeholder="00000000000000">
             </div>
 
             {{-- Email / Telefone --}}
@@ -95,7 +96,7 @@
                     <label class="block text-sm font-medium text-gray-700">
                         E-mail corporativo
                     </label>
-                    <input type="email" name="email" value="{{ old('email') }}"
+                    <input type="email" name="email" value="{{ old('email') }}" required maxlength="255"
                            class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                            placeholder="contato@empresa.com">
                 </div>
@@ -104,16 +105,17 @@
                     <label class="block text-sm font-medium text-gray-700">
                         Telefone
                     </label>
-                    <input type="text" name="phone" value="{{ old('phone') }}"
+                    <input type="text" name="phone" value="{{ old('phone') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="11"
+                           data-only-digits data-maxlen="11"
                            class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                           placeholder="(00) 00000-0000">
+                           placeholder="00000000000">
                 </div>
             </div>
 
             {{-- Senha --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700">Senha</label>
-                <input type="password" name="password"
+                <input type="password" name="password" required minlength="6" maxlength="255"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="••••••••">
             </div>
@@ -123,7 +125,7 @@
                 <label class="block text-sm font-medium text-gray-700">
                     Descrição da empresa
                 </label>
-                <textarea name="description" rows="4"
+                <textarea name="description" rows="3" required maxlength="1000"
                           class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           placeholder="Conte um pouco sobre sua empresa...">{{ old('description') }}</textarea>
             </div>
@@ -185,4 +187,17 @@
 </div>
 
 </body>
+<script>
+    (function () {
+        const inputs = document.querySelectorAll('input[data-only-digits]');
+        inputs.forEach((input) => {
+            const maxLen = Number(input.getAttribute('data-maxlen')) || null;
+            input.addEventListener('input', () => {
+                let v = input.value.replace(/\D/g, '');
+                if (maxLen) v = v.slice(0, maxLen);
+                if (input.value !== v) input.value = v;
+            });
+        });
+    })();
+</script>
 </html>

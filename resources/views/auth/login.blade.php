@@ -19,7 +19,12 @@
     </style>
 </head>
 <body class="min-h-screen bg-slate-50 text-gray-900">
-    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 relative">
+        <a href="{{ url('/') }}"
+           class="absolute top-6 left-6 z-10 inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm backdrop-blur transition hover:bg-white">
+            <span class="text-base leading-none">←</span>
+            Voltar
+        </a>
 
     {{-- LADO ESQUERDO --}}
     <div class="w-full flex flex-col justify-center px-8 lg:px-20 py-12">

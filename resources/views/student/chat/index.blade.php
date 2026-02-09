@@ -190,8 +190,8 @@
             }
         }
 
-        // --- Dispara o polling a cada 4 segundos ---
-        setInterval(pollMessages, 4000);
+        // --- Dispara o polling a cada 2 segundos ---
+        setInterval(pollMessages, 2000);
     </script>
 @endif
 
