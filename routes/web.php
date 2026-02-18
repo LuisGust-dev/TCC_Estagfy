@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Coordinator\InternshipCalendarController as CoordinatorInternshipCalendarController;
+use App\Http\Controllers\Coordinator\TopHiringCompanyController as CoordinatorTopHiringCompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -186,12 +187,22 @@ Route::middleware(['auth', 'active', 'coordinator'])
     ->group(function () {
         Route::get('/calendar', [CoordinatorInternshipCalendarController::class, 'index'])
             ->name('calendar.index');
+        Route::get('/calendar/events', [CoordinatorInternshipCalendarController::class, 'events'])
+            ->name('calendar.events');
+        Route::get('/calendar/hiring-companies', [CoordinatorTopHiringCompanyController::class, 'index'])
+            ->name('calendar.hiring-companies.index');
         Route::post('/calendar', [CoordinatorInternshipCalendarController::class, 'store'])
             ->name('calendar.store');
         Route::put('/calendar/{event}', [CoordinatorInternshipCalendarController::class, 'update'])
             ->name('calendar.update');
         Route::delete('/calendar/{event}', [CoordinatorInternshipCalendarController::class, 'destroy'])
             ->name('calendar.destroy');
+        Route::post('/calendar/hiring-companies', [CoordinatorTopHiringCompanyController::class, 'store'])
+            ->name('calendar.hiring-companies.store');
+        Route::put('/calendar/hiring-companies/{company}', [CoordinatorTopHiringCompanyController::class, 'update'])
+            ->name('calendar.hiring-companies.update');
+        Route::delete('/calendar/hiring-companies/{company}', [CoordinatorTopHiringCompanyController::class, 'destroy'])
+            ->name('calendar.hiring-companies.destroy');
     });
 
 
@@ -241,6 +252,9 @@ Route::middleware(['auth', 'active', 'company'])
 
         Route::patch('/applications/{application}/reject', [JobCandidateController::class, 'reject'])
             ->name('applications.reject');
+
+        Route::patch('/applications/{application}/finalize', [JobCandidateController::class, 'finalize'])
+            ->name('applications.finalize');
 
         /*
         | Perfil da Empresa

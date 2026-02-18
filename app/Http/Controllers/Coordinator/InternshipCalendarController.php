@@ -9,14 +9,20 @@ use Illuminate\Validation\Rule;
 
 class InternshipCalendarController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $courses = config('internship.courses', []);
-        $selectedCourse = request()->query('course');
+        [$courses, $selectedCourse, $courseCounts] = $this->calendarContext($request);
 
-        if (!in_array($selectedCourse, $courses, true)) {
-            $selectedCourse = $courses[0] ?? null;
-        }
+        $eventsCount = InternshipCalendar::query()
+            ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
+            ->count();
+
+        return view('coordinator.calendar.index', compact('courses', 'selectedCourse', 'courseCounts', 'eventsCount'));
+    }
+
+    public function events(Request $request)
+    {
+        [$courses, $selectedCourse, $courseCounts] = $this->calendarContext($request);
 
         $events = InternshipCalendar::query()
             ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
@@ -24,13 +30,7 @@ class InternshipCalendarController extends Controller
             ->orderBy('end_date')
             ->get();
 
-        $courseCounts = InternshipCalendar::query()
-            ->selectRaw('course, COUNT(*) as total')
-            ->whereNotNull('course')
-            ->groupBy('course')
-            ->pluck('total', 'course');
-
-        return view('coordinator.calendar.index', compact('events', 'courses', 'selectedCourse', 'courseCounts'));
+        return view('coordinator.calendar.events', compact('events', 'courses', 'selectedCourse', 'courseCounts'));
     }
 
     public function store(Request $request)
@@ -71,5 +71,23 @@ class InternshipCalendarController extends Controller
         $event->delete();
 
         return back()->with('success', 'Evento removido do calendário.');
+    }
+
+    private function calendarContext(Request $request): array
+    {
+        $courses = config('internship.courses', []);
+        $selectedCourse = $request->query('course');
+
+        if (!in_array($selectedCourse, $courses, true)) {
+            $selectedCourse = $courses[0] ?? null;
+        }
+
+        $courseCounts = InternshipCalendar::query()
+            ->selectRaw('course, COUNT(*) as total')
+            ->whereNotNull('course')
+            ->groupBy('course')
+            ->pluck('total', 'course');
+
+        return [$courses, $selectedCourse, $courseCounts];
     }
 }

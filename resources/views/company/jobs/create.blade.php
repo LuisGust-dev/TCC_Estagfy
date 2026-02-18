@@ -77,6 +77,21 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Fluxo da vaga</label>
+                <select name="flow_type" id="flow_type"
+                    class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="continuous" @selected(old('flow_type', 'continuous') === 'continuous')>Fluxo contínuo</option>
+                    <option value="defined_period" @selected(old('flow_type') === 'defined_period')>Período definido</option>
+                </select>
+                <p id="flow_type_hint" class="mt-2 text-xs text-gray-500">
+                    Fluxo contínuo: a vaga fica ativa até preencher todas as vagas disponíveis.
+                </p>
+                @error('flow_type')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Área</label>
                 <select name="area"
                     class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -86,6 +101,24 @@
                     @endforeach
                 </select>
                 @error('area')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div id="period_start_wrap" class="{{ old('flow_type') === 'defined_period' ? '' : 'hidden' }}">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Data inicial do período</label>
+                <input type="date" name="period_start" value="{{ old('period_start') }}"
+                    class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                @error('period_start')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div id="period_end_wrap" class="{{ old('flow_type') === 'defined_period' ? '' : 'hidden' }}">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Data final do período</label>
+                <input type="date" name="period_end" value="{{ old('period_end') }}"
+                    class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                @error('period_end')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
@@ -125,6 +158,10 @@
     document.addEventListener('DOMContentLoaded', () => {
         const addButton = document.getElementById('add-requirement');
         const list = document.getElementById('requirements-list');
+        const flowType = document.getElementById('flow_type');
+        const periodStartWrap = document.getElementById('period_start_wrap');
+        const periodEndWrap = document.getElementById('period_end_wrap');
+        const flowTypeHint = document.getElementById('flow_type_hint');
 
         addButton.addEventListener('click', () => {
             const input = document.createElement('input');
@@ -135,6 +172,19 @@
             list.appendChild(input);
             input.focus();
         });
+
+        function togglePeriodFields() {
+            const isDefinedPeriod = flowType.value === 'defined_period';
+            periodStartWrap.classList.toggle('hidden', !isDefinedPeriod);
+            periodEndWrap.classList.toggle('hidden', !isDefinedPeriod);
+
+            flowTypeHint.textContent = isDefinedPeriod
+                ? 'Período definido: a vaga ficará ativa somente entre a data inicial e a data final.'
+                : 'Fluxo contínuo: a vaga fica ativa até preencher todas as vagas disponíveis.';
+        }
+
+        flowType.addEventListener('change', togglePeriodFields);
+        togglePeriodFields();
     });
 </script>
 

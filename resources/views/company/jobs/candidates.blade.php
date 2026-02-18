@@ -31,6 +31,10 @@
                class="px-3 py-1 rounded-full border {{ $status === 'recusado' ? 'bg-red-600 text-white border-red-600' : 'text-gray-600 hover:bg-gray-50' }}">
                 Recusados
             </a>
+            <a href="{{ route('company.candidates.index', ['status' => 'finalizado']) }}"
+               class="px-3 py-1 rounded-full border {{ $status === 'finalizado' ? 'bg-slate-700 text-white border-slate-700' : 'text-gray-600 hover:bg-gray-50' }}">
+                Finalizados
+            </a>
         </div>
     @endif
 </div>
@@ -90,6 +94,10 @@
                         <span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
                             Aprovado
                         </span>
+                    @elseif ($application->status === 'finalizado')
+                        <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+                            Finalizado
+                        </span>
                     @else
                         <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
                             Recusado
@@ -115,6 +123,16 @@
                             <span class="text-sm">💬</span>
                             Chat
                         </a>
+
+                        <form action="{{ route('company.applications.finalize', $application) }}"
+                            method="POST" class="inline"
+                            onsubmit="return confirm('Deseja finalizar o estágio deste aluno?')">
+                            @csrf
+                            @method('PATCH')
+                            <button class="px-3 py-1 bg-slate-600 text-white rounded text-xs hover:bg-slate-700 transition">
+                                Finalizar estágio
+                            </button>
+                        </form>
                     @endif
 
                     @if ($application->status === 'em_analise')

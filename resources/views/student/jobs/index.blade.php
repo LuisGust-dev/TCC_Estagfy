@@ -87,6 +87,9 @@ Vagas de Estágio
                         <span>📍 {{ $job->location }}</span>
                         <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
                         <span>🪑 {{ $job->vacancies ?? 1 }} vaga(s)</span>
+                        @if($job->flow_type === 'defined_period' && $job->period_start && $job->period_end)
+                            <span>📆 {{ $job->period_start->format('d/m/Y') }} até {{ $job->period_end->format('d/m/Y') }}</span>
+                        @endif
                         <span>💰 R$ {{ number_format($job->salary, 2, ',', '.') }}</span>
                         <span>👥 {{ $job->applications_count }} candidatos</span>
                     </div>

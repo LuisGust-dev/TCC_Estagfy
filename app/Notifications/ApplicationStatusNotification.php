@@ -32,6 +32,7 @@ class ApplicationStatusNotification extends Notification
             'message' => match ($this->application->status) {
                 'aprovado' => 'Sua candidatura foi aprovada 🎉',
                 'recusado' => 'Sua candidatura foi recusada',
+                'finalizado' => 'Seu estágio foi finalizado. Você já pode se candidatar para novas vagas.',
                 default => 'Status atualizado',
             },
         ];

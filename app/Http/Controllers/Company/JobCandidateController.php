@@ -128,6 +128,30 @@ class JobCandidateController extends Controller
         return back()->with('success', 'Candidatura recusada.');
     }
 
+    /**
+     * Finalizar estágio de candidatura aprovada
+     */
+    public function finalize(Application $application)
+    {
+        $companyId = Auth::user()->company->id;
+
+        if ($application->job->company_id !== $companyId) {
+            abort(403);
+        }
+
+        if ($application->status !== 'aprovado') {
+            return back()->with('error', 'Só é possível finalizar estágios de candidaturas aprovadas.');
+        }
+
+        $application->update(['status' => 'finalizado']);
+
+        $application->student->notify(
+            new ApplicationStatusNotification($application)
+        );
+
+        return back()->with('success', 'Estágio finalizado com sucesso. O aluno pode se candidatar novamente.');
+    }
+
 
 
 

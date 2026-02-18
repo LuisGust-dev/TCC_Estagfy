@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class Job extends Model
 {
@@ -18,6 +19,9 @@ class Job extends Model
         'type',
         'area',
         'vacancies',
+        'flow_type',
+        'period_start',
+        'period_end',
         'salary',
         'requirements',
     ];
@@ -25,6 +29,8 @@ class Job extends Model
     protected $casts = [
         'requirements' => 'array',
         'vacancies' => 'integer',
+        'period_start' => 'date',
+        'period_end' => 'date',
     ];
 
     public function company()
@@ -44,9 +50,35 @@ class Job extends Model
 
     public function scopeOpenForApplications(Builder $query): Builder
     {
-        return $query->whereRaw(
-            "(select count(*) from applications where applications.job_id = jobs.id and applications.status = 'aprovado') < jobs.vacancies"
-        );
+        $today = Carbon::today()->toDateString();
+
+        return $query
+            ->whereRaw(
+                "(select count(*) from applications where applications.job_id = jobs.id and applications.status = 'aprovado') < jobs.vacancies"
+            )
+            ->where(function (Builder $periodQuery) use ($today) {
+                $periodQuery->where('flow_type', 'continuous')
+                    ->orWhere(function (Builder $definedPeriod) use ($today) {
+                        $definedPeriod->where('flow_type', 'defined_period')
+                            ->whereDate('period_start', '<=', $today)
+                            ->whereDate('period_end', '>=', $today);
+                    });
+            });
+    }
+
+    public function isWithinDefinedPeriod(?Carbon $date = null): bool
+    {
+        if ($this->flow_type !== 'defined_period') {
+            return true;
+        }
+
+        if (!$this->period_start || !$this->period_end) {
+            return false;
+        }
+
+        $date = $date ?: Carbon::today();
+
+        return $date->between($this->period_start, $this->period_end);
     }
 
 }

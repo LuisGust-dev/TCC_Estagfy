@@ -35,20 +35,22 @@
                     'em_analise' => 'bg-blue-100 text-blue-700',
                     'aprovado'   => 'bg-green-100 text-green-700',
                     'recusado'   => 'bg-red-100 text-red-700',
+                    'finalizado' => 'bg-slate-100 text-slate-700',
                 ];
 
                 $statusLabels = [
                     'em_analise' => 'Em análise',
                     'aprovado'   => 'Aprovado',
                     'recusado'   => 'Recusado',
+                    'finalizado' => 'Estágio finalizado',
                 ];
             @endphp
 
-            <span class="inline-block px-4 py-1 rounded-full text-sm font-medium {{ $statusClasses[$application->status] }}">
-                {{ $statusLabels[$application->status] }}
+            <span class="inline-block px-4 py-1 rounded-full text-sm font-medium {{ $statusClasses[$application->status] ?? 'bg-gray-100 text-gray-700' }}">
+                {{ $statusLabels[$application->status] ?? ucfirst(str_replace('_', ' ', $application->status)) }}
             </span>
 
-            @if($application->status === 'aprovado')
+            @if(in_array($application->status, ['aprovado', 'finalizado'], true))
                 <a href="{{ route('student.chat.show', $application->job_id) }}"
                    class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 text-sm font-medium transition hover:bg-blue-100">
                     <span class="text-sm">💬</span>

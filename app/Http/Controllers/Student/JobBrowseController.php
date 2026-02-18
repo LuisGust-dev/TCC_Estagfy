@@ -77,7 +77,7 @@ public function show(Job $job)
         ->where('status', 'aprovado')
         ->count();
 
-    if (!$application && $approvedCount >= $job->vacancies) {
+    if (!$application && ($approvedCount >= $job->vacancies || ! $job->isWithinDefinedPeriod())) {
         abort(404);
     }
 

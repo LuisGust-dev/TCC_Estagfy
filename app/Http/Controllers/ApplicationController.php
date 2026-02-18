@@ -39,6 +39,10 @@ class ApplicationController extends Controller
              return back()->with('error', 'Esta vaga atingiu o limite de candidatos aprovados e saiu do ar.');
          }
 
+         if (! $job->isWithinDefinedPeriod()) {
+             return back()->with('error', 'O período de candidatura desta vaga está encerrado.');
+         }
+
          $alreadyApproved = Application::where('student_id', $student->id)
              ->where('status', 'aprovado')
              ->exists();

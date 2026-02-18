@@ -20,6 +20,11 @@
         <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
         <span>🪑 {{ $job->vacancies ?? 1 }} vaga(s)</span>
         <span>💼 {{ $job->type ?? 'Tipo não informado' }}</span>
+        @if($job->flow_type === 'defined_period' && $job->period_start && $job->period_end)
+            <span>📆 {{ $job->period_start->format('d/m/Y') }} até {{ $job->period_end->format('d/m/Y') }}</span>
+        @else
+            <span>♾️ Fluxo contínuo</span>
+        @endif
 
         @if($job->salary)
             <span>💰 R$ {{ number_format($job->salary, 2, ',', '.') }}</span>
@@ -53,17 +58,19 @@
                 'em_analise' => 'bg-blue-100 text-blue-700',
                 'aprovado' => 'bg-green-100 text-green-700',
                 'recusado' => 'bg-red-100 text-red-700',
+                'finalizado' => 'bg-slate-100 text-slate-700',
             ];
 
             $labels = [
                 'em_analise' => 'Em análise',
                 'aprovado' => 'Aprovado',
                 'recusado' => 'Recusado',
+                'finalizado' => 'Estágio finalizado',
             ];
         @endphp
 
-        <span class="inline-block px-4 py-2 rounded-full text-sm font-medium {{ $colors[$application->status] }}">
-            {{ $labels[$application->status] }}
+        <span class="inline-block px-4 py-2 rounded-full text-sm font-medium {{ $colors[$application->status] ?? 'bg-gray-100 text-gray-700' }}">
+            {{ $labels[$application->status] ?? ucfirst(str_replace('_', ' ', $application->status)) }}
         </span>
     @else
         <form method="POST" action="{{ route('student.jobs.apply', $job) }}">
