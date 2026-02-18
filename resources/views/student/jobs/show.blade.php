@@ -18,6 +18,7 @@
     <div class="flex flex-wrap gap-4 text-sm text-gray-600">
         <span>📍 {{ $job->location ?? 'Local não informado' }}</span>
         <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
+        <span>🪑 {{ $job->vacancies ?? 1 }} vaga(s)</span>
         <span>💼 {{ $job->type ?? 'Tipo não informado' }}</span>
 
         @if($job->salary)

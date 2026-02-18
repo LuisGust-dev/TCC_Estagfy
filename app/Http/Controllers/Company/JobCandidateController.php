@@ -70,6 +70,14 @@ class JobCandidateController extends Controller
             return back()->with('error', 'Só é possível aprovar candidaturas em análise.');
         }
 
+        $approvedForJob = Application::where('job_id', $application->job_id)
+            ->where('status', 'aprovado')
+            ->count();
+
+        if ($approvedForJob >= $application->job->vacancies) {
+            return back()->with('error', 'Esta vaga já atingiu o limite de candidatos aprovados.');
+        }
+
         $alreadyApproved = Application::where('student_id', $application->student_id)
             ->where('status', 'aprovado')
             ->where('id', '!=', $application->id)

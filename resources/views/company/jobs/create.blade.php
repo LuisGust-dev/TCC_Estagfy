@@ -64,6 +64,19 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade de vagas</label>
+                <select name="vacancies"
+                    class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    @for($i = 1; $i <= 10; $i++)
+                        <option value="{{ $i }}" @selected((int) old('vacancies', 1) === $i)>{{ $i }}</option>
+                    @endfor
+                </select>
+                @error('vacancies')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Área</label>
                 <select name="area"
                     class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">

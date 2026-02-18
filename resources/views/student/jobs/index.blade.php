@@ -96,6 +96,7 @@
                 <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-3">
                     <span>📍 {{ $job->location }}</span>
                     <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
+                    <span>🪑 {{ $job->vacancies ?? 1 }} vaga(s)</span>
                     <span>💰 R$ {{ number_format($job->salary, 2, ',', '.') }}</span>
                     <span>👥 {{ $job->applications_count }} candidatos</span>
                 </div>

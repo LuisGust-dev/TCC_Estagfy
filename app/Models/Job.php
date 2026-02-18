@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Job extends Model
 {
@@ -16,12 +17,14 @@ class Job extends Model
         'location',
         'type',
         'area',
+        'vacancies',
         'salary',
         'requirements',
     ];
 
     protected $casts = [
         'requirements' => 'array',
+        'vacancies' => 'integer',
     ];
 
     public function company()
@@ -32,6 +35,18 @@ class Job extends Model
     public function applications()
     {
         return $this->hasMany(\App\Models\Application::class);
+    }
+
+    public function approvedApplications()
+    {
+        return $this->hasMany(\App\Models\Application::class)->where('status', 'aprovado');
+    }
+
+    public function scopeOpenForApplications(Builder $query): Builder
+    {
+        return $query->whereRaw(
+            "(select count(*) from applications where applications.job_id = jobs.id and applications.status = 'aprovado') < jobs.vacancies"
+        );
     }
 
 }

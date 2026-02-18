@@ -17,11 +17,13 @@ class DashboardController extends Controller
             'totalJobs' => Job::whereHas('company.user', function ($query) {
                 $query->where('active', true);
             })
+                ->openForApplications()
                 ->when(!empty($studentCourse), fn ($query) => $query->where('area', $studentCourse), fn ($query) => $query->whereRaw('1 = 0'))
                 ->count(),
             'recentJobs' => Job::whereHas('company.user', function ($query) {
                 $query->where('active', true);
             })
+                ->openForApplications()
                 ->when(!empty($studentCourse), fn ($query) => $query->where('area', $studentCourse), fn ($query) => $query->whereRaw('1 = 0'))
                 ->latest()
                 ->take(5)

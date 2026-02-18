@@ -31,6 +31,14 @@ class ApplicationController extends Controller
              return back()->with('error', 'Esta vaga não é da área do seu curso.');
          }
 
+         $approvedForJob = Application::where('job_id', $job->id)
+             ->where('status', 'aprovado')
+             ->count();
+
+         if ($approvedForJob >= $job->vacancies) {
+             return back()->with('error', 'Esta vaga atingiu o limite de candidatos aprovados e saiu do ar.');
+         }
+
          $alreadyApproved = Application::where('student_id', $student->id)
              ->where('status', 'aprovado')
              ->exists();

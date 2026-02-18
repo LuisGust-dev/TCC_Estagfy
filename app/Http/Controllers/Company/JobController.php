@@ -38,6 +38,7 @@ class JobController extends Controller
             'location'    => 'nullable|string|max:255',
             'type'        => 'nullable|string|max:50',
             'area'        => ['required', Rule::in(config('internship.courses', []))],
+            'vacancies'   => 'required|integer|min:1|max:10',
             'salary'      => 'nullable|numeric',
             'requirements' => 'nullable|array',
             'requirements.*' => 'nullable|string|max:120',
@@ -56,6 +57,7 @@ class JobController extends Controller
             'location'   => $request->location,
             'type'       => $request->type,
             'area'       => $request->area,
+            'vacancies'  => $request->vacancies,
             'salary'     => $request->salary,
             'requirements' => $requirements,
         ]);

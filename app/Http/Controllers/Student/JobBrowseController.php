@@ -19,6 +19,7 @@ class JobBrowseController extends Controller
             ->whereHas('company.user', function ($query) {
                 $query->where('active', true);
             })
+            ->openForApplications()
             ->when(!empty($studentCourse), function ($query) use ($studentCourse) {
                 $query->where('area', $studentCourse);
             }, function ($query) {
@@ -71,6 +72,14 @@ public function show(Job $job)
     $application = Application::where('job_id', $job->id)
         ->where('student_id', $student->id)
         ->first();
+
+    $approvedCount = Application::where('job_id', $job->id)
+        ->where('status', 'aprovado')
+        ->count();
+
+    if (!$application && $approvedCount >= $job->vacancies) {
+        abort(404);
+    }
 
     return view('student.jobs.show', compact('job', 'application'));
 }
