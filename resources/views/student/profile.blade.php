@@ -74,6 +74,32 @@
                        value="{{ old('cpf', $student?->cpf) }}"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
+
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Foto de perfil</label>
+
+                <div class="rounded-2xl border border-dashed border-blue-200 bg-blue-50/40 p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <div class="h-16 w-16 rounded-xl bg-white border overflow-hidden flex items-center justify-center">
+                            @if($user->photo)
+                                <img src="{{ asset('storage/' . $user->photo) }}"
+                                     alt="Foto atual"
+                                     class="h-full w-full object-cover">
+                            @else
+                                <span class="text-xl font-semibold text-blue-600">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                            @endif
+                        </div>
+
+                        <div class="flex-1">
+                            <p class="text-sm text-gray-600 mb-2">Envie uma imagem JPG ou PNG (máx. 2MB).</p>
+                            <input type="file"
+                                   name="photo"
+                                   accept="image/png,image/jpeg"
+                                   class="w-full text-sm text-gray-600">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="pt-2">

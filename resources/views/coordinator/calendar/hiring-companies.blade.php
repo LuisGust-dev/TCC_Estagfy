@@ -78,55 +78,68 @@
             <div class="rounded-2xl border bg-white shadow-sm">
                 <div class="border-b px-6 py-4">
                     <h2 class="text-lg font-semibold text-gray-900">Lista cadastrada</h2>
-                    <p class="text-sm text-gray-500">Curso: {{ $selectedCourse }} ({{ $companies->count() }} empresa(s))</p>
+                    <p class="text-sm text-gray-500">Curso: {{ $selectedCourse }}</p>
                 </div>
 
-                <div class="space-y-4 p-6">
-                    @forelse($companies as $company)
-                        <article class="rounded-xl border border-gray-200 bg-gray-50/60 p-4">
-                            <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.update', $company) }}" class="space-y-3">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" name="course" value="{{ $selectedCourse }}">
-
-                                <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
-                                    <input type="text" name="company_name" value="{{ $company->company_name }}"
-                                           class="rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500 md:col-span-3">
+                <div class="p-6">
+                    <article class="rounded-2xl border bg-white shadow-sm">
+                        <header class="rounded-t-2xl border-b border-amber-200 bg-amber-50 px-4 py-3 text-amber-700">
+                            <div class="flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                                    <h3 class="text-sm font-semibold">Empresas destaque</h3>
                                 </div>
-
-                                <textarea name="description" rows="2"
-                                          class="w-full rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">{{ $company->description }}</textarea>
-
-                                <div class="flex items-center justify-between gap-2">
-                                    <span class="text-xs text-gray-500">
-                                        Atualizado em {{ $company->updated_at?->format('d/m/Y H:i') }}
-                                    </span>
-                                    <div class="flex items-center gap-2">
-                                        <button type="submit"
-                                                class="rounded-lg bg-amber-600 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-700">
-                                            Atualizar
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <div class="mt-2 flex justify-end">
-                                <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.destroy', $company) }}"
-                                      onsubmit="return confirm('Deseja remover esta empresa da lista?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                            class="rounded-lg border border-red-200 px-4 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50">
-                                        Excluir
-                                    </button>
-                                </form>
+                                <span class="rounded-full bg-white/80 px-2 py-0.5 text-xs font-semibold">
+                                    {{ $companies->count() }}
+                                </span>
                             </div>
-                        </article>
-                    @empty
-                        <div class="rounded-xl border border-dashed p-8 text-center text-gray-500">
-                            Nenhuma empresa destaque cadastrada para este curso.
+                            <p class="mt-1 text-xs">Cards com informacoes e acoes de gerenciamento.</p>
+                        </header>
+
+                        <div class="max-h-[60vh] space-y-3 overflow-y-auto p-3">
+                            @forelse($companies as $company)
+                                <article class="rounded-xl border border-gray-200 bg-gray-50 p-3">
+                                    <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.update', $company) }}" class="space-y-3">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="course" value="{{ $selectedCourse }}">
+
+                                        <input type="text" name="company_name" value="{{ $company->company_name }}"
+                                               class="w-full rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">
+
+                                        <textarea name="description" rows="2"
+                                                  class="w-full rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">{{ $company->description }}</textarea>
+
+                                        <div class="flex items-center justify-between gap-2">
+                                            <span class="text-xs text-gray-500">
+                                                Atualizado em {{ $company->updated_at?->format('d/m/Y H:i') }}
+                                            </span>
+                                            <button type="submit"
+                                                    class="rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-700">
+                                                Atualizar
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <div class="mt-2 flex justify-end">
+                                        <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.destroy', $company) }}"
+                                              onsubmit="return confirm('Deseja remover esta empresa da lista?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition hover:bg-red-50">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </article>
+                            @empty
+                                <div class="rounded-xl border border-dashed p-6 text-center text-xs text-gray-500">
+                                    Nenhuma empresa destaque cadastrada para este curso.
+                                </div>
+                            @endforelse
                         </div>
-                    @endforelse
+                    </article>
                 </div>
             </div>
         </section>

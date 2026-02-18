@@ -94,6 +94,14 @@ class JobCandidateController extends Controller
                 ->where('status', 'em_analise')
                 ->where('id', '!=', $application->id)
                 ->delete();
+
+            $approvedForJob = Application::where('job_id', $application->job_id)
+                ->where('status', 'aprovado')
+                ->count();
+
+            if ($approvedForJob >= $application->job->vacancies && is_null($application->job->closed_at)) {
+                $application->job->update(['closed_at' => now()]);
+            }
         });
 
         // 🔔 Notificar aluno

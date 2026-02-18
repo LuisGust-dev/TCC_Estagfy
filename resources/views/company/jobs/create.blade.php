@@ -92,10 +92,10 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Área</label>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Curso</label>
                 <select name="area"
                     class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    <option value="">Selecione a área</option>
+                    <option value="">Selecione o Curso</option>
                     @foreach($courses as $course)
                         <option value="{{ $course }}" @selected(old('area') === $course)>{{ $course }}</option>
                     @endforeach

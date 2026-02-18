@@ -35,7 +35,7 @@ class ApplicationController extends Controller
              ->where('status', 'aprovado')
              ->count();
 
-         if ($approvedForJob >= $job->vacancies) {
+         if ($approvedForJob >= $job->vacancies || !is_null($job->closed_at)) {
              return back()->with('error', 'Esta vaga atingiu o limite de candidatos aprovados e saiu do ar.');
          }
 

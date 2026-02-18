@@ -129,17 +129,7 @@
                 </div>
             </div>
 
-            <div class="rounded-2xl border bg-white p-5 shadow-sm">
-                <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Legenda</h3>
-                <div class="mt-3 grid grid-cols-1 gap-2 text-xs text-gray-600">
-                    @foreach($legendItems as $item)
-                        <div class="flex items-center gap-2">
-                            <span class="h-2.5 w-2.5 rounded-full {{ $item['style']['dot'] }}"></span>
-                            {{ $item['style']['label'] }}
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+           
 
             <div class="rounded-2xl border bg-white p-5 shadow-sm">
                 <h3 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Empresas que mais contratam</h3>
@@ -147,12 +137,7 @@
                 <div class="mt-3 space-y-3">
                     @forelse($topHiringCompanies as $company)
                         <article class="rounded-xl border border-blue-100 bg-blue-50/40 p-3">
-                            <div class="flex items-start justify-between gap-2">
-                                <h4 class="text-sm font-semibold text-gray-900">{{ $company->company_name }}</h4>
-                                <span class="rounded-full bg-blue-100 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
-                                    {{ $company->hires_count }} contratacoes
-                                </span>
-                            </div>
+                            <h4 class="text-sm font-semibold text-gray-900">{{ $company->company_name }}</h4>
                             @if(!empty($company->description))
                                 <p class="mt-2 text-xs leading-relaxed text-gray-600">
                                     {{ \Illuminate\Support\Str::limit($company->description, 95) }}

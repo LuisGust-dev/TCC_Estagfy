@@ -22,6 +22,7 @@ class Job extends Model
         'flow_type',
         'period_start',
         'period_end',
+        'closed_at',
         'salary',
         'requirements',
     ];
@@ -31,6 +32,7 @@ class Job extends Model
         'vacancies' => 'integer',
         'period_start' => 'date',
         'period_end' => 'date',
+        'closed_at' => 'datetime',
     ];
 
     public function company()
@@ -53,6 +55,7 @@ class Job extends Model
         $today = Carbon::today()->toDateString();
 
         return $query
+            ->whereNull('closed_at')
             ->whereRaw(
                 "(select count(*) from applications where applications.job_id = jobs.id and applications.status = 'aprovado') < jobs.vacancies"
             )

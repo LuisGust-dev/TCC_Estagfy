@@ -83,12 +83,18 @@
             <div class="flex flex-col items-end justify-between">
 
                 {{-- CANDIDATOS --}}
-                <span
-                    class="inline-flex items-center gap-2
-                           bg-blue-50 text-blue-600
-                           px-4 py-2 rounded-full text-sm font-medium mb-4">
-                    👤 {{ $job->applications_count }} candidatos
-                </span>
+                <div class="flex flex-col items-end gap-2 mb-4">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold {{ $job->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700' }}">
+                        {{ $job->is_active ? 'Ativa' : 'Inativa' }}
+                    </span>
+
+                    <span
+                        class="inline-flex items-center gap-2
+                               bg-blue-50 text-blue-600
+                               px-4 py-2 rounded-full text-sm font-medium">
+                        👤 {{ $job->applications_count }} candidatos
+                    </span>
+                </div>
 
                 {{-- AÇÕES --}}
                 <form method="POST"

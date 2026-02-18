@@ -13,8 +13,11 @@
     </div>
 
     <a href="{{ route('company.jobs.create') }}"
-       class="inline-flex items-center justify-center gap-2 rounded-xl bg-green-600 px-5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-green-700">
-        <span class="text-base">➕</span>
+       class="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-500/80 bg-gradient-to-r from-emerald-600 to-green-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(16,185,129,.25)] transition-all duration-200 hover:-translate-y-0.5 hover:from-emerald-700 hover:to-green-600 hover:shadow-[0_12px_24px_rgba(16,185,129,.3)] focus:outline-none focus:ring-2 focus:ring-emerald-400/60">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+        </svg>
         Nova Vaga
     </a>
 </div>

@@ -16,8 +16,15 @@ class JobController extends Controller
 
         $jobs = Job::where('company_id', $company->id)
             ->withCount('applications')
+            ->withCount('approvedApplications')
             ->latest()
             ->get();
+
+        $jobs->each(function (Job $job) {
+            $job->is_active = is_null($job->closed_at)
+                && $job->approved_applications_count < $job->vacancies
+                && $job->isWithinDefinedPeriod();
+        });
 
         return view('company.jobs.index', compact('jobs'));
     }
