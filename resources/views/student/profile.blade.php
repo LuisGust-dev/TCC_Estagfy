@@ -82,8 +82,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="text-sm text-gray-600">Curso</label>
-                        <input type="text" name="course" value="{{ old('course', $student?->course) }}"
-                               class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
+                        <select name="course" class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
+                            <option value="">Selecione o curso</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course }}" @selected(old('course', $student?->course) === $course)>{{ $course }}</option>
+                            @endforeach
+                        </select>
+                        @error('course')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div>

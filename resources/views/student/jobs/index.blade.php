@@ -48,23 +48,7 @@
 
         {{-- FILTROS (visual apenas) --}}
         <button class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-            ⚙️ Todas
-        </button>
-
-        <button class="px-4 py-2 rounded-lg border text-sm hover:bg-gray-100">
-            Tecnologia
-        </button>
-
-        <button class="px-4 py-2 rounded-lg border text-sm hover:bg-gray-100">
-            Marketing
-        </button>
-
-        <button class="px-4 py-2 rounded-lg border text-sm hover:bg-gray-100">
-            Finanças
-        </button>
-
-        <button class="px-4 py-2 rounded-lg border text-sm hover:bg-gray-100">
-            Design
+            ⚙️ Minha área
         </button>
 
     </form>
@@ -111,6 +95,7 @@
                 {{-- INFO --}}
                 <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-3">
                     <span>📍 {{ $job->location }}</span>
+                    <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
                     <span>💰 R$ {{ number_format($job->salary, 2, ',', '.') }}</span>
                     <span>👥 {{ $job->applications_count }} candidatos</span>
                 </div>

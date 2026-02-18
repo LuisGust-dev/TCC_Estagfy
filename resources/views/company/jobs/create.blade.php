@@ -65,9 +65,16 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Área</label>
-                <input type="text" name="area"
-                    placeholder="Ex: Tecnologia"
-                    class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <select name="area"
+                    class="w-full border rounded-xl px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option value="">Selecione a área</option>
+                    @foreach($courses as $course)
+                        <option value="{{ $course }}" @selected(old('area') === $course)>{{ $course }}</option>
+                    @endforeach
+                </select>
+                @error('area')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 

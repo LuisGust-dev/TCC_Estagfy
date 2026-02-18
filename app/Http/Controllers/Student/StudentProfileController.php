@@ -13,8 +13,9 @@ class StudentProfileController extends Controller
     {
         $user = Auth::user();
         $student = $user->student;
+        $courses = config('internship.courses', []);
 
-        return view('student.profile', compact('user', 'student'));
+        return view('student.profile', compact('user', 'student', 'courses'));
     }
 
     public function update(Request $request)
@@ -39,7 +40,7 @@ class StudentProfileController extends Controller
                 'digits:11',
                 Rule::unique('students', 'cpf')->ignore($student?->id),
             ],
-            'course' => 'nullable|string|max:255',
+            'course' => ['required', Rule::in(config('internship.courses', []))],
             'period' => 'nullable|string|max:50',
             'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
@@ -51,7 +52,7 @@ class StudentProfileController extends Controller
 
         $studentData = [
             'cpf' => $validated['cpf'],
-            'course' => $validated['course'] ?? null,
+            'course' => $validated['course'],
             'period' => $validated['period'] ?? null,
         ];
 

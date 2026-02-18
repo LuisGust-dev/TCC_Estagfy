@@ -40,6 +40,9 @@
                     <span class="flex items-center gap-1">
                         📍 {{ $job->location ?? 'Local não informado' }}
                     </span>
+                    <span class="flex items-center gap-1">
+                        🎯 {{ $job->area ?? 'Área não informada' }}
+                    </span>
 
                     <span
                         class="px-2 py-0.5 rounded-full text-xs font-medium

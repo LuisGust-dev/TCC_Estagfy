@@ -8,6 +8,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class RegisterStudentController extends Controller
 {
@@ -22,7 +23,7 @@ class RegisterStudentController extends Controller
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|max:255',
             'cpf'      => 'required|digits:11|unique:students,cpf',
-            'course'   => 'required|string|max:255',
+            'course'   => ['required', Rule::in(config('internship.courses', []))],
             'period'   => 'required|string|max:50',
             'resume'   => 'required|file|mimes:pdf,doc,docx|max:2048',
             'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // 👈 NOVO

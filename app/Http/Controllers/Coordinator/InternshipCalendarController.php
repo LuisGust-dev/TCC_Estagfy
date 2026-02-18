@@ -5,17 +5,32 @@ namespace App\Http\Controllers\Coordinator;
 use App\Http\Controllers\Controller;
 use App\Models\InternshipCalendar;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class InternshipCalendarController extends Controller
 {
     public function index()
     {
+        $courses = config('internship.courses', []);
+        $selectedCourse = request()->query('course');
+
+        if (!in_array($selectedCourse, $courses, true)) {
+            $selectedCourse = $courses[0] ?? null;
+        }
+
         $events = InternshipCalendar::query()
+            ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
             ->orderBy('start_date')
             ->orderBy('end_date')
             ->get();
 
-        return view('coordinator.calendar.index', compact('events'));
+        $courseCounts = InternshipCalendar::query()
+            ->selectRaw('course, COUNT(*) as total')
+            ->whereNotNull('course')
+            ->groupBy('course')
+            ->pluck('total', 'course');
+
+        return view('coordinator.calendar.index', compact('events', 'courses', 'selectedCourse', 'courseCounts'));
     }
 
     public function store(Request $request)
@@ -23,6 +38,7 @@ class InternshipCalendarController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:2000',
+            'course' => ['required', Rule::in(config('internship.courses', []))],
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
@@ -40,6 +56,7 @@ class InternshipCalendarController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:2000',
+            'course' => ['required', Rule::in(config('internship.courses', []))],
             'start_date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);

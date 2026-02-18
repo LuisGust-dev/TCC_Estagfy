@@ -23,6 +23,14 @@ class ApplicationController extends Controller
          $student = Auth::user();
          $studentProfile = $student->student;
 
+         if (!$studentProfile || empty($studentProfile->course)) {
+             return back()->with('error', 'Defina seu curso no perfil antes de se candidatar.');
+         }
+
+         if ($job->area !== $studentProfile->course) {
+             return back()->with('error', 'Esta vaga não é da área do seu curso.');
+         }
+
          $alreadyApproved = Application::where('student_id', $student->id)
              ->where('status', 'aprovado')
              ->exists();

@@ -29,6 +29,7 @@ rgb(74, 71, 228)
 <body class="h-screen overflow-hidden bg-slate-50 text-gray-900">
 
 <div class="h-screen overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+    @php($courses = config('internship.courses', []))
 
     {{-- LADO ESQUERDO --}}
     <div class="relative flex items-center justify-center px-6 py-10 lg:py-12">
@@ -131,9 +132,16 @@ rgb(74, 71, 228)
                             <label class="block text-sm font-medium text-gray-700">
                                 Curso
                             </label>
-                            <input type="text" name="course" value="{{ old('course') }}" required maxlength="255"
-                                   class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                   placeholder="Ex: Eng. Software">
+                            <select name="course" required
+                                    class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Selecione o curso</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course }}" @selected(old('course') === $course)>{{ $course }}</option>
+                                @endforeach
+                            </select>
+                            @error('course')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div>

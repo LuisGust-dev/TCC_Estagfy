@@ -19,7 +19,10 @@
                 $lastMessage = $group->first();
                 $jobItem = $lastMessage->job;
                 $companyItem = $jobItem->company;
-                $companyName = $companyItem->name ?? 'Empresa';
+                $companyName = data_get($companyItem, 'user.name', 'Empresa');
+                $hasUnread = $group->contains(function ($message) {
+                    return $message->sender_id !== auth()->id() && is_null($message->read_at);
+                });
             @endphp
 
             <a href="{{ route('student.chat.show', $jobItem->id) }}"
@@ -39,9 +42,14 @@
                         {{ $lastMessage->message }}
                     </p>
                 </div>
-                <span class="text-[11px] text-gray-400">
-                    {{ $lastMessage->created_at->format('H:i') }}
-                </span>
+                <div class="flex flex-col items-end gap-1">
+                    @if($hasUnread)
+                        <span class="inline-block h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+                    @endif
+                    <span class="text-[11px] text-gray-400">
+                        {{ $lastMessage->created_at->format('H:i') }}
+                    </span>
+                </div>
             </a>
         @empty
             <p class="p-4 text-sm text-gray-400">
@@ -60,10 +68,10 @@
             <div class="p-4 border-b bg-white">
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">
-                        {{ strtoupper(substr($company->name ?? 'E', 0, 1)) }}
+                        {{ strtoupper(substr(data_get($company, 'user.name', 'E'), 0, 1)) }}
                     </div>
                     <div>
-                        <p class="font-semibold text-gray-800">{{ $company->name ?? 'Empresa' }}</p>
+                        <p class="font-semibold text-gray-800">{{ data_get($company, 'user.name', 'Empresa') }}</p>
                         <p class="text-xs text-gray-500">{{ $job->title }}</p>
                     </div>
                 </div>

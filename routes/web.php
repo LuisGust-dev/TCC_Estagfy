@@ -154,6 +154,19 @@ Route::get('/calendar', [StudentInternshipCalendarController::class, 'index'])
         return back();
     })->name('notifications.markAsRead');
 
+    Route::post('/notifications/{notification}/read-and-redirect', function ($notificationId) {
+        $notification = auth()->user()->notifications()->findOrFail($notificationId);
+        $notification->markAsRead();
+
+        $jobId = $notification->data['job_id'] ?? null;
+
+        if ($jobId) {
+            return redirect()->route('student.jobs.show', $jobId);
+        }
+
+        return redirect()->route('student.notifications.index');
+    })->name('notifications.readAndGo');
+
 
     });
 

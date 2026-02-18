@@ -9,6 +9,12 @@
 
 @php
     $unreadCount = auth()->user()->unreadNotifications->count();
+    $unreadMessagesCount = \App\Models\Message::where('company_id', auth()->id())
+        ->where('sender_id', '!=', auth()->id())
+        ->whereNull('read_at')
+        ->count();
+    $isCandidatesRoute = request()->routeIs('company.candidates.*') || request()->routeIs('company.jobs.candidates');
+    $isJobsRoute = request()->routeIs('company.jobs.*') && !$isCandidatesRoute;
 @endphp
 
 <div class="flex min-h-screen">
@@ -57,8 +63,8 @@
 
             <a href="{{ route('company.jobs.index') }}"
                class="group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.jobs.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.jobs.*') ? 'text-white' : '' }}">
+               {{ $isJobsRoute ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-green-600 {{ $isJobsRoute ? 'text-white' : '' }}">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 8a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
                     </svg>
@@ -68,8 +74,8 @@
 
             <a href="{{ route('company.candidates.index') }}"
                class="group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.candidates.*') || request()->routeIs('company.jobs.candidates') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.candidates.*') || request()->routeIs('company.jobs.candidates') ? 'text-white' : '' }}">
+               {{ $isCandidatesRoute ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-green-600 {{ $isCandidatesRoute ? 'text-white' : '' }}">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M8 6h8"/>
                         <path d="M8 10h8"/>
@@ -93,14 +99,22 @@
             </a>
 
             <a href="{{ route('company.messages.index') }}"
-               class="group flex items-center gap-3 px-4 py-2 rounded-xl transition
+               class="group flex items-center justify-between gap-3 px-4 py-2 rounded-xl transition
                {{ request()->routeIs('company.messages.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.messages.*') ? 'text-white' : '' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
-                    </svg>
+                <span class="flex items-center gap-3">
+                    <span class="text-green-600 {{ request()->routeIs('company.messages.*') ? 'text-white' : '' }}">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
+                        </svg>
+                    </span>
+                    <span class="text-sm font-medium">Mensagens</span>
                 </span>
-                <span class="text-sm font-medium">Mensagens</span>
+
+                @if($unreadMessagesCount > 0)
+                    <span class="bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
+                        {{ $unreadMessagesCount }}
+                    </span>
+                @endif
             </a>
 
             <a href="{{ route('company.notifications.index') }}"

@@ -5,7 +5,7 @@
 @section('content')
 <div class="mb-8 rounded-2xl border bg-gradient-to-r from-blue-50 via-white to-cyan-50 p-6">
     <p class="text-xs font-semibold uppercase tracking-widest text-blue-500">Calendario Informativo</p>
-    <h1 class="text-2xl font-bold text-gray-800">Calendario de Estagio</h1>
+    <h1 class="text-2xl font-bold text-gray-800">Calendario de Estágio</h1>
     <p class="text-gray-600">Acompanhe os periodos e datas importantes definidos pela coordenacao.</p>
 </div>
 

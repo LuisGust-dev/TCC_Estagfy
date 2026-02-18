@@ -15,40 +15,45 @@
 
     @forelse(auth()->user()->notifications as $notification)
 
-        <div class="bg-white border rounded-2xl p-6 flex items-start justify-between gap-4 shadow-sm">
-            <div class="flex items-start gap-4">
-                <div class="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold">
-                    🔔
-                </div>
+        <form method="POST" action="{{ route('company.notifications.readAndGo', $notification->id) }}">
+            @csrf
+            <button type="submit"
+                    class="w-full text-left bg-white border rounded-2xl p-6 flex items-start justify-between gap-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200">
+                <div class="flex items-start gap-4">
+                    <div class="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold">
+                        🔔
+                    </div>
 
-                <div>
-                    {{-- 🔔 Clique que redireciona --}}
-                    <form method="POST"
-                          action="{{ route('company.notifications.readAndGo', $notification->id) }}">
-                        @csrf
-                        <button class="text-left font-medium text-emerald-700 hover:underline">
+                    <div>
+                        <p class="font-medium {{ is_null($notification->read_at) ? 'text-emerald-700' : 'text-gray-700' }}">
                             {{ $notification->data['message'] }}
-                        </button>
-                    </form>
+                        </p>
 
-                    <p class="text-sm text-gray-500 mt-1">
-                        Vaga: {{ $notification->data['job_title'] }}
-                    </p>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Vaga: {{ $notification->data['job_title'] }}
+                        </p>
 
-                    <p class="text-sm text-gray-500">
-                        Aluno: {{ $notification->data['student_name'] }}
-                    </p>
+                        <p class="text-sm text-gray-500">
+                            Aluno: {{ $notification->data['student_name'] }}
+                        </p>
 
-                    <p class="text-xs text-gray-400 mt-2">
-                        {{ $notification->created_at->diffForHumans() }}
-                    </p>
+                        <p class="text-xs text-gray-400 mt-2">
+                            {{ $notification->created_at->diffForHumans() }}
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <span class="text-[11px] text-gray-400 whitespace-nowrap">
-                {{ $notification->created_at->format('H:i') }}
-            </span>
-        </div>
+                <div class="flex flex-col items-end gap-2">
+                    @if(is_null($notification->read_at))
+                        <span class="inline-block h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                    @endif
+
+                    <span class="text-[11px] text-gray-400 whitespace-nowrap">
+                        {{ $notification->created_at->format('H:i') }}
+                    </span>
+                </div>
+            </button>
+        </form>
 
     @empty
         <div class="rounded-2xl border border-dashed p-8 text-center text-gray-500">

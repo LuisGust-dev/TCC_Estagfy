@@ -146,6 +146,10 @@
 
                 @php
                     $count = auth()->user()->unreadNotifications->count();
+                    $unreadMessagesCount = \App\Models\Message::where('student_id', auth()->id())
+                        ->where('sender_id', '!=', auth()->id())
+                        ->whereNull('read_at')
+                        ->count();
                 @endphp
 
                 @if($count > 0)
@@ -157,16 +161,24 @@
 
             {{-- MENSAGENS --}}
             <a href="{{ route('student.messages.index') }}"
-               class="flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="flex items-center justify-between px-4 py-2.5 rounded-lg
                {{ request()->routeIs('student.messages.*') || request()->routeIs('student.chat.*')
                     ? 'bg-blue-600 text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.messages.*') || request()->routeIs('student.chat.*') ? 'text-white' : '' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
-                    </svg>
+                <span class="flex items-center gap-3">
+                    <span class="text-blue-600 {{ request()->routeIs('student.messages.*') || request()->routeIs('student.chat.*') ? 'text-white' : '' }}">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
+                        </svg>
+                    </span>
+                    Mensagens
                 </span>
-                Mensagens
+
+                @if($unreadMessagesCount > 0)
+                    <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                        {{ $unreadMessagesCount }}
+                    </span>
+                @endif
             </a>
 
         </nav>

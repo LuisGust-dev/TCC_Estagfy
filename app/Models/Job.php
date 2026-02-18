@@ -15,6 +15,7 @@ class Job extends Model
         'description',
         'location',
         'type',
+        'area',
         'salary',
         'requirements',
     ];

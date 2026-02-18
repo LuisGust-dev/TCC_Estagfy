@@ -17,9 +17,9 @@ class CompanyChatController extends Controller
      */
     public function index()
 {
-    $companyId = Auth::user()->company->id;
+    $companyUserId = Auth::id();
 
-    $conversations = Message::where('company_id', $companyId)
+    $conversations = Message::where('company_id', $companyUserId)
         ->with(['student', 'job'])
         ->orderBy('created_at', 'desc')
         ->get()
@@ -36,12 +36,13 @@ class CompanyChatController extends Controller
     /**
      * 💬 Abre uma conversa específica
      */
-    public function show($jobId, $studentId)
+public function show($jobId, $studentId)
 {
-    $companyId = Auth::user()->company->id;
+    $companyProfileId = Auth::user()->company->id;
+    $companyUserId = Auth::id();
 
     $job = Job::where('id', $jobId)
-        ->where('company_id', $companyId)
+        ->where('company_id', $companyProfileId)
         ->firstOrFail();
 
     $student = User::where('id', $studentId)
@@ -50,12 +51,19 @@ class CompanyChatController extends Controller
 
     $messages = Message::where('job_id', $jobId)
         ->where('student_id', $studentId)
-        ->where('company_id', $companyId)
+        ->where('company_id', $companyUserId)
         ->orderBy('created_at')
         ->get();
 
+    Message::where('job_id', $jobId)
+        ->where('student_id', $studentId)
+        ->where('company_id', $companyUserId)
+        ->where('sender_id', '!=', Auth::id())
+        ->whereNull('read_at')
+        ->update(['read_at' => now()]);
+
     // 🔹 REBUSCA AS CONVERSAS (lado esquerdo)
-    $conversations = Message::where('company_id', $companyId)
+    $conversations = Message::where('company_id', $companyUserId)
         ->with(['student', 'job'])
         ->orderBy('created_at', 'desc')
         ->get()
@@ -73,10 +81,16 @@ class CompanyChatController extends Controller
      */
     public function send($jobId, $studentId)
     {
+        $companyProfileId = Auth::user()->company->id;
+
+        Job::where('id', $jobId)
+            ->where('company_id', $companyProfileId)
+            ->firstOrFail();
+
         Message::create([
             'job_id'     => $jobId,
             'student_id' => $studentId,
-            'company_id' => Auth::user()->company->id,
+            'company_id' => Auth::id(),
             'sender_id'  => Auth::id(),
             'message'    => request('message'),
         ]);
@@ -89,17 +103,24 @@ class CompanyChatController extends Controller
      */
     public function poll(Request $request, $jobId, $studentId)
     {
-        $companyId = Auth::user()->company->id;
+        $companyUserId = Auth::id();
+        $currentUserId = Auth::id();
         $lastId = (int) $request->query('last_id', 0);
 
         $messages = Message::where('job_id', $jobId)
             ->where('student_id', $studentId)
-            ->where('company_id', $companyId)
+            ->where('company_id', $companyUserId)
             ->when($lastId > 0, function ($query) use ($lastId) {
                 $query->where('id', '>', $lastId);
             })
             ->orderBy('created_at')
             ->get();
+
+        $messages->where('sender_id', '!=', $currentUserId)
+            ->whereNull('read_at')
+            ->each(function ($message) {
+                $message->update(['read_at' => now()]);
+            });
 
         return response()->json([
             'messages' => $messages->map(function ($message) {

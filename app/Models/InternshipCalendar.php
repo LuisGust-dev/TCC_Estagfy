@@ -12,6 +12,7 @@ class InternshipCalendar extends Model
     protected $fillable = [
         'title',
         'description',
+        'course',
         'start_date',
         'end_date',
         'created_by',

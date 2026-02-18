@@ -19,6 +19,9 @@
                 $lastMessage = $group->first();
                 $studentItem = $lastMessage->student;
                 $jobItem = $lastMessage->job;
+                $hasUnread = $group->contains(function ($message) {
+                    return $message->sender_id !== auth()->id() && is_null($message->read_at);
+                });
             @endphp
 
             <a href="{{ route('company.chat.show', [$jobItem->id, $studentItem->id]) }}"
@@ -38,9 +41,14 @@
                         {{ $lastMessage->message }}
                     </p>
                 </div>
-                <span class="text-[11px] text-gray-400">
-                    {{ $lastMessage->created_at->format('H:i') }}
-                </span>
+                <div class="flex flex-col items-end gap-1">
+                    @if($hasUnread)
+                        <span class="inline-block h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+                    @endif
+                    <span class="text-[11px] text-gray-400">
+                        {{ $lastMessage->created_at->format('H:i') }}
+                    </span>
+                </div>
             </a>
         @empty
             <p class="p-4 text-sm text-gray-400">

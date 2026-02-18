@@ -13,10 +13,16 @@ class JobBrowseController extends Controller
     public function index(Request $request)
     {
         $search = $request->string('q')->trim();
+        $studentCourse = Auth::user()->student?->course;
 
         $jobs = Job::withCount('applications')
             ->whereHas('company.user', function ($query) {
                 $query->where('active', true);
+            })
+            ->when(!empty($studentCourse), function ($query) use ($studentCourse) {
+                $query->where('area', $studentCourse);
+            }, function ($query) {
+                $query->whereRaw('1 = 0');
             })
             ->when($search->isNotEmpty(), function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
@@ -55,6 +61,11 @@ public function show(Job $job)
     }
 
     $student = Auth::user();
+    $studentCourse = $student->student?->course;
+
+    if (empty($studentCourse) || $job->area !== $studentCourse) {
+        abort(404);
+    }
 
     // verifica se o aluno já se candidatou
     $application = Application::where('job_id', $job->id)

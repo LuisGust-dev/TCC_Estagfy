@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class JobController extends Controller
 {
@@ -24,7 +25,9 @@ class JobController extends Controller
 
     public function create()
     {
-        return view('company.jobs.create');
+        $courses = config('internship.courses', []);
+
+        return view('company.jobs.create', compact('courses'));
     }
 
     public function store(Request $request)
@@ -34,6 +37,7 @@ class JobController extends Controller
             'description' => 'required|string',
             'location'    => 'nullable|string|max:255',
             'type'        => 'nullable|string|max:50',
+            'area'        => ['required', Rule::in(config('internship.courses', []))],
             'salary'      => 'nullable|numeric',
             'requirements' => 'nullable|array',
             'requirements.*' => 'nullable|string|max:120',
@@ -51,6 +55,7 @@ class JobController extends Controller
             'description'=> $request->description,
             'location'   => $request->location,
             'type'       => $request->type,
+            'area'       => $request->area,
             'salary'     => $request->salary,
             'requirements' => $requirements,
         ]);

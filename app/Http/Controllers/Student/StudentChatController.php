@@ -17,7 +17,7 @@ class StudentChatController extends Controller
         $studentId = auth()->id();
 
         $conversations = Message::where('student_id', $studentId)
-            ->with(['job.company'])
+            ->with(['job.company.user'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('job_id');
@@ -37,6 +37,12 @@ class StudentChatController extends Controller
     {
         $studentId = auth()->id();
 
+        Message::where('job_id', $job->id)
+            ->where('student_id', $studentId)
+            ->where('sender_id', '!=', $studentId)
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+
         // Buscar mensagens desse chat
         $messages = Message::where('job_id', $job->id)
             ->where('student_id', $studentId)
@@ -44,7 +50,7 @@ class StudentChatController extends Controller
             ->get();
 
         $conversations = Message::where('student_id', $studentId)
-            ->with(['job.company'])
+            ->with(['job.company.user'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('job_id');
@@ -63,10 +69,16 @@ class StudentChatController extends Controller
             'message' => 'required|string|max:2000',
         ]);
 
+        $companyUserId = data_get($job, 'company.user.id');
+
+        if (empty($companyUserId)) {
+            return back()->with('error', 'Empresa da vaga não encontrada.');
+        }
+
         Message::create([
             'job_id'     => $job->id,
             'student_id'=> auth()->id(),
-            'company_id'=> $job->company_id,
+            'company_id'=> $companyUserId,
             'sender_id' => auth()->id(),
             'message'   => $request->message,
         ]);
@@ -89,6 +101,12 @@ class StudentChatController extends Controller
             })
             ->orderBy('created_at')
             ->get();
+
+        $messages->where('sender_id', '!=', $studentId)
+            ->whereNull('read_at')
+            ->each(function ($message) {
+                $message->update(['read_at' => now()]);
+            });
 
         return response()->json([
             'messages' => $messages->map(function ($message) {
