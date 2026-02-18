@@ -3,139 +3,134 @@
 @section('title', 'Meu Perfil')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
+<div class="max-w-6xl mx-auto space-y-6">
 
-    {{-- Título --}}
-    <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold text-gray-800">Perfil do Aluno</h1>
-        <p class="text-gray-500">Confira suas informações acadêmicas</p>
-    </div>
-
-    {{-- Card principal --}}
-    <div class="bg-white rounded-2xl shadow border overflow-hidden">
-
-        {{-- Header azul --}}
-        <div class="bg-gradient-to-r from-blue-600 to-blue-400 p-8 text-center text-white">
-            <div class="mx-auto w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
+    <section class="rounded-3xl border bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-8 text-white shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+            <div class="h-20 w-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center overflow-hidden">
                 @if($user->photo)
-                    <img
-                        src="{{ asset('storage/' . $user->photo) }}"
-                        alt="Foto do aluno"
-                        class="w-full h-full object-cover"
-                    >
+                    <img src="{{ asset('storage/' . $user->photo) }}"
+                         alt="Foto do aluno"
+                         class="h-full w-full object-cover">
                 @else
-                    <span class="text-2xl font-semibold">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </span>
+                    <span class="text-2xl font-semibold">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
                 @endif
             </div>
-            <h2 class="text-xl font-semibold">{{ $user->name }}</h2>
-            <p class="text-sm opacity-90">{{ $user->email }}</p>
+            <div class="min-w-0">
+                <h1 class="text-2xl font-bold truncate">{{ $user->name }}</h1>
+                <p class="text-sm text-blue-100 truncate">{{ $user->email }}</p>
+                <p class="text-xs uppercase tracking-widest mt-2 text-blue-100/90">Perfil de Estudante</p>
+            </div>
+        </div>
+    </section>
+
+    @if(session('success'))
+        <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            @foreach($errors->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
+    <form method="POST"
+          action="{{ route('student.profile.update') }}"
+          enctype="multipart/form-data"
+          class="rounded-3xl border bg-white p-6 md:p-8 shadow-sm space-y-6">
+        @csrf
+        @method('PUT')
+
+        <div>
+            <h2 class="text-lg font-semibold text-gray-900">Informações pessoais</h2>
+            <p class="text-sm text-gray-500">Mantenha seus dados atualizados para facilitar o processo seletivo.</p>
         </div>
 
-        {{-- Conteúdo --}}
-        <div class="p-8">
-
-            {{-- Cabeçalho --}}
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    Informações do Estudante
-                </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="md:col-span-2">
+                <label class="text-sm font-medium text-gray-700">Nome completo</label>
+                <input type="text"
+                       name="name"
+                       value="{{ old('name', $user->name) }}"
+                       class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 
-            @if(session('success'))
-                <div class="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-700">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <div>
+                <label class="text-sm font-medium text-gray-700">E-mail</label>
+                <input type="email"
+                       name="email"
+                       value="{{ old('email', $user->email) }}"
+                       class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+            </div>
 
-            <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data" class="space-y-6">
-                @csrf
-                @method('PUT')
-
-                <div>
-                    <label class="text-sm text-gray-600">Nome completo</label>
-                    <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                           class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-sm text-gray-600">E-mail</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                               class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
-                    </div>
-
-                    <div>
-                        <label class="text-sm text-gray-600">Status</label>
-                        <input type="text" value="Estudante"
-                               class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50" readonly>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-sm text-gray-600">CPF</label>
-                    <input type="text" name="cpf" value="{{ old('cpf', $student?->cpf) }}"
-                           class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-sm text-gray-600">Curso</label>
-                        <select name="course" class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
-                            <option value="">Selecione o curso</option>
-                            @foreach($courses as $course)
-                                <option value="{{ $course }}" @selected(old('course', $student?->course) === $course)>{{ $course }}</option>
-                            @endforeach
-                        </select>
-                        @error('course')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label class="text-sm text-gray-600">Período</label>
-                        <input type="text" name="period" value="{{ old('period', $student?->period) }}"
-                               class="w-full mt-1 border rounded-lg px-4 py-2 bg-gray-50">
-                    </div>
-                </div>
-
-                <div class="pt-6 border-t">
-                    <h4 class="font-semibold text-gray-800 mb-3">
-                        Currículo do Aluno
-                    </h4>
-
-                    <div class="border-2 border-dashed rounded-xl p-6 text-center bg-gray-50">
-                        @if($student?->resume)
-                            <div class="text-3xl mb-2">📄</div>
-                            <p class="text-gray-500 text-sm mb-3">
-                                Currículo disponível para visualização
-                            </p>
-                            <a href="{{ asset('storage/' . $student->resume) }}"
-                               class="inline-block border px-4 py-2 rounded-lg text-sm hover:bg-gray-100">
-                                Ver Currículo
-                            </a>
-                        @else
-                            <div class="text-3xl mb-2">⬆️</div>
-                            <p class="text-gray-500 text-sm mb-3">
-                                Nenhum currículo enviado
-                            </p>
-                        @endif
-                        <div class="mt-4">
-                            <label class="block text-sm text-gray-600 mb-2">Atualizar currículo</label>
-                            <input type="file" name="resume" accept=".pdf,.doc,.docx"
-                                   class="w-full text-sm">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-6">
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg">
-                        Salvar alterações
-                    </button>
-                </div>
-            </form>
+            <div>
+                <label class="text-sm font-medium text-gray-700">CPF</label>
+                <input type="text"
+                       name="cpf"
+                       value="{{ old('cpf', $student?->cpf) }}"
+                       class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+            </div>
         </div>
-    </div>
+
+        <div class="pt-2">
+            <h3 class="text-base font-semibold text-gray-900 mb-3">Informações acadêmicas</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Curso</label>
+                    <select name="course"
+                            class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Selecione o curso</option>
+                        @foreach($courses as $course)
+                            <option value="{{ $course }}" @selected(old('course', $student?->course) === $course)>{{ $course }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Período</label>
+                    <input type="text"
+                           name="period"
+                           value="{{ old('period', $student?->period) }}"
+                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-2 border-t">
+            <h3 class="text-base font-semibold text-gray-900 mb-1">Currículo</h3>
+            <p class="text-sm text-gray-500 mb-4">Arquivo usado nas candidaturas.</p>
+
+            <div class="rounded-2xl border border-dashed border-blue-200 bg-blue-50/40 p-5 text-center">
+                @if($student?->resume)
+                    <p class="text-sm text-gray-700 mb-3">Currículo disponível</p>
+                    <a href="{{ asset('storage/' . $student->resume) }}"
+                       class="inline-flex items-center rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm text-blue-700 hover:bg-blue-50">
+                        Ver currículo
+                    </a>
+                @else
+                    <p class="text-sm text-gray-500">Nenhum currículo enviado.</p>
+                @endif
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Atualizar currículo</label>
+                <input type="file"
+                       name="resume"
+                       accept=".pdf,.doc,.docx"
+                       class="w-full text-sm text-gray-600">
+            </div>
+        </div>
+
+        <div class="pt-2">
+            <button type="submit"
+                    class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700">
+                Salvar alterações
+            </button>
+        </div>
+    </form>
 </div>
 @endsection

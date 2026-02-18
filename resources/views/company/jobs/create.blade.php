@@ -25,7 +25,7 @@
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">Título da vaga</label>
             <input type="text" name="title"
-                placeholder="Ex: Estágio em Desenvolvimento Web"
+                placeholder="Ex: Estágio em..."
                 class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
         </div>
 
@@ -42,7 +42,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Localização</label>
                 <input type="text" name="location"
-                    placeholder="Ex: São Paulo, SP"
+                    placeholder="Ex: Guanambi, Ba"
                     class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
@@ -59,7 +59,7 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Remuneração</label>
                 <input type="text" name="salary"
-                    placeholder="Ex: R$ 1.800,00"
+                    placeholder="Ex: R$400,00"
                     class="w-full border rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:outline-none">
             </div>
 
