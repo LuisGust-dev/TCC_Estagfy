@@ -42,6 +42,10 @@ class AuthenticatedSessionController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
+    if ($user->role === 'coordinator') {
+        return redirect()->route('coordinator.calendar.index');
+    }
+
     return redirect('/'); // fallback
 }
 

@@ -26,6 +26,10 @@
                class="px-3 py-2 rounded-lg border {{ $role === 'admin' ? 'bg-indigo-600 text-white border-indigo-600' : 'text-gray-600 hover:bg-gray-100' }}">
                 Admin
             </a>
+            <a href="{{ route('admin.users.index', ['role' => 'coordinator']) }}"
+               class="px-3 py-2 rounded-lg border {{ $role === 'coordinator' ? 'bg-amber-600 text-white border-amber-600' : 'text-gray-600 hover:bg-gray-100' }}">
+                Coordenadores
+            </a>
         </div>
     </div>
 

@@ -14,7 +14,7 @@ class UserController extends Controller
 
         $usersQuery = User::query();
 
-        if (in_array($role, ['student', 'company', 'admin'], true)) {
+        if (in_array($role, ['student', 'company', 'admin', 'coordinator'], true)) {
             $usersQuery->where('role', $role);
         }
 

@@ -7,6 +7,7 @@ use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\ApplicationStatusNotification;
+use Illuminate\Support\Facades\DB;
 
 class JobCandidateController extends Controller
 {
@@ -59,7 +60,33 @@ class JobCandidateController extends Controller
 
     public function approve(Application $application)
     {
-        $application->update(['status' => 'aprovado']);
+        $companyId = Auth::user()->company->id;
+
+        if ($application->job->company_id !== $companyId) {
+            abort(403);
+        }
+
+        if ($application->status !== 'em_analise') {
+            return back()->with('error', 'Só é possível aprovar candidaturas em análise.');
+        }
+
+        $alreadyApproved = Application::where('student_id', $application->student_id)
+            ->where('status', 'aprovado')
+            ->where('id', '!=', $application->id)
+            ->exists();
+
+        if ($alreadyApproved) {
+            return back()->with('error', 'Este aluno já foi aprovado em outra vaga.');
+        }
+
+        DB::transaction(function () use ($application) {
+            $application->update(['status' => 'aprovado']);
+
+            Application::where('student_id', $application->student_id)
+                ->where('status', 'em_analise')
+                ->where('id', '!=', $application->id)
+                ->delete();
+        });
 
         // 🔔 Notificar aluno
         $application->student->notify(
@@ -77,6 +104,12 @@ class JobCandidateController extends Controller
      */
     public function reject(Application $application)
     {
+        $companyId = Auth::user()->company->id;
+
+        if ($application->job->company_id !== $companyId) {
+            abort(403);
+        }
+
         $application->update(['status' => 'recusado']);
 
         // 🔔 Notificar aluno

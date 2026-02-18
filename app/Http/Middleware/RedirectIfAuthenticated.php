@@ -21,6 +21,24 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::guard($guard)->user();
+
+                if ($user?->role === 'student') {
+                    return redirect()->route('student.dashboard');
+                }
+
+                if ($user?->role === 'company') {
+                    return redirect()->route('company.dashboard');
+                }
+
+                if ($user?->role === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                }
+
+                if ($user?->role === 'coordinator') {
+                    return redirect()->route('coordinator.calendar.index');
+                }
+
                 return redirect(RouteServiceProvider::HOME);
             }
         }

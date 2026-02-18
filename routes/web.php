@@ -21,6 +21,7 @@ use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\JobBrowseController;
 use App\Http\Controllers\Student\ApplicationController as StudentApplicationController;
 use App\Http\Controllers\Student\StudentProfileController;
+use App\Http\Controllers\Student\InternshipCalendarController as StudentInternshipCalendarController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Student\StudentChatController;
 use App\Http\Controllers\Company\CompanyChatController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Coordinator\InternshipCalendarController as CoordinatorInternshipCalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +135,9 @@ Route::get('/jobs/{job}', [JobBrowseController::class, 'show'])
 Route::delete('/applications/{application}', [StudentApplicationController::class, 'destroy'])
     ->name('applications.destroy');
 
+Route::get('/calendar', [StudentInternshipCalendarController::class, 'index'])
+    ->name('calendar.index');
+
 
     // 📌 Lista de notificações
     Route::get('/notifications', function () {
@@ -155,6 +160,26 @@ Route::delete('/applications/{application}', [StudentApplicationController::clas
 
 
 
+
+
+/*
+|--------------------------------------------------------------------------
+| Rotas do COORDENADOR
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'active', 'coordinator'])
+    ->prefix('coordinator')
+    ->name('coordinator.')
+    ->group(function () {
+        Route::get('/calendar', [CoordinatorInternshipCalendarController::class, 'index'])
+            ->name('calendar.index');
+        Route::post('/calendar', [CoordinatorInternshipCalendarController::class, 'store'])
+            ->name('calendar.store');
+        Route::put('/calendar/{event}', [CoordinatorInternshipCalendarController::class, 'update'])
+            ->name('calendar.update');
+        Route::delete('/calendar/{event}', [CoordinatorInternshipCalendarController::class, 'destroy'])
+            ->name('calendar.destroy');
+    });
 
 
 /*

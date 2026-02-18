@@ -23,6 +23,14 @@ class ApplicationController extends Controller
          $student = Auth::user();
          $studentProfile = $student->student;
 
+         $alreadyApproved = Application::where('student_id', $student->id)
+             ->where('status', 'aprovado')
+             ->exists();
+
+         if ($alreadyApproved) {
+             return back()->with('error', 'Você já foi aprovado em uma vaga e não pode se candidatar a outra.');
+         }
+
          $alreadyApplied = Application::where('job_id', $job->id)
              ->where('student_id', $student->id)
              ->exists();

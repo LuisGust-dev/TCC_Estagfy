@@ -110,6 +110,23 @@
                 Candidaturas
             </a>
 
+            {{-- CALENDARIO DE ESTAGIO --}}
+            <a href="{{ route('student.calendar.index') }}"
+               class="flex items-center gap-3 px-4 py-2.5 rounded-lg
+               {{ request()->routeIs('student.calendar.*')
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-blue-600 {{ request()->routeIs('student.calendar.*') ? 'text-white' : '' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="4" y="5" width="16" height="15" rx="2"/>
+                        <path d="M8 3v4"/>
+                        <path d="M16 3v4"/>
+                        <path d="M4 10h16"/>
+                    </svg>
+                </span>
+                Calendario de Estagio
+            </a>
+
             {{-- NOTIFICAÇÕES --}}
             <a href="{{ route('student.notifications.index') }}"
                class="flex justify-between items-center px-4 py-2.5 rounded-lg

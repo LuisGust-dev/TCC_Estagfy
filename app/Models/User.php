@@ -64,6 +64,11 @@ public function isAdmin()
     return $this->role === 'admin';
 }
 
+public function isCoordinator()
+{
+    return $this->role === 'coordinator';
+}
+
 
 
 public function student()
