@@ -16,7 +16,16 @@ class CoordinatorMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check() || !auth()->user()->isCoordinator()) {
-            abort(403);
+            return redirect()->route('coordinator.login');
+        }
+
+        $selectedCourse = $request->session()->get('coordinator_course');
+        $courses = config('internship.courses', []);
+
+        if (!in_array($selectedCourse, $courses, true)) {
+            return redirect()
+                ->route('coordinator.login')
+                ->with('error', 'Selecione o curso que você coordena para continuar.');
         }
 
         return $next($request);

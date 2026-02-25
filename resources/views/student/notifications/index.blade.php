@@ -9,6 +9,19 @@
     Acompanhe atualizações sobre suas candidaturas
 </p>
 
+@if(auth()->user()->notifications->isNotEmpty())
+    <div class="mb-6 flex justify-end">
+        <form method="POST" action="{{ route('student.notifications.clearAll') }}"
+              onsubmit="return confirm('Deseja apagar todas as notificações? Esta ação não pode ser desfeita.');">
+            @csrf
+            <button type="submit"
+                    class="inline-flex items-center rounded-lg border border-red-200 bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition hover:border-red-300 hover:bg-red-100">
+                Apagar todas
+            </button>
+        </form>
+    </div>
+@endif
+
 <div class="space-y-4">
 
     @forelse(auth()->user()->notifications as $notification)

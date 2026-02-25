@@ -52,10 +52,7 @@ Vagas de Estágio
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-sm">
-            <span class="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 border border-blue-100">
-                <span class="h-2 w-2 rounded-full bg-blue-500"></span>
-                Área ativa
-            </span>
+       
             <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200">
                 {{ $studentCourse ?? 'Curso não definido' }}
             </span>

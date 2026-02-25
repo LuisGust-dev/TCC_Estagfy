@@ -36,6 +36,10 @@ class RedirectIfAuthenticated
                 }
 
                 if ($user?->role === 'coordinator') {
+                    if (!$request->session()->has('coordinator_course')) {
+                        return redirect()->route('coordinator.login');
+                    }
+
                     return redirect()->route('coordinator.calendar.index');
                 }
 

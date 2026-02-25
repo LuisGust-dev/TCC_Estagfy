@@ -31,11 +31,11 @@ class AuthenticatedSessionController extends Controller
     $user = auth()->user();
 
     if ($user->role === 'student') {
-        return redirect()->route('student.dashboard');
+        return redirect()->route('student.dashboard')->with('login_animation', 'student');
     }
 
     if ($user->role === 'company') {
-        return redirect()->route('company.dashboard');
+        return redirect()->route('company.dashboard')->with('login_animation', 'company');
     }
 
     if ($user->role === 'admin') {
@@ -43,6 +43,10 @@ class AuthenticatedSessionController extends Controller
     }
 
     if ($user->role === 'coordinator') {
+        if (!session()->has('coordinator_course')) {
+            return redirect()->route('coordinator.login');
+        }
+
         return redirect()->route('coordinator.calendar.index');
     }
 
@@ -56,11 +60,18 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $redirectToLogin = $request->boolean('redirect_to_login');
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+        $request->session()->forget('coordinator_course');
+
+        if ($redirectToLogin) {
+            return redirect()->route('login');
+        }
 
         return redirect('/');
     }

@@ -11,14 +11,14 @@ class TopHiringCompanyController extends Controller
 {
     public function index(Request $request)
     {
-        [$courses, $selectedCourse, $courseCounts] = $this->courseContext($request);
+        $selectedCourse = $this->selectedCourse($request);
 
         $companies = TopHiringCompany::query()
             ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
             ->orderBy('company_name')
             ->get();
 
-        return view('coordinator.calendar.hiring-companies', compact('companies', 'courses', 'selectedCourse', 'courseCounts'));
+        return view('coordinator.calendar.hiring-companies', compact('companies', 'selectedCourse'));
     }
 
     public function store(Request $request)
@@ -57,21 +57,8 @@ class TopHiringCompanyController extends Controller
         return back()->with('success', 'Empresa destaque removida.');
     }
 
-    private function courseContext(Request $request): array
+    private function selectedCourse(Request $request): ?string
     {
-        $courses = config('internship.courses', []);
-        $selectedCourse = $request->query('course');
-
-        if (!in_array($selectedCourse, $courses, true)) {
-            $selectedCourse = $courses[0] ?? null;
-        }
-
-        $courseCounts = TopHiringCompany::query()
-            ->selectRaw('course, COUNT(*) as total')
-            ->whereNotNull('course')
-            ->groupBy('course')
-            ->pluck('total', 'course');
-
-        return [$courses, $selectedCourse, $courseCounts];
+        return $request->session()->get('coordinator_course');
     }
 }

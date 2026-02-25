@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
 use App\Http\Controllers\Coordinator\InternshipCalendarController as CoordinatorInternshipCalendarController;
 use App\Http\Controllers\Coordinator\TopHiringCompanyController as CoordinatorTopHiringCompanyController;
+use App\Http\Controllers\Coordinator\CoordinatorAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,16 @@ Route::post('/register/company', [RegisterCompanyController::class, 'store'])
 
 // Rotas de autenticação padrão (login, logout, etc)
 require __DIR__ . '/auth.php';
+
+/*
+|--------------------------------------------------------------------------
+| Login do COORDENADOR (com seleção de curso)
+|--------------------------------------------------------------------------
+*/
+Route::get('/coordinator/login', [CoordinatorAuthController::class, 'create'])
+    ->name('coordinator.login');
+Route::post('/coordinator/login', [CoordinatorAuthController::class, 'store'])
+    ->name('coordinator.login.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +178,13 @@ Route::get('/calendar', [StudentInternshipCalendarController::class, 'index'])
 
         return redirect()->route('student.notifications.index');
     })->name('notifications.readAndGo');
+
+    // 🗑️ Apagar todas as notificações do aluno
+    Route::post('/notifications/clear-all', function () {
+        auth()->user()->notifications()->delete();
+
+        return back()->with('success', 'Todas as notificações foram apagadas.');
+    })->name('notifications.clearAll');
 
 
     });
@@ -293,6 +311,13 @@ Route::middleware(['auth', 'active', 'company'])
                 $notification->data['job_id']
             );
         })->name('notifications.readAndGo');
+
+        // 🗑️ Apagar todas as notificações da empresa
+        Route::post('/notifications/clear-all', function () {
+            auth()->user()->notifications()->delete();
+
+            return back()->with('success', 'Todas as notificações foram apagadas.');
+        })->name('notifications.clearAll');
 
 
 

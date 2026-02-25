@@ -6,6 +6,47 @@
     <title>@yield('title', 'Aluno') | EstagFy</title>
     @vite(['resources/css/app.css'])
     <style>
+        .estagfy-login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 18% 20%, rgba(147, 197, 253, 0.45), transparent 38%), #eff6ff;
+            opacity: 1;
+            transition: opacity .35s ease;
+        }
+
+        .estagfy-login-overlay.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .estagfy-login-card {
+            border: 1px solid rgba(59, 130, 246, .18);
+            background: rgba(255, 255, 255, .95);
+            border-radius: 1rem;
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 24px 48px -30px rgba(30, 64, 175, .5);
+            min-width: 320px;
+            text-align: center;
+        }
+
+        .estagfy-login-spinner {
+            width: 2.2rem;
+            height: 2.2rem;
+            border: 3px solid #bfdbfe;
+            border-top-color: #2563eb;
+            border-radius: 9999px;
+            margin: 0 auto .75rem;
+            animation: estagfySpin .8s linear infinite;
+        }
+
+        @keyframes estagfySpin {
+            to { transform: rotate(360deg); }
+        }
+
         #student-sidebar {
             transition: width 220ms ease, padding 220ms ease;
         }
@@ -41,6 +82,16 @@
     </style>
 </head>
 <body class="bg-slate-100 text-gray-900">
+@if(session('login_animation') === 'student')
+    <div id="student-login-overlay" class="estagfy-login-overlay" aria-hidden="true">
+        <div class="estagfy-login-card">
+            <div class="estagfy-login-spinner"></div>
+            <p class="text-sm font-semibold text-blue-700">Entrando na área do aluno</p>
+            <p class="mt-1 text-xs text-gray-500">Carregando seu painel...</p>
+        </div>
+    </div>
+@endif
+
 @php
     $count = auth()->user()->unreadNotifications->count();
     $unreadMessagesCount = \App\Models\Message::where('student_id', auth()->id())
@@ -272,6 +323,19 @@
         });
     });
 </script>
+@if(session('login_animation') === 'student')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('student-login-overlay');
+        if (!overlay) return;
+
+        setTimeout(() => {
+            overlay.classList.add('is-hidden');
+            setTimeout(() => overlay.remove(), 380);
+        }, 1900);
+    });
+</script>
+@endif
 
 </body>
 </html>

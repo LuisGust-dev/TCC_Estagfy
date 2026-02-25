@@ -6,6 +6,47 @@
     <title>@yield('title', 'Empresa | EstagFy')</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
     <style>
+        .estagfy-login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 82% 20%, rgba(110, 231, 183, 0.4), transparent 34%), #ecfdf5;
+            opacity: 1;
+            transition: opacity .35s ease;
+        }
+
+        .estagfy-login-overlay.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .estagfy-login-card {
+            border: 1px solid rgba(16, 185, 129, .22);
+            background: rgba(255, 255, 255, .96);
+            border-radius: 1rem;
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 24px 48px -30px rgba(5, 150, 105, .45);
+            min-width: 320px;
+            text-align: center;
+        }
+
+        .estagfy-login-spinner {
+            width: 2.2rem;
+            height: 2.2rem;
+            border: 3px solid #bbf7d0;
+            border-top-color: #16a34a;
+            border-radius: 9999px;
+            margin: 0 auto .75rem;
+            animation: estagfySpin .8s linear infinite;
+        }
+
+        @keyframes estagfySpin {
+            to { transform: rotate(360deg); }
+        }
+
         #company-sidebar {
             transition: width 220ms ease, padding 220ms ease;
         }
@@ -41,6 +82,15 @@
     </style>
 </head>
 <body class="bg-gray-50">
+@if(session('login_animation') === 'company')
+    <div id="company-login-overlay" class="estagfy-login-overlay" aria-hidden="true">
+        <div class="estagfy-login-card">
+            <div class="estagfy-login-spinner"></div>
+            <p class="text-sm font-semibold text-green-700">Entrando na área da empresa</p>
+            <p class="mt-1 text-xs text-gray-500">Preparando suas vagas e candidatos...</p>
+        </div>
+    </div>
+@endif
 
 @php
     $unreadCount = auth()->user()->unreadNotifications->count();
@@ -218,5 +268,18 @@
         });
     });
 </script>
+@if(session('login_animation') === 'company')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('company-login-overlay');
+        if (!overlay) return;
+
+        setTimeout(() => {
+            overlay.classList.add('is-hidden');
+            setTimeout(() => overlay.remove(), 380);
+        }, 1900);
+    });
+</script>
+@endif
 </body>
 </html>

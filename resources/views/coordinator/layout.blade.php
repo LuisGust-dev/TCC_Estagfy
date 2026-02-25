@@ -16,17 +16,19 @@
                 <div>
                     <p class="text-sm text-gray-500">Painel</p>
                     <p class="text-lg font-semibold">Coordenação de Curso</p>
+                    <p class="text-xs text-gray-500">Curso: {{ session('coordinator_course') }}</p>
                 </div>
             </div>
 
-           
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit"
-                        class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900">
-                    Sair
-                </button>
-            </form>
+            <div class="flex items-center gap-2">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                            class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 transition hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900">
+                        Sair
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 

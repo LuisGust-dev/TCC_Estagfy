@@ -32,11 +32,11 @@ rgb(74, 71, 228)
     @php($courses = config('internship.courses', []))
 
     {{-- LADO ESQUERDO --}}
-    <div class="relative flex items-center justify-center px-6 py-10 lg:py-12">
+    <div class="relative flex items-center justify-center px-6 py-10 lg:py-12 overflow-hidden">
         <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-blue-200/40 blur-3xl"></div>
         <div class="absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-indigo-200/40 blur-3xl"></div>
 
-        <div class="w-full max-w-xl">
+        <div class="w-full max-w-2xl">
             <div class="bg-white/80 backdrop-blur border border-white shadow-2xl rounded-3xl p-8 md:p-10">
 
                 {{-- voltar --}}
@@ -55,7 +55,7 @@ rgb(74, 71, 228)
                 <form method="POST"
                       action="{{ route('register.student.store') }}"
                       enctype="multipart/form-data"
-                      class="space-y-4">
+                      class="space-y-3">
 
                     @csrf
 
@@ -67,7 +67,7 @@ rgb(74, 71, 228)
                         <input type="file"
                                name="photo"
                                accept="image/*"
-                               class="mt-2 w-full border-2 border-dashed rounded-xl p-4 text-sm text-gray-500 bg-white">
+                               class="mt-2 w-full border-2 border-dashed rounded-xl p-3 text-sm text-gray-500 bg-white">
                         @error('photo')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -160,7 +160,7 @@ rgb(74, 71, 228)
                             Currículo (PDF ou DOC)
                         </label>
                         <input type="file" name="resume" required
-                               class="mt-2 w-full border-2 border-dashed rounded-xl p-4 text-sm text-gray-500 bg-white">
+                               class="mt-2 w-full border-2 border-dashed rounded-xl p-3 text-sm text-gray-500 bg-white">
                         @error('resume')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -174,7 +174,7 @@ rgb(74, 71, 228)
 
                 </form>
 
-                <p class="mt-8 text-sm text-gray-500 text-center">
+                <p class="mt-6 text-sm text-gray-500 text-center">
                     Já tem uma conta?
                     <a href="{{ route('login') }}" class="text-blue-600 hover:underline">
                         Fazer login

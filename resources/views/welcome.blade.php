@@ -4,10 +4,63 @@
 
 @section('content')
 
+<style>
+    .welcome-hero-shell {
+        min-height: clamp(520px, 78vh, 760px);
+        isolation: isolate;
+    }
+
+    .hero-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0;
+        transform: scale(1.06);
+        transition: opacity 900ms ease, transform 6s ease;
+        will-change: opacity, transform;
+    }
+
+    .hero-slide.is-active {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(115deg, rgba(29, 78, 216, .80), rgba(30, 64, 175, .78), rgba(2, 132, 199, .78)),
+            radial-gradient(circle at 14% 20%, rgba(255, 255, 255, .22), transparent 33%),
+            radial-gradient(circle at 82% 86%, rgba(255, 255, 255, .15), transparent 36%);
+        z-index: 1;
+    }
+
+    .hero-typewriter-caret {
+        display: inline-block;
+        width: .14em;
+        margin-left: .08em;
+        background-color: rgba(255, 255, 255, .9);
+        animation: heroBlink 1s steps(1, end) infinite;
+        vertical-align: text-bottom;
+    }
+
+    @keyframes heroBlink {
+        50% { opacity: 0; }
+    }
+</style>
+
 {{-- =========================
 1️⃣ HERO
 ========================= --}}
-<section class="bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 py-28 text-center text-white relative overflow-hidden">
+<section class="welcome-hero-shell py-20 md:py-24 text-center text-white relative overflow-hidden">
+    <div class="hero-slide is-active" data-hero-slide style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="hero-slide" data-hero-slide style="background-image: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="hero-slide" data-hero-slide style="background-image: url('https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="hero-slide" data-hero-slide style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="relative z-10">
 
     {{-- Badge --}}
     <div class="flex justify-center mb-6">
@@ -17,10 +70,10 @@
     </div>
 
     {{-- Título --}}
-    <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-        Conectando <span class="text-yellow-300">alunos</span> e
-        <span class="text-yellow-300">empresas</span><br>
-        para oportunidades de estágio
+    <h1 class="mx-auto max-w-4xl text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+        <span>Conectando alunos e empresas para </span>
+        <span id="hero-typed-text" class="text-yellow-300"></span>
+        <span class="hero-typewriter-caret" aria-hidden="true"></span>
     </h1>
 
     {{-- Subtítulo --}}
@@ -30,7 +83,7 @@
     </p>
 
     {{-- Botões --}}
-    <div class="flex justify-center gap-4">
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
        <a href="{{ route('register.choice') }}"
            class="bg-white text-blue-700 px-10 py-4 rounded-xl font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition">
             Comece agora →
@@ -40,6 +93,7 @@
            class="border border-white text-white px-10 py-4 rounded-xl font-semibold hover:bg-white/10 transition">
             Já tenho conta
         </a>
+    </div>
     </div>
 </section>
 
@@ -241,5 +295,67 @@
 
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = Array.from(document.querySelectorAll('[data-hero-slide]'));
+        let activeSlide = 0;
+
+        if (slides.length > 1) {
+            setInterval(() => {
+                slides[activeSlide].classList.remove('is-active');
+                activeSlide = (activeSlide + 1) % slides.length;
+                slides[activeSlide].classList.add('is-active');
+            }, 4200);
+        }
+
+        const typedEl = document.getElementById('hero-typed-text');
+        if (!typedEl) return;
+
+        const words = [
+            'oportunidades',
+            'carreiras promissoras',
+            'conexões com empresas',
+            'crescimento profissional',
+            'novos talentos'
+        ];
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        const runTypewriter = () => {
+            const currentWord = words[wordIndex];
+
+            if (!deleting) {
+                typedEl.textContent = currentWord.slice(0, charIndex + 1);
+                charIndex += 1;
+
+                if (charIndex === currentWord.length) {
+                    deleting = true;
+                    setTimeout(runTypewriter, 1900);
+                    return;
+                }
+
+                setTimeout(runTypewriter, 85);
+                return;
+            }
+
+            typedEl.textContent = currentWord.slice(0, charIndex - 1);
+            charIndex -= 1;
+
+            if (charIndex === 0) {
+                deleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(runTypewriter, 420);
+                return;
+            }
+
+            setTimeout(runTypewriter, 55);
+        };
+
+        runTypewriter();
+    });
+</script>
 
 @endsection

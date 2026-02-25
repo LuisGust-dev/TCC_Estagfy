@@ -11,18 +11,18 @@ class InternshipCalendarController extends Controller
 {
     public function index(Request $request)
     {
-        [$courses, $selectedCourse, $courseCounts] = $this->calendarContext($request);
+        $selectedCourse = $this->selectedCourse($request);
 
         $eventsCount = InternshipCalendar::query()
             ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
             ->count();
 
-        return view('coordinator.calendar.index', compact('courses', 'selectedCourse', 'courseCounts', 'eventsCount'));
+        return view('coordinator.calendar.index', compact('selectedCourse', 'eventsCount'));
     }
 
     public function events(Request $request)
     {
-        [$courses, $selectedCourse, $courseCounts] = $this->calendarContext($request);
+        $selectedCourse = $this->selectedCourse($request);
 
         $events = InternshipCalendar::query()
             ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
@@ -30,7 +30,7 @@ class InternshipCalendarController extends Controller
             ->orderBy('end_date')
             ->get();
 
-        return view('coordinator.calendar.events', compact('events', 'courses', 'selectedCourse', 'courseCounts'));
+        return view('coordinator.calendar.events', compact('events', 'selectedCourse'));
     }
 
     public function store(Request $request)
@@ -73,21 +73,8 @@ class InternshipCalendarController extends Controller
         return back()->with('success', 'Evento removido do calendário.');
     }
 
-    private function calendarContext(Request $request): array
+    private function selectedCourse(Request $request): ?string
     {
-        $courses = config('internship.courses', []);
-        $selectedCourse = $request->query('course');
-
-        if (!in_array($selectedCourse, $courses, true)) {
-            $selectedCourse = $courses[0] ?? null;
-        }
-
-        $courseCounts = InternshipCalendar::query()
-            ->selectRaw('course, COUNT(*) as total')
-            ->whereNotNull('course')
-            ->groupBy('course')
-            ->pluck('total', 'course');
-
-        return [$courses, $selectedCourse, $courseCounts];
+        return $request->session()->get('coordinator_course');
     }
 }
