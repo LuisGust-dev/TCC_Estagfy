@@ -1,11 +1,11 @@
 FROM php:8.2-cli
 
-# libs + extensões PHP
+# PHP deps
 RUN apt-get update && apt-get install -y \
-    unzip git curl libpq-dev \
+    unzip git curl libpq-dev ca-certificates \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-# Node (para Vite)
+# Node 20 (Vite)
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
@@ -15,14 +15,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY . .
 
-# dependências PHP
+# Instala PHP deps
 RUN composer install --no-dev --optimize-autoloader
 
-# dependências JS + build do Vite (gera public/build/manifest.json)
+# Build front (gera public/build/manifest.json)
 RUN npm ci || npm install
 RUN npm run build
 
-# permissões
+# Permissões básicas
 RUN mkdir -p storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
