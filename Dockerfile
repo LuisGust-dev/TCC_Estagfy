@@ -1,30 +1,36 @@
 FROM php:8.2-cli
 
-# PHP deps
+# deps do sistema + extensões
 RUN apt-get update && apt-get install -y \
     unzip git curl libpq-dev ca-certificates \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql
 
-# Node 20 (Vite)
+# Node 20
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
 # Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 COPY . .
 
-# Instala PHP deps
+# deps PHP
 RUN composer install --no-dev --optimize-autoloader
 
-# Build front (gera public/build/manifest.json)
+# deps Node + build Vite
 RUN npm ci || npm install
 RUN npm run build
 
-# Permissões básicas
+# ✅ PROVA no log (sem shell no free)
+RUN echo "=== LIST public/build ===" \
+ && ls -la public/build || true \
+ && echo "=== LIST public/build/assets ===" \
+ && ls -la public/build/assets || true
+
+# permissões
 RUN mkdir -p storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 10000
-CMD php artisan serve --host=0.0.0.0 --port=10000
+# ✅ Render usa a env PORT (não fixe 10000)
+CMD php -S 0.0.0.0:${PORT:-10000} -t public
