@@ -32,5 +32,7 @@ RUN echo "=== LIST public/build ===" \
 RUN mkdir -p storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
+
+RUN php artisan storage:link || true
 # ✅ Render usa a env PORT (não fixe 10000)
 CMD php artisan serve --host=0.0.0.0 --port=${PORT}
