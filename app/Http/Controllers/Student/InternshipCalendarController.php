@@ -36,17 +36,21 @@ class InternshipCalendarController extends Controller
             ->orderBy('end_date')
             ->get();
 
-        $calendarEvents = $events->map(function (InternshipCalendar $event) {
-            $category = $this->resolveCategory($event->title, $event->description);
+        $today = Carbon::today();
+
+        $calendarEvents = $events->map(function (InternshipCalendar $event) use ($today) {
+            $startDate = $event->start_date->copy();
+            $endDate = ($event->end_date ?: $event->start_date)->copy();
+            $timing = $this->resolveTiming($startDate, $endDate, $today);
 
             return [
                 'id' => $event->id,
                 'title' => $event->title,
                 'description' => $event->description,
-                'start_date' => $event->start_date->copy(),
-                'end_date' => ($event->end_date ?: $event->start_date)->copy(),
-                'category' => $category,
-                'style' => $this->styleForCategory($category),
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'timing' => $timing,
+                'style' => $this->styleForTiming($timing),
             ];
         })->values();
 
@@ -71,25 +75,11 @@ class InternshipCalendarController extends Controller
             ->values()
             ->take(6);
 
-        $legendItems = $calendarEvents
-            ->pluck('category')
-            ->unique()
-            ->values()
-            ->map(function (string $category) {
-                return [
-                    'category' => $category,
-                    'style' => $this->styleForCategory($category),
-                ];
-            });
-
-        if ($legendItems->isEmpty()) {
-            $legendItems = collect([
-                [
-                    'category' => 'data_curso',
-                    'style' => $this->styleForCategory('data_curso'),
-                ],
+        $legendItems = collect(['atraso', 'hoje', 'futuro'])
+            ->map(fn (string $timing) => [
+                'timing' => $timing,
+                'style' => $this->styleForTiming($timing),
             ]);
-        }
 
         $topHiringCompanies = TopHiringCompany::query()
             ->when(!empty($studentCourse), fn ($query) => $query->where('course', $studentCourse), fn ($query) => $query->whereRaw('1 = 0'))
@@ -116,31 +106,27 @@ class InternshipCalendarController extends Controller
         ]);
     }
 
-    private function resolveCategory(string $title, ?string $description): string
+    private function resolveTiming(Carbon $startDate, Carbon $endDate, Carbon $today): string
     {
-        $text = mb_strtolower(trim($title . ' ' . ($description ?? '')));
+        if ($endDate->lt($today)) {
+            return 'atraso';
+        }
 
-        return match (true) {
-            str_contains($text, 'prazo'), str_contains($text, 'entrega') => 'prazo',
-            default => 'data_curso',
-        };
+        if ($startDate->lte($today) && $endDate->gte($today)) {
+            return 'hoje';
+        }
+
+        return 'futuro';
     }
 
-    private function styleForCategory(string $category): array
+    private function styleForTiming(string $timing): array
     {
-        return match ($category) {
-            'prazo' => [
-                'dot' => 'bg-red-500',
-                'soft' => 'bg-red-50 text-red-700 border-red-100',
-                'pill' => 'bg-red-100 text-red-700',
-                'label' => 'Prazo',
-            ],
-            default => [
-                'dot' => 'bg-blue-500',
-                'soft' => 'bg-blue-50 text-blue-700 border-blue-100',
-                'pill' => 'bg-blue-100 text-blue-700',
-                'label' => 'Evento acadêmico',
-            ],
-        };
+        return [
+            'dot' => 'bg-blue-500',
+            'soft' => 'bg-blue-50 text-blue-700 border-blue-100',
+            'pill' => 'bg-blue-100 text-blue-700',
+            'day' => 'border-blue-200 bg-blue-50/30',
+            'label' => 'Evento acadêmico',
+        ];
     }
 }

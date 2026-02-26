@@ -61,7 +61,7 @@
                         $isToday = $date->isToday();
                     @endphp
 
-                    <div class="h-24 rounded-xl border p-2 transition hover:shadow-sm {{ $firstDayEvent ? 'border-blue-200 bg-blue-50/30' : 'border-gray-100 bg-white' }} {{ $isToday ? 'ring-2 ring-blue-200' : '' }}">
+                    <div class="h-24 rounded-xl border p-2 transition hover:shadow-sm {{ $firstDayEvent ? $firstDayEvent['style']['day'] : 'border-gray-100 bg-white' }} {{ $isToday ? 'ring-2 ring-blue-200' : '' }}">
                         <div class="flex items-center justify-between">
                             <span class="text-sm font-semibold {{ $isToday ? 'text-blue-700' : 'text-gray-700' }}">
                                 {{ $day }}
@@ -96,7 +96,7 @@
 
         <aside class="space-y-4">
             <div class="rounded-2xl border bg-white p-5 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900">Próximos eventos</h3>
+                <h3 class="text-lg font-semibold text-gray-900">Eventos do mês</h3>
 
                 <div class="mt-4 space-y-3">
                     @forelse($upcomingEvents as $event)

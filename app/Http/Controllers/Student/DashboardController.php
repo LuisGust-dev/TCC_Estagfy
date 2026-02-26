@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +13,19 @@ class DashboardController extends Controller
     {
         $student = Auth::user();
         $studentCourse = $student->student?->course;
+        $studentId = $student->id;
+
+        $hasApprovedApplication = Application::where('student_id', $studentId)
+            ->where('status', 'aprovado')
+            ->exists();
+
+        $hasPendingApplication = Application::where('student_id', $studentId)
+            ->where('status', 'em_analise')
+            ->exists();
+
+        $applicationStatus = $hasApprovedApplication
+            ? 'aprovado'
+            : ($hasPendingApplication ? 'em_analise' : 'sem_candidatura');
 
         return view('student.dashboard', [
             'totalJobs' => Job::whereHas('company.user', function ($query) {
@@ -28,7 +42,8 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get(),
-            'applicationsCount' => 0, // depois ligamos com applications
+            'applicationsCount' => Application::where('student_id', $studentId)->count(),
+            'applicationStatus' => $applicationStatus,
         ]);
     }
 }

@@ -43,6 +43,20 @@
         </div>
     </a>
 
+    @php
+        $statusLabel = match ($applicationStatus ?? 'sem_candidatura') {
+            'aprovado' => 'Aprovado',
+            'em_analise' => 'Em análise',
+            default => 'Sem candidatura',
+        };
+
+        $statusClass = match ($applicationStatus ?? 'sem_candidatura') {
+            'aprovado' => 'text-emerald-600',
+            'em_analise' => 'text-amber-600',
+            default => 'text-slate-600',
+        };
+    @endphp
+
     <div class="bg-white p-6 rounded-2xl border shadow-sm flex items-center gap-4">
         <div class="rounded-xl bg-yellow-100 p-3 text-yellow-700">
             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -52,7 +66,7 @@
         </div>
         <div>
             <p class="text-gray-500 text-sm">Status</p>
-            <h2 class="text-lg font-semibold text-blue-600">Em breve</h2>
+            <h2 class="text-lg font-semibold {{ $statusClass }}">{{ $statusLabel }}</h2>
         </div>
     </div>
 

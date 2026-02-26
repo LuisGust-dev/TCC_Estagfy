@@ -13,25 +13,27 @@ class DashboardController extends Controller
     {
         $company = Auth::user()->company;
 
-        // 📌 Vagas da empresa
-        $jobs = Job::where('company_id', $company->id)->get();
+        // 📌 IDs das vagas da empresa
+        $jobIds = Job::where('company_id', $company->id)->pluck('id');
 
         // 📊 Cards
-        $vagasAtivas = $jobs->count();
+        $vagasAtivas = Job::where('company_id', $company->id)
+            ->openForApplications()
+            ->count();
 
         $candidatos = Application::whereIn(
             'job_id',
-            $jobs->pluck('id')
+            $jobIds
         )->count();
 
         $contratacoes = Application::whereIn(
             'job_id',
-            $jobs->pluck('id')
+            $jobIds
         )->where('status', 'aprovado')->count();
 
         $emAnalise = Application::whereIn(
             'job_id',
-            $jobs->pluck('id')
+            $jobIds
         )->where('status', 'em_analise')->count();
 
         // 🧳 Vagas recentes (da empresa)
@@ -44,7 +46,7 @@ class DashboardController extends Controller
         // 👥 Candidatos recentes (para vagas da empresa)
         $candidatosRecentes = Application::whereIn(
             'job_id',
-            $jobs->pluck('id')
+            $jobIds
         )
             ->with(['student', 'job'])
             ->latest()

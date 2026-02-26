@@ -18,17 +18,35 @@
     </a>
 </div>
 
+@php
+    $statusFilter = $statusFilter ?? 'all';
+@endphp
+
+<div class="mb-6 flex flex-wrap items-center gap-2">
+    <a href="{{ route('company.jobs.index', ['status' => 'all']) }}"
+       class="px-3 py-1.5 rounded-full border text-sm font-medium transition {{ $statusFilter === 'all' ? 'bg-gray-900 text-white border-gray-900' : 'text-gray-600 border-gray-300 hover:bg-gray-50' }}">
+        Todas
+    </a>
+    <a href="{{ route('company.jobs.index', ['status' => 'active']) }}"
+       class="px-3 py-1.5 rounded-full border text-sm font-medium transition {{ $statusFilter === 'active' ? 'bg-emerald-600 text-white border-emerald-600' : 'text-gray-600 border-gray-300 hover:bg-gray-50' }}">
+        Ativas
+    </a>
+    <a href="{{ route('company.jobs.index', ['status' => 'inactive']) }}"
+       class="px-3 py-1.5 rounded-full border text-sm font-medium transition {{ $statusFilter === 'inactive' ? 'bg-slate-700 text-white border-slate-700' : 'text-gray-600 border-gray-300 hover:bg-gray-50' }}">
+        Inativas
+    </a>
+</div>
+
 {{-- LISTA --}}
 <div class="space-y-6">
 
 @forelse($jobs as $job)
-    <a href="{{ route('company.jobs.candidates', $job) }}"
-       class="group block bg-white border border-gray-200 rounded-xl px-6 py-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-200 hover:ring-1 hover:ring-blue-200">
+    <div class="group bg-white border border-gray-200 rounded-xl px-6 py-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-200 hover:ring-1 hover:ring-blue-200">
 
-        <div class="flex justify-between gap-6">
+        <div class="flex items-start justify-between gap-6">
 
             {{-- ESQUERDA --}}
-            <div class="flex-1">
+            <a href="{{ route('company.jobs.candidates', $job) }}" class="block flex-1 min-w-0">
 
                 {{-- TÍTULO --}}
                 <h2 class="text-base font-semibold text-gray-900 mb-1">
@@ -77,10 +95,10 @@
                     @endforeach
                 </div>
 
-            </div>
+            </a>
 
             {{-- DIREITA --}}
-            <div class="flex flex-col items-end justify-between">
+            <div class="flex shrink-0 flex-col items-end justify-between gap-3">
 
                 {{-- CANDIDATOS --}}
                 <div class="flex flex-col items-end gap-2 mb-4">
@@ -97,29 +115,36 @@
                 </div>
 
                 {{-- AÇÕES --}}
-                <form method="POST"
-                      action="{{ route('company.jobs.destroy', $job) }}"
-                      onsubmit="return confirm('Tem certeza que deseja excluir esta vaga?')"
-                      onclick="event.stopPropagation();">
-                    @csrf
-                    @method('DELETE')
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('company.jobs.edit', $job) }}"
+                       class="inline-flex items-center rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+                       title="Editar vaga">
+                        Editar
+                    </a>
 
-                    <button
-                        type="submit"
-                        class="flex items-center justify-center
-                               w-10 h-10 rounded-lg
-                               border border-red-200
-                               text-red-500
-                               hover:bg-red-50 transition">
-                        🗑
-                    </button>
-                </form>
+                    <form method="POST"
+                          action="{{ route('company.jobs.destroy', $job) }}"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esta vaga?')">
+                        @csrf
+                        @method('DELETE')
+
+                        <button
+                            type="submit"
+                            class="flex items-center justify-center
+                                   w-10 h-10 rounded-lg
+                                   border border-red-200
+                                   text-red-500
+                                   hover:bg-red-50 transition">
+                            🗑
+                        </button>
+                    </form>
+                </div>
 
             </div>
 
         </div>
 
-    </a>
+    </div>
 @empty
     <div class="text-center py-24 text-gray-400">
         <p class="text-lg font-medium">Nenhuma vaga cadastrada</p>

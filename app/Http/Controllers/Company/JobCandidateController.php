@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\DB;
 
 class JobCandidateController extends Controller
 {
+    private function resolveStatusFilter(?string $status, string $default = 'all'): string
+    {
+        $allowedStatuses = ['all', 'em_analise', 'aprovado', 'finalizado', 'recusado'];
+
+        if (!in_array($status, $allowedStatuses, true)) {
+            return $default;
+        }
+
+        return $status;
+    }
+
     /**
      * Lista candidatos da vaga
      */
@@ -21,11 +32,11 @@ class JobCandidateController extends Controller
         $jobIds = Job::where('company_id', $company->id)
             ->pluck('id');
 
-        $status = request()->query('status');
+        $status = $this->resolveStatusFilter(request()->query('status'), 'all');
 
         $applicationsQuery = Application::whereIn('job_id', $jobIds);
 
-        if (!empty($status)) {
+        if ($status !== 'all') {
             $applicationsQuery->where('status', $status);
         }
 
@@ -46,12 +57,19 @@ class JobCandidateController extends Controller
             abort(403);
         }
 
-        $applications = $job->applications()
-            ->with('student.student')
-            ->latest()
-            ->get();
+        $status = $this->resolveStatusFilter(request()->query('status'), 'all');
 
-        return view('company.jobs.candidates', compact('job', 'applications'));
+        $applicationsQuery = $job->applications()
+            ->with('student.student')
+            ->latest();
+
+        if ($status !== 'all') {
+            $applicationsQuery->where('status', $status);
+        }
+
+        $applications = $applicationsQuery->get();
+
+        return view('company.jobs.candidates', compact('job', 'applications', 'status'));
     }
 
     /**
@@ -61,6 +79,8 @@ class JobCandidateController extends Controller
     public function approve(Application $application)
     {
         $companyId = Auth::user()->company->id;
+        $studentRejectedApplicationIds = [];
+        $autoRejectedApplicationIds = [];
 
         if ($application->job->company_id !== $companyId) {
             abort(403);
@@ -87,20 +107,38 @@ class JobCandidateController extends Controller
             return back()->with('error', 'Este aluno já foi aprovado em outra vaga.');
         }
 
-        DB::transaction(function () use ($application) {
+        DB::transaction(function () use ($application, &$studentRejectedApplicationIds, &$autoRejectedApplicationIds) {
             $application->update(['status' => 'aprovado']);
 
-            Application::where('student_id', $application->student_id)
+            $studentRejectedApplicationIds = Application::where('student_id', $application->student_id)
                 ->where('status', 'em_analise')
                 ->where('id', '!=', $application->id)
-                ->delete();
+                ->pluck('id')
+                ->all();
+
+            if (!empty($studentRejectedApplicationIds)) {
+                Application::whereIn('id', $studentRejectedApplicationIds)
+                    ->update(['status' => 'recusado']);
+            }
 
             $approvedForJob = Application::where('job_id', $application->job_id)
                 ->where('status', 'aprovado')
                 ->count();
 
-            if ($approvedForJob >= $application->job->vacancies && is_null($application->job->closed_at)) {
-                $application->job->update(['closed_at' => now()]);
+            if ($approvedForJob >= $application->job->vacancies) {
+                $autoRejectedApplicationIds = Application::where('job_id', $application->job_id)
+                    ->where('status', 'em_analise')
+                    ->pluck('id')
+                    ->all();
+
+                if (!empty($autoRejectedApplicationIds)) {
+                    Application::whereIn('id', $autoRejectedApplicationIds)
+                        ->update(['status' => 'recusado']);
+                }
+
+                if (is_null($application->job->closed_at)) {
+                    $application->job->update(['closed_at' => now()]);
+                }
             }
         });
 
@@ -108,6 +146,30 @@ class JobCandidateController extends Controller
         $application->student->notify(
             new ApplicationStatusNotification($application)
         );
+
+        if (!empty($studentRejectedApplicationIds)) {
+            $studentRejectedApplications = Application::whereIn('id', $studentRejectedApplicationIds)
+                ->with('student')
+                ->get();
+
+            foreach ($studentRejectedApplications as $studentRejectedApplication) {
+                $studentRejectedApplication->student?->notify(
+                    new ApplicationStatusNotification($studentRejectedApplication)
+                );
+            }
+        }
+
+        if (!empty($autoRejectedApplicationIds)) {
+            $autoRejectedApplications = Application::whereIn('id', $autoRejectedApplicationIds)
+                ->with('student')
+                ->get();
+
+            foreach ($autoRejectedApplications as $autoRejectedApplication) {
+                $autoRejectedApplication->student?->notify(
+                    new ApplicationStatusNotification($autoRejectedApplication)
+                );
+            }
+        }
 
         return back()->with('success', 'Candidatura aprovada.');
     }
@@ -124,6 +186,10 @@ class JobCandidateController extends Controller
 
         if ($application->job->company_id !== $companyId) {
             abort(403);
+        }
+
+        if ($application->status !== 'em_analise') {
+            return back()->with('error', 'Só é possível recusar candidaturas em análise.');
         }
 
         $application->update(['status' => 'recusado']);

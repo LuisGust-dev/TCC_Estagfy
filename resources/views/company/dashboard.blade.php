@@ -25,7 +25,7 @@
 {{-- CARDS --}}
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
 
-    <a href="{{ route('company.jobs.index') }}"
+    <a href="{{ route('company.jobs.index', ['status' => 'active']) }}"
        class="group bg-white rounded-2xl p-6 border flex items-center gap-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-green-100 hover:border-green-200 hover:ring-1 hover:ring-green-200">
         <div class="bg-green-100 text-green-700 p-3 rounded-xl">
             <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">

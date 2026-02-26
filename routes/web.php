@@ -170,7 +170,12 @@ Route::get('/calendar', [StudentInternshipCalendarController::class, 'index'])
         $notification = auth()->user()->notifications()->findOrFail($notificationId);
         $notification->markAsRead();
 
+        $status = $notification->data['status'] ?? null;
         $jobId = $notification->data['job_id'] ?? null;
+
+        if ($status === 'finalizado') {
+            return redirect()->route('student.jobs.index');
+        }
 
         if ($jobId) {
             return redirect()->route('student.jobs.show', $jobId);
@@ -252,6 +257,12 @@ Route::middleware(['auth', 'active', 'company'])
 
         Route::post('/jobs', [JobController::class, 'store'])
             ->name('jobs.store');
+
+        Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])
+            ->name('jobs.edit');
+
+        Route::put('/jobs/{job}', [JobController::class, 'update'])
+            ->name('jobs.update');
 
         Route::delete('/jobs/{job}', [JobController::class, 'destroy'])
             ->name('jobs.destroy');
