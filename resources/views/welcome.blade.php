@@ -253,47 +253,80 @@
 {{-- =========================
 4️⃣ ALUNO x EMPRESA
 ========================= --}}
-<section class="py-24 bg-gray-50">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto px-6">
-
-        {{-- Aluno --}}
-        <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition">
-            <h3 class="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
-                🎓 Para Alunos
-            </h3>
-
-            <ul class="space-y-3 text-sm text-gray-600 mb-8">
-                <li>✔ Encontre vagas compatíveis com seu perfil</li>
-                <li>✔ Acompanhe suas candidaturas</li>
-                <li>✔ Gerencie entrevistas e prazos</li>
-                <li>✔ Comunicação direta com empresas</li>
-            </ul>
-
-            <a href="{{ route('register.student') }}"
-               class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-semibold transition">
-                Cadastrar como Aluno
-            </a>
+<section class="py-24 bg-gradient-to-b from-slate-50 to-white">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center rounded-full bg-indigo-100 text-indigo-700 px-4 py-1 text-xs font-semibold uppercase tracking-wider">
+                Fluxos principais
+            </span>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4">Uma experiência pensada para cada perfil</h2>
+            <p class="text-gray-600 mt-3 max-w-2xl mx-auto">
+                Estudantes e empresas encontram uma jornada clara, rápida e organizada para transformar estágios em resultados reais.
+            </p>
         </div>
 
-        {{-- Empresa --}}
-        <div class="bg-white p-8 rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition">
-            <h3 class="text-xl font-semibold mb-4 text-gray-900 flex items-center gap-2">
-                🏢 Para Empresas
-            </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            <ul class="space-y-3 text-sm text-gray-600 mb-8">
-                <li>✔ Publique vagas rapidamente</li>
-                <li>✔ Gerencie candidatos em um só lugar</li>
-                <li>✔ Acesse currículos e perfis</li>
-                <li>✔ Contrate com facilidade</li>
-            </ul>
+            {{-- Aluno --}}
+            <article class="group relative overflow-hidden bg-white p-8 rounded-3xl border border-blue-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+                <div class="absolute -top-20 -right-12 w-44 h-44 rounded-full bg-gradient-to-br from-blue-200/60 to-cyan-200/60 blur-2xl"></div>
+                <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-blue-600 to-cyan-500"></div>
 
-            <a href="{{ route('register.company') }}"
-               class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-xl font-semibold transition">
-                Cadastrar como Empresa
-            </a>
+                <div class="relative">
+                    <span class="inline-flex items-center rounded-full bg-blue-100 text-blue-700 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider mb-4">
+                        Jornada do estudante
+                    </span>
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900 flex items-center gap-2">
+                        <span class="text-3xl">🎓</span> Para Alunos
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">
+                        Organize sua busca por estágio com um processo simples, acompanhamento em tempo real e contato direto com as empresas.
+                    </p>
+
+                    <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs font-bold">✓</span> Encontre vagas compatíveis com seu perfil</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs font-bold">✓</span> Acompanhe suas candidaturas em um painel único</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs font-bold">✓</span> Gerencie entrevistas e prazos com mais controle</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs font-bold">✓</span> Comunicação direta com empresas</li>
+                    </ul>
+
+                    <a href="{{ route('register.student') }}"
+                    class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-semibold transition shadow-md shadow-blue-200/70">
+                        Cadastrar como Aluno
+                    </a>
+                </div>
+            </article>
+
+            {{-- Empresa --}}
+            <article class="group relative overflow-hidden bg-white p-8 rounded-3xl border border-emerald-100 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition duration-300">
+                <div class="absolute -top-20 -right-12 w-44 h-44 rounded-full bg-gradient-to-br from-emerald-200/60 to-teal-200/60 blur-2xl"></div>
+                <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-emerald-600 to-teal-500"></div>
+
+                <div class="relative">
+                    <span class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider mb-4">
+                        Fluxo de recrutamento
+                    </span>
+                    <h3 class="text-2xl font-bold mb-2 text-gray-900 flex items-center gap-2">
+                        <span class="text-3xl">🏢</span> Para Empresas
+                    </h3>
+                    <p class="text-sm text-gray-600 mb-6">
+                        Publique oportunidades, avalie candidatos e conduza contratações com mais agilidade e organização em um só lugar.
+                    </p>
+
+                    <ul class="space-y-3 text-sm text-gray-700 mb-8">
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">✓</span> Publique vagas rapidamente</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">✓</span> Gerencie candidatos em um só painel</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">✓</span> Acesse currículos e perfis com facilidade</li>
+                        <li class="flex items-start gap-3"><span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold">✓</span> Contrate com processo mais eficiente</li>
+                    </ul>
+
+                    <a href="{{ route('register.company') }}"
+                    class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-semibold transition shadow-md shadow-emerald-200/70">
+                        Cadastrar como Empresa
+                    </a>
+                </div>
+            </article>
         </div>
-
     </div>
 </section>
 
