@@ -211,12 +211,12 @@
                         <h3 class="text-2xl font-bold text-gray-900 leading-tight">Luis Gustavo</h3>
                         <p class="text-sm text-gray-500 font-medium mb-3">Desenvolvedor Full Stack</p>
                         <p class="text-gray-600 mb-4">
-                            Responsável pela arquitetura, experiência do usuário e evolução técnica do EstagFy, com foco em usabilidade e eficiência no fluxo de estágios.
+                            Sou desenvolvedor Full Stack com foco em criar soluções web eficientes e intuitivas. No EstagFy, atuo no desenvolvimento completo da plataforma, unindo backend e frontend para oferecer uma experiência prática e confiável para alunos e empresas.
                         </p>
                         <div class="flex flex-wrap justify-center sm:justify-start gap-2">
-                            <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1 rounded-full">Arquitetura</span>
-                            <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1 rounded-full">UX educacional</span>
                             <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1 rounded-full">Laravel</span>
+                            <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1 rounded-full">PHP</span>
+                            <span class="text-xs font-medium bg-slate-100 text-slate-700 px-3 py-1 rounded-full">MySQL</span>
                         </div>
                     </div>
                 </div>
@@ -233,7 +233,7 @@
                         <span class="inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider mb-3">
                             Orientação acadêmica
                         </span>
-                        <h3 class="text-2xl font-bold text-gray-900 leading-tight">Prof. George Gabriel</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 leading-tight">Prof Mestre George Gabriel Mendes Dourado</h3>
                         <p class="text-sm text-gray-500 font-medium mb-3">Orientador do projeto</p>
                         <p class="text-gray-600 mb-4">
                             Contribui com direcionamento técnico e acadêmico para garantir qualidade metodológica e alinhamento do sistema com objetivos de formação profissional.
