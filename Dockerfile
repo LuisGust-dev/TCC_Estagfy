@@ -19,7 +19,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 # deps Node + build Vite
-RUN npm ci || npm install
+RUN npm install
 RUN npm run build
 
 # ✅ PROVA no log (sem shell no free)
@@ -33,4 +33,4 @@ RUN mkdir -p storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # ✅ Render usa a env PORT (não fixe 10000)
-CMD php -S 0.0.0.0:${PORT:-10000} -t public
+CMD php artisan serve --host=0.0.0.0 --port=${PORT}
