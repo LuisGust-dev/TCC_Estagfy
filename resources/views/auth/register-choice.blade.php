@@ -54,7 +54,7 @@
                 </h1>
 
                 <p class="text-gray-500 mt-2 mb-10">
-                    Escolha o tipo de perfil para comecar sua jornada
+                    Escolha o tipo de perfil para começar sua jornada
                 </p>
 
                 {{-- Cards --}}
@@ -82,7 +82,7 @@
                     </h2>
 
                     <p class="text-gray-600 text-sm leading-relaxed">
-                        Busco oportunidades de estagio e quero acompanhar candidaturas em tempo real
+                        Busco oportunidades de estágio e quero acompanhar candidaturas em tempo real
                     </p>
                 </a>
 
@@ -115,7 +115,7 @@
                 </div>
 
                 <p class="mt-12 text-sm text-gray-500">
-                    Ja tem uma conta?
+                    Já tem uma conta?
                     <a href="{{ route('login') }}" class="text-blue-600 font-medium hover:underline">
                         Fazer login
                     </a>

@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Empresas</h1>
-        <p class="text-gray-600">Gestao das empresas cadastradas</p>
+        <p class="text-gray-600">Gestão das empresas cadastradas</p>
     </div>
 
     <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
@@ -17,11 +17,11 @@
                         <th class="text-left px-6 py-3 font-semibold">CNPJ</th>
                         <th class="text-left px-6 py-3 font-semibold">E-mail</th>
                         <th class="text-left px-6 py-3 font-semibold">Telefone</th>
-                        <th class="text-left px-6 py-3 font-semibold">Descricao</th>
+                        <th class="text-left px-6 py-3 font-semibold">Descrição</th>
                         <th class="text-left px-6 py-3 font-semibold">Vagas</th>
                         <th class="text-left px-6 py-3 font-semibold">Candidatos</th>
                         <th class="text-left px-6 py-3 font-semibold">Status</th>
-                        <th class="text-right px-6 py-3 font-semibold">Acoes</th>
+                        <th class="text-right px-6 py-3 font-semibold">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-8 rounded-2xl border bg-gradient-to-r from-amber-50 via-white to-orange-50 p-6">
-        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600">Coordenacao</p>
+        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600">Coordenação</p>
         <h1 class="text-2xl font-bold text-gray-900">Empresas que mais contratam</h1>
         <p class="text-gray-600">Cadastro manual das empresas destaque por curso.</p>
     </div>
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="md:col-span-3">
-                            <label class="mb-1 block text-sm font-medium text-gray-700">Descricao (opcional)</label>
+                            <label class="mb-1 block text-sm font-medium text-gray-700">Descrição (opcional)</label>
                             <textarea name="description" rows="2"
                                       class="w-full rounded-xl border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">{{ old('description') }}</textarea>
                         </div>
@@ -75,7 +75,7 @@
                                     {{ $companies->count() }}
                                 </span>
                             </div>
-                            <p class="mt-1 text-xs">Cards com informacoes e acoes de gerenciamento.</p>
+                            <p class="mt-1 text-xs">Cards com informações e ações de gerenciamento.</p>
                         </header>
 
                         <div class="max-h-[60vh] space-y-3 overflow-y-auto p-3">

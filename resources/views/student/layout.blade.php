@@ -212,7 +212,7 @@
                 <span class="sidebar-label">Candidaturas</span>
             </a>
 
-            {{-- CALENDARIO DE ESTAGIO --}}
+            {{-- CALENDÁRIO DE ESTÁGIO --}}
             <a href="{{ route('student.calendar.index') }}"
                class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
                {{ request()->routeIs('student.calendar.*')
@@ -226,7 +226,7 @@
                         <path d="M4 10h16"/>
                     </svg>
                 </span>
-                <span class="sidebar-label">Calendario de Estagio</span>
+                <span class="sidebar-label">Calendário de Estágio</span>
             </a>
 
             {{-- NOTIFICAÇÕES --}}
@@ -243,7 +243,7 @@
                             <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
                         </svg>
                     </span>
-                    <span class="sidebar-label">Notificacoes</span>
+                    <span class="sidebar-label">Notificações</span>
                 </span>
 
                 @if($count > 0)

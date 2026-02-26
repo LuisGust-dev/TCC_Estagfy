@@ -40,7 +40,7 @@
                 'dot' => 'bg-amber-500',
             ],
             [
-                'title' => 'Proximos',
+                'title' => 'Próximos',
                 'subtitle' => 'Eventos futuros',
                 'count' => $upcomingEvents->count(),
                 'header' => 'bg-blue-50 text-blue-700 border-blue-200',
@@ -51,9 +51,9 @@
     @endphp
 
     <div class="mb-8 rounded-2xl border bg-gradient-to-r from-amber-50 via-white to-orange-50 p-6">
-        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600">Coordenacao</p>
+        <p class="text-xs font-semibold uppercase tracking-widest text-amber-600">Coordenação</p>
         <h1 class="text-2xl font-bold text-gray-900">Eventos cadastrados</h1>
-        <p class="text-gray-600">Visualizacao em board para acompanhar o andamento do calendario.</p>
+        <p class="text-gray-600">Visualização em board para acompanhar o andamento do calendário.</p>
     </div>
 
     <div class="mb-6 flex flex-wrap items-center gap-2">
@@ -100,7 +100,7 @@
                                     <h4 class="text-sm font-semibold text-gray-900">{{ $event->title }}</h4>
                                     <p class="mt-1 text-xs text-gray-500">
                                         @if($event->end_date && !$event->start_date->isSameDay($event->end_date))
-                                            {{ $event->start_date->format('d/m/Y') }} ate {{ $event->end_date->format('d/m/Y') }}
+                                            {{ $event->start_date->format('d/m/Y') }} até {{ $event->end_date->format('d/m/Y') }}
                                         @else
                                             {{ $event->start_date->format('d/m/Y') }}
                                         @endif
@@ -135,13 +135,13 @@
 
                                                 <button type="submit"
                                                         class="rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700">
-                                                    Salvar alteracoes
+                                                    Salvar alterações
                                                 </button>
                                             </form>
                                         </details>
 
                                         <form method="POST" action="{{ route('coordinator.calendar.destroy', $event) }}"
-                                              onsubmit="return confirm('Deseja remover esta data do calendario?')">
+                                              onsubmit="return confirm('Deseja remover esta data do calendário?')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"

@@ -5,7 +5,7 @@
 @section('content')
     <div class="mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Alunos</h1>
-        <p class="text-gray-600">Gestao dos alunos cadastrados</p>
+        <p class="text-gray-600">Gestão dos alunos cadastrados</p>
     </div>
 
     <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
@@ -15,12 +15,12 @@
                     <tr>
                         <th class="text-left px-6 py-3 font-semibold">Aluno</th>
                         <th class="text-left px-6 py-3 font-semibold">Curso</th>
-                        <th class="text-left px-6 py-3 font-semibold">Periodo</th>
+                        <th class="text-left px-6 py-3 font-semibold">Período</th>
                         <th class="text-left px-6 py-3 font-semibold">E-mail</th>
-                        <th class="text-left px-6 py-3 font-semibold">Curriculo</th>
+                        <th class="text-left px-6 py-3 font-semibold">Currículo</th>
                         <th class="text-left px-6 py-3 font-semibold">Candidaturas</th>
                         <th class="text-left px-6 py-3 font-semibold">Status</th>
-                        <th class="text-right px-6 py-3 font-semibold">Acoes</th>
+                        <th class="text-right px-6 py-3 font-semibold">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -33,7 +33,7 @@
                             <td class="px-6 py-4 text-gray-600">
                                 @if($student->student?->resume)
                                     <a class="text-blue-600 hover:underline" href="{{ asset('storage/' . $student->student->resume) }}">
-                                        Ver curriculo
+                                        Ver currículo
                                     </a>
                                 @else
                                     -

@@ -1,11 +1,11 @@
 @extends('student.layout')
 
-@section('title', 'Calendario de Estagio')
+@section('title', 'Calendário de Estágio')
 
 @section('content')
     <div class="mb-8 rounded-2xl border bg-gradient-to-r from-blue-50 via-white to-cyan-50 p-6">
-        <p class="text-xs font-semibold uppercase tracking-widest text-blue-500">Calendario Informativo</p>
-        <h1 class="text-2xl font-bold text-gray-800">Calendario de Estagio</h1>
+        <p class="text-xs font-semibold uppercase tracking-widest text-blue-500">Calendário Informativo</p>
+        <h1 class="text-2xl font-bold text-gray-800">Calendário de Estágio</h1>
         <p class="text-gray-600">
             Visualize prazos e datas importantes do seu curso.
         </p>
@@ -96,7 +96,7 @@
 
         <aside class="space-y-4">
             <div class="rounded-2xl border bg-white p-5 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900">Proximos eventos</h3>
+                <h3 class="text-lg font-semibold text-gray-900">Próximos eventos</h3>
 
                 <div class="mt-4 space-y-3">
                     @forelse($upcomingEvents as $event)
@@ -110,7 +110,7 @@
                             <h4 class="mt-2 text-sm font-semibold text-gray-900">{{ $event['title'] }}</h4>
                             <p class="mt-1 text-xs text-gray-600">
                                 @if($event['end_date'] && !$event['start_date']->isSameDay($event['end_date']))
-                                    {{ $event['start_date']->format('d/m/Y') }} ate {{ $event['end_date']->format('d/m/Y') }}
+                                    {{ $event['start_date']->format('d/m/Y') }} até {{ $event['end_date']->format('d/m/Y') }}
                                 @else
                                     {{ $event['start_date']->format('d/m/Y') }}
                                 @endif
@@ -123,7 +123,7 @@
                         </article>
                     @empty
                         <div class="rounded-xl border border-dashed p-4 text-sm text-gray-500">
-                            Nenhum evento cadastrado para este mes.
+                            Nenhum evento cadastrado para este mês.
                         </div>
                     @endforelse
                 </div>
@@ -156,7 +156,7 @@
 
     @if(empty($studentCourse))
         <div class="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            Defina seu curso no perfil para visualizar o calendario especifico da sua area.
+            Defina seu curso no perfil para visualizar o calendário específico da sua área.
         </div>
     @endif
 @endsection

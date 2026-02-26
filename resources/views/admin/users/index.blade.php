@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Usuarios | Admin EstagFy')
+@section('title', 'Usuários | Admin EstagFy')
 
 @section('content')
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Usuarios</h1>
-            <p class="text-gray-600">Gestao e status dos usuarios do sistema</p>
+            <h1 class="text-2xl font-bold text-gray-900">Usuários</h1>
+            <p class="text-gray-600">Gestão e status dos usuários do sistema</p>
         </div>
 
         <div class="flex flex-wrap gap-2 text-sm">
@@ -43,7 +43,7 @@
                         <th class="text-left px-6 py-3 font-semibold">Perfil</th>
                         <th class="text-left px-6 py-3 font-semibold">Status</th>
                         <th class="text-left px-6 py-3 font-semibold">Cadastro</th>
-                        <th class="text-right px-6 py-3 font-semibold">Acoes</th>
+                        <th class="text-right px-6 py-3 font-semibold">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
@@ -72,7 +72,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="px-6 py-6 text-center text-gray-500">
-                                Nenhum usuario encontrado.
+                                Nenhum usuário encontrado.
                             </td>
                         </tr>
                     @endforelse
