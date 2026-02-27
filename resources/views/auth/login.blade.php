@@ -37,6 +37,14 @@
             box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
         }
 
+        .estagfy-feature-panel {
+            box-shadow: 0 36px 80px -42px rgba(15, 23, 42, .55);
+        }
+
+        .estagfy-feature-pill {
+            background: linear-gradient(120deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .62));
+        }
+
         @keyframes estagfyGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -165,29 +173,53 @@
         <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-blue-200/40 blur-2xl"></div>
         <div class="absolute -bottom-12 -left-8 w-48 h-48 rounded-full bg-indigo-200/40 blur-2xl"></div>
 
-        <div class="relative max-w-md rounded-3xl border border-white bg-white/72 p-12 text-center shadow-2xl backdrop-blur">
-            <div class="mx-auto mb-6 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center">
-                <svg viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-                    <path d="M4 12l8-5 8 5-8 5-8-5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M6.5 13.5v3.5c0 1.9 4.1 3.5 5.5 3.5s5.5-1.6 5.5-3.5v-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-                </svg>
+        <div class="estagfy-feature-panel relative w-full max-w-lg rounded-[2rem] border border-white/75 bg-white/70 p-10 backdrop-blur-xl">
+            <div class="mb-7 flex items-center justify-between gap-3">
+                <div class="inline-flex items-center gap-3 rounded-2xl border border-white/70 bg-white/75 px-4 py-2">
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow">
+                        <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+                            <path d="M4 12l8-5 8 5-8 5-8-5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6.5 13.5v3.5c0 1.9 4.1 3.5 5.5 3.5s5.5-1.6 5.5-3.5v-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700">Plataforma EstagFy</p>
+                        <p class="text-xs text-slate-500">Ambiente profissional para estágios</p>
+                    </div>
+                </div>
             </div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">Plataforma EstagFy</p>
-            <h2 class="text-2xl font-bold mb-3 text-gray-900">Seu próximo estágio começa aqui</h2>
-            <p class="text-gray-600 mb-8">
-                Conecte seu talento a empresas reais, acompanhe candidaturas e receba
-                resposta rápida em um só lugar.
+
+            <h2 class="mb-3 text-3xl font-bold leading-tight text-slate-900">
+                Transforme candidaturas em
+                <span class="text-blue-700">resultados reais</span>
+            </h2>
+            <p class="mb-7 text-[15px] leading-relaxed text-slate-600">
+                Encontre vagas certas, acompanhe cada etapa e converse com empresas no mesmo fluxo.
             </p>
 
-            <div class="grid grid-cols-2 gap-3 text-left text-sm">
-                <div class="rounded-2xl border border-white/70 bg-white/60 p-3">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-blue-700">Prático</p>
-                    <p class="mt-1 text-gray-700">Processo simples e direto</p>
+            <div class="space-y-3 text-sm">
+                <div class="estagfy-feature-pill flex items-start gap-3 rounded-2xl border border-white/70 px-4 py-3.5 text-slate-700">
+                    <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                        <svg viewBox="0 0 20 20" fill="none" class="h-3.5 w-3.5">
+                            <path d="M5 10.5 8.2 13.5 15 6.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    Processo estruturado para aluno, empresa e coordenação.
                 </div>
-                <div class="rounded-2xl border border-white/70 bg-white/60 p-3">
-                    <p class="text-xs font-semibold uppercase tracking-widest text-blue-700">Rápido</p>
-                    <p class="mt-1 text-gray-700">Acesso imediato às vagas</p>
+                <div class="estagfy-feature-pill flex items-start gap-3 rounded-2xl border border-white/70 px-4 py-3.5 text-slate-700">
+                    <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+                        <svg viewBox="0 0 20 20" fill="none" class="h-3.5 w-3.5">
+                            <path d="M5 10.5 8.2 13.5 15 6.8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    Acompanhamento em tempo real das candidaturas.
                 </div>
+            </div>
+
+            <div class="mt-7 rounded-2xl border border-white/70 bg-white/65 px-4 py-3">
+                <p class="text-center text-xs font-medium tracking-wide text-slate-600">
+                    Painel unificado para alunos, empresas e coordenação.
+                </p>
             </div>
         </div>
     </div>
