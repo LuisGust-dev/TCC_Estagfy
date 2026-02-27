@@ -44,8 +44,8 @@
         }
     </style>
 </head>
-<body class="min-h-screen estagfy-soft-background text-gray-900">
-    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2 relative">
+<body class="h-[100dvh] overflow-hidden estagfy-soft-background text-gray-900">
+    <div class="h-[100dvh] grid grid-cols-1 lg:grid-cols-2 relative">
         <a href="{{ url('/') }}"
            class="absolute top-6 left-6 z-10 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white">
             <span class="text-base leading-none">←</span>
@@ -53,7 +53,7 @@
         </a>
 
     {{-- LADO ESQUERDO --}}
-    <div class="w-full flex flex-col justify-center px-8 lg:px-20 py-12">
+    <div class="w-full flex flex-col justify-center px-8 lg:px-20 py-6 lg:py-10 overflow-hidden">
         <div class="w-full max-w-lg mx-auto">
 
         {{-- LOGO --}}

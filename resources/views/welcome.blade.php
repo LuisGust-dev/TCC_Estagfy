@@ -45,6 +45,16 @@
         vertical-align: text-bottom;
     }
 
+    .hero-typed-slot {
+        display: block;
+        min-height: 1.2em;
+        line-height: 1.1;
+    }
+
+    #hero-typed-text {
+        display: inline-block;
+    }
+
     @keyframes heroBlink {
         50% { opacity: 0; }
     }
@@ -73,8 +83,10 @@
     {{-- Título --}}
     <h1 class="mx-auto max-w-4xl text-4xl md:text-6xl font-extrabold leading-tight mb-6">
         <span>Conectando alunos e empresas para </span>
-        <span id="hero-typed-text" class="text-yellow-300"></span>
-        <span class="hero-typewriter-caret" aria-hidden="true"></span>
+        <span class="hero-typed-slot">
+            <span id="hero-typed-text" class="text-yellow-300"></span>
+            <span class="hero-typewriter-caret" aria-hidden="true"></span>
+        </span>
     </h1>
 
     {{-- Subtítulo --}}
