@@ -79,6 +79,10 @@
         #company-sidebar.is-collapsed #sidebar-toggle-icon {
             transform: rotate(180deg);
         }
+
+        #company-sidebar.is-open {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -102,10 +106,10 @@
     $isJobsRoute = request()->routeIs('company.jobs.*') && !$isCandidatesRoute;
 @endphp
 
-<div class="flex min-h-screen" id="company-shell">
+<div class="relative flex min-h-screen" id="company-shell">
 
     {{-- SIDEBAR --}}
-    <aside id="company-sidebar" class="w-64 bg-white border-r px-6 py-6 flex h-screen shrink-0 flex-col sticky top-0">
+    <aside id="company-sidebar" class="fixed inset-y-0 left-0 z-40 w-64 max-w-[85vw] -translate-x-full bg-white border-r px-4 py-6 flex h-screen shrink-0 flex-col transition-transform duration-200 md:sticky md:top-0 md:z-10 md:max-w-none md:translate-x-0 md:px-6">
 
         {{-- PERFIL DA EMPRESA --}}
         <div class="company-profile mb-8 flex items-start justify-between gap-2">
@@ -244,8 +248,19 @@
 
     </aside>
 
+    <div id="company-sidebar-backdrop" class="fixed inset-0 z-30 hidden bg-slate-900/35 md:hidden"></div>
+
     {{-- CONTEÚDO --}}
-    <main class="flex-1 min-w-0 p-10">
+    <main class="flex-1 min-w-0 p-4 sm:p-6 md:p-8 lg:p-10">
+        <div class="mb-4 flex items-center justify-between md:hidden">
+            <button id="company-sidebar-open" type="button" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm">
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 7h16M4 12h16M4 17h16"></path>
+                </svg>
+                Menu
+            </button>
+            <p class="text-xs font-medium uppercase tracking-widest text-gray-400">EstagFy Empresa</p>
+        </div>
         @if(session('success') && empty($hideSuccess))
             <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
                 {{ session('success') }}
@@ -264,17 +279,54 @@
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('company-sidebar');
         const toggleButton = document.getElementById('sidebar-toggle');
+        const openButton = document.getElementById('company-sidebar-open');
+        const backdrop = document.getElementById('company-sidebar-backdrop');
         const stateKey = 'company_sidebar_collapsed';
+        const desktopMedia = window.matchMedia('(min-width: 768px)');
 
         if (!sidebar || !toggleButton) return;
 
-        if (localStorage.getItem(stateKey) === '1') {
+        if (desktopMedia.matches && localStorage.getItem(stateKey) === '1') {
             sidebar.classList.add('is-collapsed');
         }
 
         toggleButton.addEventListener('click', () => {
+            if (!desktopMedia.matches) {
+                sidebar.classList.remove('is-open');
+                backdrop?.classList.add('hidden');
+                return;
+            }
+
             sidebar.classList.toggle('is-collapsed');
             localStorage.setItem(stateKey, sidebar.classList.contains('is-collapsed') ? '1' : '0');
+        });
+
+        const openSidebar = () => {
+            sidebar.classList.add('is-open');
+            backdrop?.classList.remove('hidden');
+        };
+
+        const closeSidebar = () => {
+            sidebar.classList.remove('is-open');
+            backdrop?.classList.add('hidden');
+        };
+
+        openButton?.addEventListener('click', openSidebar);
+        backdrop?.addEventListener('click', closeSidebar);
+
+        window.addEventListener('resize', () => {
+            if (desktopMedia.matches) {
+                sidebar.classList.remove('is-open');
+                backdrop?.classList.add('hidden');
+                if (localStorage.getItem(stateKey) === '1') {
+                    sidebar.classList.add('is-collapsed');
+                } else {
+                    sidebar.classList.remove('is-collapsed');
+                }
+                return;
+            }
+
+            sidebar.classList.remove('is-collapsed');
         });
     });
 </script>

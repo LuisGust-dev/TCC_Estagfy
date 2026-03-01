@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="flex flex-col md:flex-row h-[700px] bg-white border rounded-2xl overflow-hidden shadow-sm">
+<div class="flex flex-col md:flex-row h-[75vh] md:h-[700px] min-h-[560px] bg-white border rounded-2xl overflow-hidden shadow-sm">
 
     {{-- LISTA DE CONVERSAS --}}
     <div class="w-full md:w-1/3 border-r bg-gray-50 overflow-y-auto">
@@ -110,7 +110,7 @@
             {{-- INPUT --}}
             <form method="POST"
                   action="{{ route('student.chat.send', $job) }}"
-                  class="p-4 border-t bg-white flex gap-2">
+                  class="p-4 border-t bg-white flex flex-col sm:flex-row gap-2">
                 @csrf
 
                 <input name="message"
@@ -118,7 +118,7 @@
                        placeholder="Digite sua mensagem..."
                        class="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
 
-                <button class="bg-blue-600 text-white px-6 rounded-full hover:bg-blue-700 transition">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
                     Enviar
                 </button>
             </form>

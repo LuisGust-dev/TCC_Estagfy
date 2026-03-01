@@ -26,18 +26,18 @@ rgb(74, 71, 228)
     </style>
 </head>
 
-<body class="h-screen overflow-hidden bg-slate-50 text-gray-900">
+<body class="min-h-screen bg-slate-50 text-gray-900">
 
-<div class="h-screen overflow-hidden grid grid-cols-1 lg:grid-cols-2">
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
     @php($courses = config('internship.courses', []))
 
     {{-- LADO ESQUERDO --}}
-    <div class="relative flex items-center justify-center px-6 py-10 lg:py-12 overflow-hidden">
+    <div class="relative flex items-center justify-center px-4 sm:px-6 py-10 lg:py-12 overflow-hidden">
         <div class="absolute -top-16 -right-12 w-56 h-56 rounded-full bg-blue-200/40 blur-3xl"></div>
         <div class="absolute -bottom-20 -left-10 w-64 h-64 rounded-full bg-indigo-200/40 blur-3xl"></div>
 
         <div class="w-full max-w-2xl">
-            <div class="bg-white/80 backdrop-blur border border-white shadow-2xl rounded-3xl p-8 md:p-10">
+            <div class="bg-white/80 backdrop-blur border border-white shadow-2xl rounded-3xl p-6 sm:p-8 md:p-10">
 
                 {{-- voltar --}}
                 <a href="{{ route('register.choice') }}" class="text-sm text-gray-500 hover:underline">

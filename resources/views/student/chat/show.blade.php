@@ -8,7 +8,7 @@
     💬 Chat — {{ $job->title }}
 </h1>
 
-<div class="bg-white border rounded-xl p-4 h-[500px] flex flex-col">
+<div class="bg-white border rounded-xl p-4 h-[70vh] md:h-[500px] min-h-[520px] flex flex-col">
 
     {{-- Mensagens --}}
     <div class="flex-1 overflow-y-auto space-y-3 mb-4">
@@ -39,7 +39,7 @@
 
     {{-- Enviar mensagem --}}
     <form method="POST" action="{{ route('student.chat.send', $job) }}"
-          class="flex gap-2">
+          class="flex flex-col sm:flex-row gap-2">
         @csrf
 
         <input
@@ -48,7 +48,7 @@
             placeholder="Digite sua mensagem..."
             class="flex-1 border rounded-lg px-4 py-2">
 
-        <button class="bg-blue-600 text-white px-6 rounded-lg">
+        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg">
             Enviar
         </button>
     </form>

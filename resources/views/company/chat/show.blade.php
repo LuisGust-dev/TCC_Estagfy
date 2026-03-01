@@ -4,7 +4,7 @@
 
 @section('content')
 
-<div class="bg-white border rounded-2xl shadow-sm overflow-hidden h-[700px] flex flex-col">
+<div class="bg-white border rounded-2xl shadow-sm overflow-hidden h-[75vh] md:h-[700px] min-h-[560px] flex flex-col">
 
     {{-- Header --}}
     <div class="p-4 border-b bg-white">
@@ -49,7 +49,7 @@
     {{-- Enviar mensagem --}}
     <form method="POST"
           action="{{ route('company.chat.send', [$job, $student]) }}"
-          class="p-4 border-t bg-white flex gap-2">
+          class="p-4 border-t bg-white flex flex-col sm:flex-row gap-2">
         @csrf
 
         <input
@@ -58,7 +58,7 @@
             placeholder="Digite sua mensagem..."
             class="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
 
-        <button class="bg-emerald-600 text-white px-6 rounded-full hover:bg-emerald-700 transition">
+        <button class="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition">
             Enviar
         </button>
     </form>

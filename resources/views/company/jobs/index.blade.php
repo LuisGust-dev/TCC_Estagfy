@@ -5,15 +5,15 @@
 @section('content')
 
 {{-- HEADER --}}
-<div class="flex justify-between items-center mb-10">
-    <div>
+<div class="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-center sm:justify-between">
+    <div class="min-w-0">
         <h1 class="text-2xl font-bold text-gray-900">Minhas Vagas</h1>
         <p class="text-gray-500">Gerencie suas vagas e candidatos</p>
     </div>
 
     <a href="{{ route('company.jobs.create') }}"
-       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700
-              text-white px-5 py-2 rounded-lg text-sm font-medium shadow">
+       class="inline-flex w-full items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700
+              text-white px-5 py-2 rounded-lg text-sm font-medium shadow sm:w-auto">
         <span class="text-lg">＋</span> Nova Vaga
     </a>
 </div>
@@ -41,12 +41,12 @@
 <div class="space-y-6">
 
 @forelse($jobs as $job)
-    <div class="group bg-white border border-gray-200 rounded-xl px-6 py-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-200 hover:ring-1 hover:ring-blue-200">
+    <div class="group bg-white border border-gray-200 rounded-xl px-4 py-4 sm:px-6 sm:py-5 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-200 hover:ring-1 hover:ring-blue-200">
 
-        <div class="flex items-start justify-between gap-6">
+        <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between md:gap-6">
 
             {{-- ESQUERDA --}}
-            <a href="{{ route('company.jobs.candidates', $job) }}" class="block flex-1 min-w-0">
+            <a href="{{ route('company.jobs.candidates', $job) }}" class="block min-w-0 flex-1">
 
                 {{-- TÍTULO --}}
                 <h2 class="text-base font-semibold text-gray-900 mb-1">
@@ -54,14 +54,14 @@
                 </h2>
 
                 {{-- LOCAL + TIPO --}}
-                <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <span class="flex items-center gap-1">
+                <div class="mb-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                    <span class="inline-flex max-w-full items-center gap-1 break-words">
                         📍 {{ $job->location ?? 'Local não informado' }}
                     </span>
-                    <span class="flex items-center gap-1">
+                    <span class="inline-flex max-w-full items-center gap-1 break-words">
                         🎯 {{ $job->area ?? 'Área não informada' }}
                     </span>
-                    <span class="flex items-center gap-1">
+                    <span class="inline-flex items-center gap-1">
                         🪑 {{ $job->vacancies ?? 1 }} vaga(s)
                     </span>
 
@@ -80,7 +80,7 @@
                 </div>
 
                 {{-- DESCRIÇÃO --}}
-                <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                <p class="mb-3 text-sm leading-relaxed text-gray-600 break-words">
                     {{ Str::limit($job->description, 160) }}
                 </p>
 
@@ -98,10 +98,10 @@
             </a>
 
             {{-- DIREITA --}}
-            <div class="flex shrink-0 flex-col items-end justify-between gap-3">
+            <div class="flex w-full shrink-0 flex-col items-start gap-3 md:w-auto md:items-end md:justify-between">
 
                 {{-- CANDIDATOS --}}
-                <div class="flex flex-col items-end gap-2 mb-4">
+                <div class="mb-1 flex w-full flex-wrap items-center gap-2 md:mb-4 md:w-auto md:flex-col md:items-end">
                     <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold {{ $job->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700' }}">
                         {{ $job->is_active ? 'Ativa' : 'Inativa' }}
                     </span>
@@ -115,9 +115,9 @@
                 </div>
 
                 {{-- AÇÕES --}}
-                <div class="flex items-center gap-2">
+                <div class="flex w-full flex-wrap items-center gap-2 md:w-auto md:justify-end">
                     <a href="{{ route('company.jobs.edit', $job) }}"
-                       class="inline-flex items-center rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+                       class="inline-flex items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
                        title="Editar vaga">
                         Editar
                     </a>
