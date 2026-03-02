@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Message;
 use App\Models\Job;
 use App\Models\User;
@@ -30,6 +31,7 @@ class CompanyChatController extends Controller
         'job' => null,
         'student' => null,
         'messages' => collect(),
+        'canSendMessage' => false,
     ]);
 }
 
@@ -48,6 +50,10 @@ public function show($jobId, $studentId)
     $student = User::where('id', $studentId)
         ->where('role', 'student')
         ->firstOrFail();
+    $application = Application::where('job_id', $jobId)
+        ->where('student_id', $studentId)
+        ->first();
+    $canSendMessage = $application?->status === 'aprovado';
 
     $messages = Message::where('job_id', $jobId)
         ->where('student_id', $studentId)
@@ -73,7 +79,8 @@ public function show($jobId, $studentId)
         'conversations',
         'job',
         'student',
-        'messages'
+        'messages',
+        'canSendMessage'
     ));
 }
  /**
@@ -86,6 +93,26 @@ public function show($jobId, $studentId)
         Job::where('id', $jobId)
             ->where('company_id', $companyProfileId)
             ->firstOrFail();
+
+        request()->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $application = Application::where('job_id', $jobId)
+            ->where('student_id', $studentId)
+            ->first();
+
+        if (! $application) {
+            return back()->with('error', 'Candidatura não encontrada para esta conversa.');
+        }
+
+        if ($application->status === 'finalizado') {
+            return back()->with('error', 'Estágio finalizado: o chat está em modo somente leitura.');
+        }
+
+        if ($application->status !== 'aprovado') {
+            return back()->with('error', 'Só é possível enviar mensagens durante o estágio em andamento.');
+        }
 
         Message::create([
             'job_id'     => $jobId,

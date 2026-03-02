@@ -150,6 +150,9 @@ Route::delete('/applications/{application}', [StudentApplicationController::clas
 Route::get('/calendar', [StudentInternshipCalendarController::class, 'index'])
     ->name('calendar.index');
 
+Route::view('/fluxo-estagio', 'student.internship-flow')
+    ->name('flow.index');
+
 
     // 📌 Lista de notificações
     Route::get('/notifications', function () {

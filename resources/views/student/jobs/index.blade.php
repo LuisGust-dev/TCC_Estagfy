@@ -12,7 +12,7 @@ Vagas de Estágio
 
 @if(session('success'))
     <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-green-700 shadow-sm">
-        ✅ {{ session('success') }}
+        {{ session('success') }}
     </div>
 @endif
 
@@ -65,62 +65,117 @@ Vagas de Estágio
 
 <div class="space-y-6">
     @forelse($jobs as $job)
-        <div class="bg-white border rounded-xl p-6 flex justify-between gap-6 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-200 hover:ring-1 hover:ring-blue-200">
-            <div class="flex gap-4">
+        <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100">
+            <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div class="flex gap-4">
                 @if($job->company->user->photo)
-                    <img src="{{ asset('storage/' . $job->company->user->photo) }}" class="w-14 h-14 rounded-lg object-cover">
+                    <img
+                        src="{{ asset('storage/' . $job->company->user->photo) }}"
+                        class="h-16 w-16 shrink-0 rounded-xl object-cover ring-1 ring-slate-200"
+                        alt="Foto da empresa {{ $job->company->user->name }}"
+                    >
                 @else
-                    <div class="w-14 h-14 rounded-lg bg-gray-200 flex items-center justify-center font-bold text-gray-500">
+                    <div class="h-16 w-16 shrink-0 rounded-xl bg-gray-200 flex items-center justify-center font-bold text-gray-500 ring-1 ring-slate-200">
                         {{ strtoupper(substr($job->company->user->name, 0, 1)) }}
                     </div>
                 @endif
 
-                <div class="max-w-2xl">
-                    <h2 class="text-lg font-semibold text-gray-900">{{ $job->title }}</h2>
-                    <p class="text-sm text-gray-500">{{ $job->company->user->name }}</p>
-                    <p class="text-sm text-gray-600 mt-2">{{ Str::limit($job->description, 160) }}</p>
-
-                    <div class="flex flex-wrap gap-4 text-sm text-gray-500 mt-3">
-                        <span>📍 {{ $job->location }}</span>
-                        <span>🎯 {{ $job->area ?? 'Área não informada' }}</span>
-                        <span>🪑 {{ $job->vacancies ?? 1 }} vaga(s)</span>
-                        @if($job->flow_type === 'defined_period' && $job->period_start && $job->period_end)
-                            <span>📆 {{ $job->period_start->format('d/m/Y') }} até {{ $job->period_end->format('d/m/Y') }}</span>
-                        @endif
-                        <span>💰 R$ {{ number_format($job->salary, 2, ',', '.') }}</span>
-                        <span>👥 {{ $job->applications_count }} candidatos</span>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2 mt-3">
-                        @foreach($job->requirements ?? [] as $requirement)
-                            <span class="px-3 py-1 text-xs rounded-full bg-emerald-600 text-white">
-                                {{ $requirement }}
+                    <div class="max-w-3xl">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <h2 class="text-lg font-semibold text-gray-900">{{ $job->title }}</h2>
+                            <span class="rounded-full px-3 py-1 text-xs font-medium
+                                @if($job->type === 'Remoto')
+                                    bg-green-100 text-green-700
+                                @elseif($job->type === 'Presencial')
+                                    bg-blue-100 text-blue-700
+                                @else
+                                    bg-amber-100 text-amber-700
+                                @endif">
+                                {{ $job->type }}
                             </span>
-                        @endforeach
+                        </div>
+
+                        <p class="mt-1 text-sm font-medium text-gray-600">{{ $job->company->user->name }}</p>
+                        <p class="mt-2 text-sm leading-relaxed text-gray-600">{{ Str::limit($job->description, 180) }}</p>
+
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                                <svg class="h-3.5 w-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-5.5 8-12a8 8 0 1 0-16 0c0 6.5 8 12 8 12Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                {{ $job->location ?? 'Local não informado' }}
+                            </span>
+
+                            <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                                <svg class="h-3.5 w-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 7h18M7 3v8M17 3v8M5 11h14a2 2 0 0 1 2 2v6H3v-6a2 2 0 0 1 2-2Z"></path>
+                                </svg>
+                                {{ $job->area ?? 'Área não informada' }}
+                            </span>
+
+                            <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                                <svg class="h-3.5 w-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 7h16"></path>
+                                    <path d="M4 12h16"></path>
+                                    <path d="M4 17h10"></path>
+                                </svg>
+                                {{ $job->vacancies ?? 1 }} vaga(s)
+                            </span>
+
+                            <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                                <svg class="h-3.5 w-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1v22"></path>
+                                    <path d="M17 5H9a3 3 0 0 0 0 6h6a3 3 0 1 1 0 6H6"></path>
+                                </svg>
+                                R$ {{ number_format($job->salary, 2, ',', '.') }}
+                            </span>
+
+                            <span class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700">
+                                <svg class="h-3.5 w-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                {{ $job->applications_count }} candidato(s)
+                            </span>
+
+                            @if($job->flow_type === 'defined_period' && $job->period_start && $job->period_end)
+                                <span class="inline-flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700">
+                                    <svg class="h-3.5 w-3.5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                        <path d="M16 2v4M8 2v4M3 10h18"></path>
+                                    </svg>
+                                    {{ $job->period_start->format('d/m/Y') }} até {{ $job->period_end->format('d/m/Y') }}
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            @foreach($job->requirements ?? [] as $requirement)
+                                <span class="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+                                    {{ $requirement }}
+                                </span>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex flex-col items-end gap-4">
-                <span class="px-3 py-1 rounded-full text-xs font-medium
-                    @if($job->type === 'Remoto')
-                        bg-green-100 text-green-700
-                    @elseif($job->type === 'Presencial')
-                        bg-blue-100 text-blue-700
-                    @else
-                        bg-purple-100 text-purple-700
-                    @endif">
-                    {{ $job->type }}
-                </span>
-
-                <form method="POST" action="{{ route('student.jobs.apply', $job) }}">
-                    @csrf
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-medium">
-                        Inscrever-se
-                    </button>
-                </form>
+                <div class="flex w-full shrink-0 items-end justify-end lg:w-auto">
+                    <form method="POST" action="{{ route('student.jobs.apply', $job) }}">
+                        @csrf
+                        <button class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"></path>
+                                <path d="M12 5l7 7-7 7"></path>
+                            </svg>
+                            Inscrever-se
+                        </button>
+                    </form>
+                </div>
             </div>
-        </div>
+        </article>
     @empty
         <div class="text-center py-24 text-gray-400">
             <p class="text-lg">Nenhuma vaga disponível no momento.</p>

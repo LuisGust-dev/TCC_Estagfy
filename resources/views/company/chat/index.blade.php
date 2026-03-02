@@ -103,20 +103,26 @@
             </div>
 
             {{-- INPUT --}}
-            <form method="POST"
-                  action="{{ route('company.chat.send', [$job->id, $student->id]) }}"
-                  class="p-4 border-t bg-white flex flex-col sm:flex-row gap-2">
-                @csrf
+            @if($canSendMessage)
+                <form method="POST"
+                      action="{{ route('company.chat.send', [$job->id, $student->id]) }}"
+                      class="p-4 border-t bg-white flex flex-col sm:flex-row gap-2">
+                    @csrf
 
-                <input name="message"
-                       required
-                       placeholder="Digite sua mensagem..."
-                       class="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <input name="message"
+                           required
+                           placeholder="Digite sua mensagem..."
+                           class="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
 
-                <button class="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition">
-                    Enviar
-                </button>
-            </form>
+                    <button class="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition">
+                        Enviar
+                    </button>
+                </form>
+            @else
+                <div class="p-4 border-t bg-slate-50 text-sm text-slate-600">
+                    Chat em modo somente leitura. Após a finalização do estágio, não é possível enviar novas mensagens.
+                </div>
+            @endif
 
         @else
             <div class="flex-1 flex items-center justify-center text-gray-400">

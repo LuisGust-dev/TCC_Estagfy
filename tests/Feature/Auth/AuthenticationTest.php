@@ -43,6 +43,22 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_coordinator_can_not_authenticate_using_the_default_login_screen(): void
+    {
+        $coordinator = User::factory()->create([
+            'role' => 'coordinator',
+        ]);
+
+        $response = $this->from('/login')->post('/login', [
+            'email' => $coordinator->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect('/login');
+        $response->assertSessionHasErrors('email');
+    }
+
     public function test_users_can_logout(): void
     {
         $user = User::factory()->create();

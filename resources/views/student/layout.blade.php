@@ -233,6 +233,23 @@
                 <span class="sidebar-label">Calendário de Estágio</span>
             </a>
 
+            {{-- FLUXO DE ESTÁGIO --}}
+            <a href="{{ route('student.flow.index') }}"
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               {{ request()->routeIs('student.flow.*')
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-blue-600 {{ request()->routeIs('student.flow.*') ? 'text-white' : '' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M4 7h16"/>
+                        <path d="M4 12h10"/>
+                        <path d="M4 17h7"/>
+                        <circle cx="18" cy="17" r="2"/>
+                    </svg>
+                </span>
+                <span class="sidebar-label">Fluxo de estágio</span>
+            </a>
+
             {{-- NOTIFICAÇÕES --}}
             <a href="{{ route('student.notifications.index') }}"
                class="sidebar-link flex justify-between items-center px-4 py-2.5 rounded-lg
