@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\StudentController as AdminStudentController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Coordinator\InternshipCalendarController as CoordinatorInternshipCalendarController;
 use App\Http\Controllers\Coordinator\TopHiringCompanyController as CoordinatorTopHiringCompanyController;
 use App\Http\Controllers\Coordinator\CoordinatorAuthController;
@@ -407,5 +408,14 @@ Route::middleware(['auth', 'active', 'admin'])->group(function () {
 
         Route::get('/students', [AdminStudentController::class, 'index'])
             ->name('students.index');
+
+        Route::get('/reports', [AdminReportController::class, 'index'])
+            ->name('reports.index');
+        Route::get('/reports/users.csv', [AdminReportController::class, 'usersCsv'])
+            ->name('reports.users.csv');
+        Route::get('/reports/companies.csv', [AdminReportController::class, 'companiesCsv'])
+            ->name('reports.companies.csv');
+        Route::get('/reports/applications.csv', [AdminReportController::class, 'applicationsCsv'])
+            ->name('reports.applications.csv');
     });
 });

@@ -37,6 +37,10 @@
                    class="px-3 py-2 rounded-lg {{ request()->routeIs('admin.students.*') ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100' }}">
                     Alunos
                 </a>
+                <a href="{{ route('admin.reports.index') }}"
+                   class="px-3 py-2 rounded-lg {{ request()->routeIs('admin.reports.*') ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100' }}">
+                    Relatórios
+                </a>
             </div>
 
             <form method="POST" action="{{ route('logout') }}">
