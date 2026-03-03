@@ -33,6 +33,24 @@
         </div>
     </div>
 
+    <form method="GET" action="{{ route('admin.users.index') }}" class="mb-6">
+        @if(!empty($role))
+            <input type="hidden" name="role" value="{{ $role }}">
+        @endif
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" name="q" value="{{ $search ?? '' }}"
+                   placeholder="Pesquisar por nome ou e-mail..."
+                   class="w-full sm:max-w-md rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
+                Buscar
+            </button>
+            <a href="{{ route('admin.users.index', array_filter(['role' => $role])) }}"
+               class="px-4 py-2 rounded-lg border text-sm font-medium text-gray-700 hover:bg-gray-100">
+                Limpar
+            </a>
+        </div>
+    </form>
+
     <div class="bg-white rounded-2xl border shadow-sm overflow-visible">
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">

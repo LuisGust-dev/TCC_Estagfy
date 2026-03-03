@@ -4,17 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = User::where('role', 'student')
-            ->with('student')
-            ->withCount('applications')
-            ->latest()
-            ->paginate(20);
+        $search = trim((string) $request->query('q', ''));
 
-        return view('admin.students.index', compact('students'));
+        $studentsQuery = User::where('role', 'student')
+            ->with('student')
+            ->withCount('applications');
+
+        if ($search !== '') {
+            $studentsQuery->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhereHas('student', function ($studentQuery) use ($search) {
+                        $studentQuery->where('course', 'like', "%{$search}%")
+                            ->orWhere('period', 'like', "%{$search}%")
+                            ->orWhere('cpf', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $students = $studentsQuery
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('admin.students.index', compact('students', 'search'));
     }
 }

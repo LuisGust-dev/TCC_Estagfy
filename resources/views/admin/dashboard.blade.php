@@ -27,8 +27,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-blue-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">Indicador</p>
-                    <p class="text-sm text-gray-600 mt-1">Total de usuarios</p>
+                    <p class="text-sm text-gray-600">Total de usuarios</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm ring-1 ring-blue-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -44,8 +43,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-emerald-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Indicador</p>
-                    <p class="text-sm text-gray-600 mt-1">Total de alunos</p>
+                    <p class="text-sm text-gray-600">Total de alunos</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-emerald-600 shadow-sm ring-1 ring-emerald-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -61,8 +59,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-amber-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">Indicador</p>
-                    <p class="text-sm text-gray-600 mt-1">Total de empresas</p>
+                    <p class="text-sm text-gray-600">Total de empresas</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-amber-600 shadow-sm ring-1 ring-amber-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -78,8 +75,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-indigo-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-indigo-700">Indicador</p>
-                    <p class="text-sm text-gray-600 mt-1">Vagas publicadas</p>
+                    <p class="text-sm text-gray-600">Vagas publicadas</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -95,8 +91,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-rose-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-rose-700">Indicador</p>
-                    <p class="text-sm text-gray-600 mt-1">Candidaturas</p>
+                    <p class="text-sm text-gray-600">Candidaturas</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-rose-600 shadow-sm ring-1 ring-rose-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

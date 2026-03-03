@@ -4,17 +4,35 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $companies = Company::with('user')
-            ->withCount('jobs')
-            ->withCount('applications')
-            ->latest('id')
-            ->paginate(20);
+        $search = trim((string) $request->query('q', ''));
 
-        return view('admin.companies.index', compact('companies'));
+        $companiesQuery = Company::with('user')
+            ->withCount('jobs')
+            ->withCount('applications');
+
+        if ($search !== '') {
+            $companiesQuery->where(function ($query) use ($search) {
+                $query->where('cnpj', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $companies = $companiesQuery
+            ->latest('id')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('admin.companies.index', compact('companies', 'search'));
     }
 }

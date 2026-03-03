@@ -13,6 +13,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $role = $request->query('role');
+        $search = trim((string) $request->query('q', ''));
 
         $usersQuery = User::query();
 
@@ -20,9 +21,16 @@ class UserController extends Controller
             $usersQuery->where('role', $role);
         }
 
+        if ($search !== '') {
+            $usersQuery->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
         $users = $usersQuery->latest()->paginate(20)->withQueryString();
 
-        return view('admin.users.index', compact('users', 'role'));
+        return view('admin.users.index', compact('users', 'role', 'search'));
     }
 
     public function toggleActive(User $user)

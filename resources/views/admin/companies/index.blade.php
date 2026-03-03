@@ -8,6 +8,21 @@
         <p class="text-gray-600">Gestão das empresas cadastradas</p>
     </div>
 
+    <form method="GET" action="{{ route('admin.companies.index') }}" class="mb-6">
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" name="q" value="{{ $search ?? '' }}"
+                   placeholder="Pesquisar por empresa, e-mail, CNPJ ou telefone..."
+                   class="w-full sm:max-w-md rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+            <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
+                Buscar
+            </button>
+            <a href="{{ route('admin.companies.index') }}"
+               class="px-4 py-2 rounded-lg border text-sm font-medium text-gray-700 hover:bg-gray-100">
+                Limpar
+            </a>
+        </div>
+    </form>
+
     <div class="bg-white rounded-2xl border shadow-sm overflow-visible">
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
