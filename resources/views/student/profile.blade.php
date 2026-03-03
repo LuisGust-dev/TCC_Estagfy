@@ -54,8 +54,13 @@
             <div class="md:col-span-2">
                 <label class="text-sm font-medium text-gray-700">Nome completo</label>
                 <input type="text"
+                       id="student-name"
                        name="name"
                        value="{{ old('name', $user->name) }}"
+                       pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$"
+                       title="Informe apenas letras e espaços."
+                       maxlength="255"
+                       oninput="this.value = this.value.replace(/[0-9]/g, '')"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 
@@ -70,8 +75,13 @@
             <div>
                 <label class="text-sm font-medium text-gray-700">CPF</label>
                 <input type="text"
+                       id="student-cpf"
                        name="cpf"
                        value="{{ old('cpf', $student?->cpf) }}"
+                       inputmode="numeric"
+                       pattern="[0-9]{11}"
+                       maxlength="11"
+                       oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 

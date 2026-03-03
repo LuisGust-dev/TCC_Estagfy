@@ -53,6 +53,14 @@
 
             @csrf
 
+            @if($errors->any())
+                <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
 
             {{-- Logo / Foto da empresa --}}
 <div>
@@ -79,6 +87,9 @@
                 <input type="text" name="name" value="{{ old('name') }}" required maxlength="255"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="Nome da sua empresa">
+                @error('name')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- CNPJ --}}
@@ -88,6 +99,9 @@
                        data-only-digits data-maxlen="14"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="00000000000000">
+                @error('cnpj')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- Email / Telefone --}}
@@ -99,6 +113,9 @@
                     <input type="email" name="email" value="{{ old('email') }}" required maxlength="255"
                            class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                            placeholder="contato@empresa.com">
+                    @error('email')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div>
@@ -109,6 +126,9 @@
                            data-only-digits data-maxlen="11"
                            class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                            placeholder="00000000000">
+                    @error('phone')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -118,6 +138,9 @@
                 <input type="password" name="password" required minlength="6" maxlength="255"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="••••••••">
+                @error('password')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- Descrição --}}
@@ -128,6 +151,9 @@
                 <textarea name="description" rows="3" required maxlength="1000"
                           class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           placeholder="Conte um pouco sobre sua empresa...">{{ old('description') }}</textarea>
+                @error('description')
+                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
 
             {{-- Botão --}}
@@ -201,3 +227,4 @@
     })();
 </script>
 </html>
+
