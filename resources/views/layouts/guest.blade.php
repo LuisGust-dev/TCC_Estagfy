@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>@yield('title', 'EstagFy')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo1-removebg-preview.png') }}">
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -35,3 +36,8 @@
 
 </body>
 </html>
+
+
+
+
+

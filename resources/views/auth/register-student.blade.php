@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Aluno | EstagFy</title>
-
+    <link rel="icon" type="image/png" href="{{ asset('images/logo1-removebg-preview.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
@@ -253,3 +253,8 @@ rgb(74, 71, 228)
     })();
 </script>
 </html>
+
+
+
+
+

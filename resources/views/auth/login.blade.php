@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | EstagFy</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo1-removebg-preview.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root {
@@ -116,12 +117,10 @@
                 <div class="flex justify-between items-center">
                     <label class="block text-sm font-medium text-gray-700">Senha</label>
 
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}"
-                           class="text-sm text-blue-600 hover:underline">
-                            Esqueceu a senha?
-                        </a>
-                    @endif
+                    <a href="{{ url('/forgot-password') }}"
+                       class="text-sm text-blue-600 hover:underline">
+                        Esqueceu a senha?
+                    </a>
                 </div>
 
                 <input
@@ -227,3 +226,8 @@
     </div>
 </body>
 </html>
+
+
+
+
+

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Empresa | EstagFy</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo1-removebg-preview.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .estagfy-animated-gradient {
@@ -221,4 +222,9 @@
     })();
 </script>
 </html>
+
+
+
+
+
 
