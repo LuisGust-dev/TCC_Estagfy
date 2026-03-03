@@ -118,7 +118,7 @@ rgb(74, 71, 228)
                         <label class="block text-sm font-medium text-gray-700">
                             Senha
                         </label>
-                        <input type="password" name="password" required minlength="6" maxlength="255"
+                        <input type="password" name="password" required minlength="8" maxlength="255"
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="••••••••">
                         @error('password')

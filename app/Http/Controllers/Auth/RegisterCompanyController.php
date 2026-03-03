@@ -24,7 +24,7 @@ class RegisterCompanyController extends Controller
                 'cnpj' => 'required|digits:14|unique:companies,cnpj',
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|digits_between:10,11',
-                'password' => 'required|string|min:6|max:255',
+                'password' => 'required|string|min:8|max:255',
                 'description' => 'required|string|max:1000',
                 'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ],
