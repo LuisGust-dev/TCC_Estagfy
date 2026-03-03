@@ -400,6 +400,12 @@ Route::middleware(['auth', 'active', 'admin'])->group(function () {
 
         Route::get('/users', [AdminUserController::class, 'index'])
             ->name('users.index');
+        Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])
+            ->name('users.edit');
+        Route::patch('/users/{user}', [AdminUserController::class, 'update'])
+            ->name('users.update');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])
+            ->name('users.destroy');
         Route::patch('/users/{user}/toggle', [AdminUserController::class, 'toggleActive'])
             ->name('users.toggle');
 
