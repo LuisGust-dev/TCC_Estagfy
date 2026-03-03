@@ -30,6 +30,7 @@ class DashboardController extends Controller
             ['label' => 'Em análise', 'count' => Application::where('status', 'em_analise')->count(), 'color' => 'bg-amber-500'],
             ['label' => 'Aprovado', 'count' => Application::where('status', 'aprovado')->count(), 'color' => 'bg-emerald-500'],
             ['label' => 'Recusado', 'count' => Application::where('status', 'recusado')->count(), 'color' => 'bg-rose-500'],
+            ['label' => 'Finalizado', 'count' => Application::where('status', 'finalizado')->count(), 'color' => 'bg-slate-500'],
         ];
 
         $monthlyLabels = [];

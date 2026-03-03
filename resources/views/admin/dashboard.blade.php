@@ -75,7 +75,7 @@
             <div class="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-indigo-200/40"></div>
             <div class="relative flex items-start justify-between">
                 <div>
-                    <p class="text-sm text-gray-600">Vagas publicadas</p>
+                    <p class="text-sm text-gray-600">Total de vagas publicadas</p>
                 </div>
                 <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-indigo-600 shadow-sm ring-1 ring-indigo-100">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -84,7 +84,7 @@
                 </span>
             </div>
             <p class="relative mt-6 text-4xl font-black text-gray-900">{{ $totalJobs }}</p>
-            <p class="relative mt-2 text-xs font-medium text-indigo-800">Oportunidades ativas</p>
+            <p class="relative mt-2 text-xs font-medium text-indigo-800">Todas as vagas já cadastradas</p>
         </div>
 
         <div class="relative overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-br from-white via-rose-50/70 to-rose-100/70 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
