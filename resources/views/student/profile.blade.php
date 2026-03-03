@@ -107,13 +107,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                     <label class="text-sm font-medium text-gray-700">Curso</label>
-                    <select name="course"
-                            class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
-                        <option value="">Selecione o curso</option>
-                        @foreach($courses as $course)
-                            <option value="{{ $course }}" @selected(old('course', $student?->course) === $course)>{{ $course }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text"
+                           value="{{ $student?->course ?? 'Nao informado' }}"
+                           readonly
+                           class="mt-1 w-full rounded-xl border-gray-200 bg-gray-100 px-4 py-2.5 text-gray-600 cursor-not-allowed">
                 </div>
 
                 <div>
@@ -151,10 +148,39 @@
             </div>
         </div>
 
+        <div class="pt-2 border-t">
+            <h3 class="text-base font-semibold text-gray-900 mb-3">Seguranca</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="md:col-span-2">
+                    <label class="text-sm font-medium text-gray-700">Senha atual</label>
+                    <input type="password"
+                           name="current_password"
+                           placeholder="Digite sua senha atual para alterar"
+                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Nova senha</label>
+                    <input type="password"
+                           name="password"
+                           placeholder="Deixe em branco para manter a atual"
+                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                </div>
+
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Confirmar nova senha</label>
+                    <input type="password"
+                           name="password_confirmation"
+                           placeholder="Repita a nova senha"
+                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
         <div class="pt-2">
             <button type="submit"
                     class="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700">
-                Salvar alterações
+                Salvar alteracoes
             </button>
         </div>
     </form>
