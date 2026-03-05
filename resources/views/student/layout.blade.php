@@ -268,11 +268,10 @@
                     <span class="sidebar-label">Notificações</span>
                 </span>
 
-                @if($count > 0)
-                    <span class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                        {{ $count }}
-                    </span>
-                @endif
+                <span id="student-notification-badge"
+                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ $count > 0 ? '' : 'hidden' }}">
+                    {{ $count }}
+                </span>
             </a>
 
             {{-- MENSAGENS --}}
@@ -393,6 +392,32 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notificationBadge = document.getElementById('student-notification-badge');
+        if (!notificationBadge) return;
+
+        const pollSummary = async () => {
+            try {
+                const response = await fetch('{{ route('student.realtime.summary') }}', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const unread = Number(data.unread_notifications || 0);
+
+                notificationBadge.textContent = String(unread);
+                notificationBadge.classList.toggle('hidden', unread <= 0);
+            } catch (error) {
+                console.warn('Falha ao atualizar notificações do aluno.', error);
+            }
+        };
+
+        setInterval(pollSummary, 8000);
+    });
+</script>
 @if(session('login_animation') === 'student')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -409,7 +434,6 @@
 
 </body>
 </html>
-
 
 
 

@@ -230,11 +230,10 @@
                     <span class="sidebar-label text-sm font-medium">Notificações</span>
                 </span>
 
-                @if($unreadCount > 0)
-                    <span class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                        {{ $unreadCount }}
-                    </span>
-                @endif
+                <span id="company-notification-badge"
+                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ $unreadCount > 0 ? '' : 'hidden' }}">
+                    {{ $unreadCount }}
+                </span>
             </a>
 
         </nav>
@@ -331,6 +330,32 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notificationBadge = document.getElementById('company-notification-badge');
+        if (!notificationBadge) return;
+
+        const pollSummary = async () => {
+            try {
+                const response = await fetch('{{ route('company.realtime.summary') }}', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const unread = Number(data.unread_notifications || 0);
+
+                notificationBadge.textContent = String(unread);
+                notificationBadge.classList.toggle('hidden', unread <= 0);
+            } catch (error) {
+                console.warn('Falha ao atualizar notificações da empresa.', error);
+            }
+        };
+
+        setInterval(pollSummary, 8000);
+    });
+</script>
 @if(session('login_animation') === 'company')
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -346,7 +371,6 @@
 @endif
 </body>
 </html>
-
 
 
 

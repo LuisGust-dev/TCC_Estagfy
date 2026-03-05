@@ -160,6 +160,14 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
         return view('student.notifications.index');
     })->name('notifications.index');
 
+    Route::get('/realtime/summary', function () {
+        $user = auth()->user();
+
+        return response()->json([
+            'unread_notifications' => $user->unreadNotifications()->count(),
+        ]);
+    })->name('realtime.summary');
+
     // ✅ Marcar notificação como lida
     Route::post('/notifications/{id}/read', function ($id) {
         auth()->user()
@@ -311,6 +319,14 @@ Route::middleware(['auth', 'active', 'company'])
         Route::get('/notifications', function () {
             return view('company.notifications.index');
         })->name('notifications.index');
+
+        Route::get('/realtime/summary', function () {
+            $user = auth()->user();
+
+            return response()->json([
+                'unread_notifications' => $user->unreadNotifications()->count(),
+            ]);
+        })->name('realtime.summary');
 
         // ✅ Marcar notificação como lida
         Route::post('/notifications/{id}/read', function ($id) {

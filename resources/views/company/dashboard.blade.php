@@ -155,4 +155,13 @@
 
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setInterval(() => {
+            if (document.hidden) return;
+            window.location.reload();
+        }, 12000);
+    });
+</script>
+
 @endsection
