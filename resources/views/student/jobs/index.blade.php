@@ -8,6 +8,7 @@ Vagas de Estágio
 @php
     $hideSuccess = true;
     $studentCourse = auth()->user()->student?->course;
+    $hasAdvancedFilters = ($minVacancies ?? 0) > 0 || filled((string) ($language ?? '')) || is_numeric($salaryMin ?? null) || is_numeric($salaryMax ?? null);
 @endphp
 
 @if(session('success'))
@@ -51,6 +52,69 @@ Vagas de Estágio
             </button>
         </div>
 
+        <div class="flex items-center">
+            <button
+                id="student-job-filters-toggle"
+                type="button"
+                class="inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-50"
+            >
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 6h16"></path>
+                    <path d="M7 12h10"></path>
+                    <path d="M10 18h4"></path>
+                </svg>
+                Filtro
+            </button>
+        </div>
+
+        <div id="student-job-filters-panel" class="{{ $hasAdvancedFilters ? '' : 'hidden' }} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Vagas mínimas</label>
+                <input
+                    type="number"
+                    name="vacancies_min"
+                    min="1"
+                    value="{{ old('vacancies_min', $minVacancies > 0 ? $minVacancies : '') }}"
+                    placeholder="Ex.: 2"
+                    class="w-full rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Linguagem</label>
+                <input
+                    type="text"
+                    name="language"
+                    value="{{ old('language', (string) $language) }}"
+                    placeholder="Ex.: PHP, Java, Python"
+                    class="w-full rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Bolsa mínima (R$)</label>
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="salary_min"
+                    value="{{ old('salary_min', is_numeric($salaryMin) ? $salaryMin : '') }}"
+                    placeholder="Ex.: 800"
+                    class="w-full rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+            </div>
+            <div>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Bolsa máxima (R$)</label>
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="salary_max"
+                    value="{{ old('salary_max', is_numeric($salaryMax) ? $salaryMax : '') }}"
+                    placeholder="Ex.: 1800"
+                    class="w-full rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                >
+            </div>
+        </div>
+
         <div class="flex flex-wrap items-center gap-2 text-sm">
        
             <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200">
@@ -59,9 +123,29 @@ Vagas de Estágio
             <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200">
                 {{ $jobs->count() }} vaga(s) encontrada(s)
             </span>
+
+            @if(filled((string) $search) || filled((string) $language) || ($minVacancies ?? 0) > 0 || is_numeric($salaryMin) || is_numeric($salaryMax))
+                <a href="{{ route('student.jobs.index') }}"
+                   class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200 hover:bg-gray-50">
+                    Limpar filtros
+                </a>
+            @endif
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButton = document.getElementById('student-job-filters-toggle');
+        const panel = document.getElementById('student-job-filters-panel');
+
+        if (!toggleButton || !panel) return;
+
+        toggleButton.addEventListener('click', () => {
+            panel.classList.toggle('hidden');
+        });
+    });
+</script>
 
 <div class="space-y-6">
     @forelse($jobs as $job)

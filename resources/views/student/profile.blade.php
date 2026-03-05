@@ -159,7 +159,7 @@
         </div>
 
         <div class="pt-2 border-t">
-            <h3 class="text-base font-semibold text-gray-900 mb-3">Seguranca</h3>
+            <h3 class="text-base font-semibold text-gray-900 mb-3">Segurança</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="md:col-span-2">
                     <label class="text-sm font-medium text-gray-700">Senha atual</label>

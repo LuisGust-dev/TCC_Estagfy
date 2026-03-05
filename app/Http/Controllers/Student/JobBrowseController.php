@@ -13,6 +13,10 @@ class JobBrowseController extends Controller
     public function index(Request $request)
     {
         $search = $request->string('q')->trim();
+        $language = $request->string('language')->trim();
+        $minVacancies = $request->integer('vacancies_min');
+        $salaryMin = $request->input('salary_min');
+        $salaryMax = $request->input('salary_max');
         $studentCourse = Auth::user()->student?->course;
 
         $jobs = Job::withCount('applications')
@@ -33,10 +37,34 @@ class JobBrowseController extends Controller
                         });
                 });
             })
+            ->when($minVacancies > 0, function ($query) use ($minVacancies) {
+                $query->where('vacancies', '>=', $minVacancies);
+            })
+            ->when($language->isNotEmpty(), function ($query) use ($language) {
+                $term = mb_strtolower((string) $language);
+                $query->where(function ($q) use ($term) {
+                    $q->whereRaw('LOWER(title) like ?', ['%' . $term . '%'])
+                        ->orWhereRaw('LOWER(description) like ?', ['%' . $term . '%'])
+                        ->orWhereRaw('LOWER(requirements) like ?', ['%' . $term . '%']);
+                });
+            })
+            ->when(is_numeric($salaryMin), function ($query) use ($salaryMin) {
+                $query->where('salary', '>=', (float) $salaryMin);
+            })
+            ->when(is_numeric($salaryMax), function ($query) use ($salaryMax) {
+                $query->where('salary', '<=', (float) $salaryMax);
+            })
             ->latest()
             ->get();
 
-        return view('student.jobs.index', compact('jobs', 'search'));
+        return view('student.jobs.index', compact(
+            'jobs',
+            'search',
+            'language',
+            'minVacancies',
+            'salaryMin',
+            'salaryMax'
+        ));
     }
 
     public function apply(Job $job)
