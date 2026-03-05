@@ -182,6 +182,14 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
         }
 
         if ($jobId) {
+            $jobExists = \App\Models\Job::query()->whereKey($jobId)->exists();
+
+            if (! $jobExists) {
+                return redirect()
+                    ->route('student.notifications.index')
+                    ->with('error', 'As informações desta vaga foram excluídas e não estão mais disponíveis.');
+            }
+
             return redirect()->route('student.jobs.show', $jobId);
         }
 
@@ -321,9 +329,29 @@ Route::middleware(['auth', 'active', 'company'])
             $notification = auth()->user()->notifications()->findOrFail($notificationId);
             $notification->markAsRead();
 
+            $jobId = $notification->data['job_id'] ?? null;
+            $companyId = auth()->user()->company?->id;
+
+            if (!$jobId || !$companyId) {
+                return redirect()
+                    ->route('company.notifications.index')
+                    ->with('error', 'As informações desta vaga foram excluídas e não estão mais disponíveis.');
+            }
+
+            $jobExistsForCompany = \App\Models\Job::query()
+                ->whereKey($jobId)
+                ->where('company_id', $companyId)
+                ->exists();
+
+            if (! $jobExistsForCompany) {
+                return redirect()
+                    ->route('company.notifications.index')
+                    ->with('error', 'As informações desta vaga foram excluídas e não estão mais disponíveis.');
+            }
+
             return redirect()->route(
                 'company.jobs.candidates',
-                $notification->data['job_id']
+                $jobId
             );
         })->name('notifications.readAndGo');
 
