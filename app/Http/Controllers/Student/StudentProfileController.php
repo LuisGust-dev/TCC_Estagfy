@@ -62,11 +62,13 @@ class StudentProfileController extends Controller
         ];
 
         if ($request->hasFile('photo')) {
-            if (!empty($user->photo)) {
-                Storage::disk('public')->delete($user->photo);
-            }
+            $oldPhoto = $user->photo;
+            $newPhoto = $request->file('photo')->store('profiles', 'public');
+            $userData['photo'] = $newPhoto;
 
-            $userData['photo'] = $request->file('photo')->store('profiles', 'public');
+            if (!empty($oldPhoto) && $oldPhoto !== $newPhoto) {
+                Storage::disk('public')->delete($oldPhoto);
+            }
         }
 
         if (!empty($validated['password'])) {

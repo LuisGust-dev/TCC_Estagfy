@@ -116,9 +116,9 @@
         <div class="company-profile mb-8 flex items-start justify-between gap-2">
             <div class="flex items-center gap-3">
 
-                @if(auth()->user()->photo)
+                @if(auth()->user()->photo_url)
                     <img
-                        src="{{ asset('storage/' . auth()->user()->photo) }}"
+                        src="{{ auth()->user()->photo_url }}"
                         class="w-11 h-11 rounded-full object-cover"
                         alt="Foto da empresa"
                     >
@@ -371,7 +371,6 @@
 @endif
 </body>
 </html>
-
 
 
 

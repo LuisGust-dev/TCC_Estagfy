@@ -115,9 +115,9 @@
         <div class="student-profile border-b px-2 py-5 flex items-start justify-between gap-2">
             <div class="flex items-center gap-3">
 
-                @if(auth()->user()->photo)
+                @if(auth()->user()->photo_url)
                     <img
-                        src="{{ asset('storage/' . auth()->user()->photo) }}"
+                        src="{{ auth()->user()->photo_url }}"
                         alt="Foto do aluno"
                         class="w-11 h-11 rounded-full object-cover"
                     >
@@ -434,7 +434,6 @@
 
 </body>
 </html>
-
 
 
 

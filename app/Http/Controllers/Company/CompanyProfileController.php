@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class CompanyProfileController extends Controller
@@ -46,7 +47,13 @@ class CompanyProfileController extends Controller
         }
 
         if ($request->hasFile('photo')) {
-            $userData['photo'] = $request->file('photo')->store('profiles', 'public');
+            $oldPhoto = $user->photo;
+            $newPhoto = $request->file('photo')->store('profiles', 'public');
+            $userData['photo'] = $newPhoto;
+
+            if (!empty($oldPhoto) && $oldPhoto !== $newPhoto) {
+                Storage::disk('public')->delete($oldPhoto);
+            }
         }
 
         $user->update($userData);

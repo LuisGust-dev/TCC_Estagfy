@@ -8,8 +8,8 @@
     <section class="rounded-3xl border bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-8 text-white shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center gap-5">
             <div class="h-20 w-20 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center overflow-hidden">
-                @if($user->photo)
-                    <img src="{{ asset('storage/' . $user->photo) }}"
+                @if($user->photo_url)
+                    <img src="{{ $user->photo_url }}"
                          alt="Foto do aluno"
                          class="h-full w-full object-cover">
                 @else
@@ -91,8 +91,8 @@
                 <div class="rounded-2xl border border-dashed border-blue-200 bg-blue-50/40 p-5">
                     <div class="flex flex-col sm:flex-row sm:items-center gap-4">
                         <div class="h-16 w-16 rounded-xl bg-white border overflow-hidden flex items-center justify-center">
-                            @if($user->photo)
-                                <img src="{{ asset('storage/' . $user->photo) }}"
+                            @if($user->photo_url)
+                                <img src="{{ $user->photo_url }}"
                                      alt="Foto atual"
                                      class="h-full w-full object-cover">
                             @else

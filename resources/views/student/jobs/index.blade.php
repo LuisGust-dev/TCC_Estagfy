@@ -185,9 +185,9 @@ Vagas de Estágio
         <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100">
             <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div class="flex gap-4">
-                @if($job->company->user->photo)
+                @if($job->company->user->photo_url)
                     <img
-                        src="{{ asset('storage/' . $job->company->user->photo) }}"
+                        src="{{ $job->company->user->photo_url }}"
                         class="h-16 w-16 shrink-0 rounded-xl object-cover ring-1 ring-slate-200"
                         alt="Foto da empresa {{ $job->company->user->name }}"
                     >
