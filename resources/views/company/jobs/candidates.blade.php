@@ -50,7 +50,7 @@
         </nav>
     </aside>
 
-    <div class="bg-white border rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-white border rounded-2xl shadow-sm overflow-visible">
         <table class="w-full text-sm align-top table-fixed">
             <thead class="bg-gray-50 text-gray-600">
                 <tr>
@@ -120,7 +120,7 @@
                         @endif
                     </td>
 
-                    <td class="px-6 py-4 text-right">
+                    <td class="px-6 py-4 text-right relative">
                         <details class="relative inline-block text-left">
                             <summary class="list-none cursor-pointer rounded-lg border border-gray-200 bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-200">
                                 <span class="inline-flex items-center gap-1">
@@ -131,7 +131,7 @@
                                 </span>
                             </summary>
 
-                            <div class="absolute right-0 z-20 mt-2 w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+                            <div class="absolute right-0 z-50 mt-2 w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
                                 @if ($application->status === 'aprovado')
                                     <a href="{{ route('company.chat.show', [$application->job_id, $application->student_id]) }}"
                                        class="block rounded-md px-3 py-2 text-xs font-medium text-blue-700 hover:bg-gray-100">
