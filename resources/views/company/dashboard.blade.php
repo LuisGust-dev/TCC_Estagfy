@@ -157,10 +157,43 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        setInterval(() => {
+        const snapshot = {
+            vagasAtivas: Number(@json($vagasAtivas ?? 0)),
+            candidatos: Number(@json($candidatos ?? 0)),
+            contratacoes: Number(@json($contratacoes ?? 0)),
+            emAnalise: Number(@json($emAnalise ?? 0)),
+            jobsLatestTs: Number(@json($jobsLatestTs ? strtotime((string) $jobsLatestTs) : 0)),
+            appsLatestTs: Number(@json($applicationsLatestTs ? strtotime((string) $applicationsLatestTs) : 0)),
+        };
+
+        const pollIfChanged = async () => {
             if (document.hidden) return;
-            window.location.reload();
-        }, 6000);
+
+            try {
+                const response = await fetch('{{ route('company.realtime.summary') }}', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const changed =
+                    Number(data.dashboard_vagas_ativas || 0) !== snapshot.vagasAtivas ||
+                    Number(data.dashboard_candidatos || 0) !== snapshot.candidatos ||
+                    Number(data.dashboard_contratacoes || 0) !== snapshot.contratacoes ||
+                    Number(data.dashboard_em_analise || 0) !== snapshot.emAnalise ||
+                    Number(data.dashboard_jobs_latest_ts || 0) !== snapshot.jobsLatestTs ||
+                    Number(data.dashboard_apps_latest_ts || 0) !== snapshot.appsLatestTs;
+
+                if (changed) {
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.warn('Falha ao sincronizar dashboard da empresa.', error);
+            }
+        };
+
+        setInterval(pollIfChanged, 6000);
     });
 </script>
 

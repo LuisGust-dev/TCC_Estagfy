@@ -358,9 +358,24 @@ Route::middleware(['auth', 'active', 'company'])
 
         Route::get('/realtime/summary', function () {
             $user = auth()->user();
+            $companyId = $user->company?->id;
+
+            $jobsQuery = \App\Models\Job::query()
+                ->where('company_id', $companyId);
+
+            $jobIds = (clone $jobsQuery)->pluck('id');
+
+            $applicationsQuery = \App\Models\Application::query()
+                ->whereIn('job_id', $jobIds);
 
             return response()->json([
                 'unread_notifications' => $user->unreadNotifications()->count(),
+                'dashboard_vagas_ativas' => (clone $jobsQuery)->openForApplications()->count(),
+                'dashboard_candidatos' => (clone $applicationsQuery)->count(),
+                'dashboard_contratacoes' => (clone $applicationsQuery)->where('status', 'aprovado')->count(),
+                'dashboard_em_analise' => (clone $applicationsQuery)->where('status', 'em_analise')->count(),
+                'dashboard_jobs_latest_ts' => (($latest = (clone $jobsQuery)->max('updated_at')) ? strtotime((string) $latest) : 0),
+                'dashboard_apps_latest_ts' => (($latest = (clone $applicationsQuery)->max('updated_at')) ? strtotime((string) $latest) : 0),
             ]);
         })->name('realtime.summary');
 

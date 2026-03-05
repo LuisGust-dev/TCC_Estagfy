@@ -36,6 +36,9 @@ class DashboardController extends Controller
             $jobIds
         )->where('status', 'em_analise')->count();
 
+        $jobsLatestTs = Job::where('company_id', $company->id)->max('updated_at');
+        $applicationsLatestTs = Application::whereIn('job_id', $jobIds)->max('updated_at');
+
         // 🧳 Vagas recentes (da empresa)
         $vagasRecentes = Job::where('company_id', $company->id)
             ->withCount('applications')
@@ -59,7 +62,9 @@ class DashboardController extends Controller
             'contratacoes',
             'emAnalise',
             'vagasRecentes',
-            'candidatosRecentes'
+            'candidatosRecentes',
+            'jobsLatestTs',
+            'applicationsLatestTs'
         ));
     }
 }
