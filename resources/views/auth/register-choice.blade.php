@@ -11,13 +11,26 @@
     .estagfy-bg-gradient {
         background: linear-gradient(
             120deg,
-#4a47e4,
+            #4a47e4,
             #0B9B5B,
-                        #4A47E4,
-                        #0B9B5B
-                    );
+            #4A47E4,
+            #0B9B5B
+        );
         background-size: 400% 400%;
         animation: estagfy-gradient-shift 7s ease-in-out infinite;
+        transition: background 400ms ease;
+    }
+
+    .estagfy-bg-gradient.bg-student {
+        background: linear-gradient(120deg, #1d4ed8, #2563eb, #1e40af, #3b82f6);
+        background-size: 220% 220%;
+        animation: estagfy-gradient-shift 6s ease-in-out infinite;
+    }
+
+    .estagfy-bg-gradient.bg-company {
+        background: linear-gradient(120deg, #059669, #10b981, #047857, #34d399);
+        background-size: 220% 220%;
+        animation: estagfy-gradient-shift 6s ease-in-out infinite;
     }
 
     @keyframes estagfy-gradient-shift {
@@ -26,6 +39,25 @@
         50% { background-position: 100% 70%; }
         75% { background-position: 0% 70%; }
         100% { background-position: 0% 50%; }
+    }
+
+    .choice-card {
+        transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease, background .3s ease, color .3s ease;
+    }
+
+    .choice-card-student:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 55%, #1e40af 100%);
+        border-color: #1d4ed8;
+    }
+
+    .choice-card-company:hover {
+        background: linear-gradient(135deg, #059669 0%, #047857 55%, #065f46 100%);
+        border-color: #047857;
+    }
+
+    .choice-card:hover .choice-title,
+    .choice-card:hover .choice-description {
+        color: #ffffff;
     }
 </style>
 
@@ -63,7 +95,8 @@
 
                 {{-- Aluno --}}
                 <a href="{{ route('register.student') }}"
-                   class="group mx-auto w-full max-w-sm bg-white
+                   data-bg-mode="student"
+                   class="choice-card choice-card-student group mx-auto w-full max-w-sm bg-white
                           border border-gray-200/70 rounded-2xl
                           p-8 text-left shadow-sm
                           hover:shadow-2xl hover:-translate-y-1
@@ -78,18 +111,19 @@
                         </svg>
                     </div>
 
-                    <h2 class="text-lg font-semibold mb-3 text-gray-900">
+                    <h2 class="choice-title text-lg font-semibold mb-3 text-gray-900">
                         Sou Aluno
                     </h2>
 
-                    <p class="text-gray-600 text-sm leading-relaxed">
+                    <p class="choice-description text-gray-600 text-sm leading-relaxed">
                         Busco oportunidades de estágio e quero acompanhar candidaturas em tempo real
                     </p>
                 </a>
 
                 {{-- Empresa --}}
                 <a href="{{ route('register.company') }}"
-                   class="group mx-auto w-full max-w-sm bg-white
+                   data-bg-mode="company"
+                   class="choice-card choice-card-company group mx-auto w-full max-w-sm bg-white
                           border border-gray-200/70 rounded-2xl
                           p-8 text-left shadow-sm
                           hover:shadow-2xl hover:-translate-y-1
@@ -104,11 +138,11 @@
                         </svg>
                     </div>
 
-                    <h2 class="text-lg font-semibold mb-3 text-gray-900">
+                    <h2 class="choice-title text-lg font-semibold mb-3 text-gray-900">
                         Sou Empresa
                     </h2>
 
-                    <p class="text-gray-600 text-sm leading-relaxed">
+                    <p class="choice-description text-gray-600 text-sm leading-relaxed">
                         Quero publicar vagas e gerenciar candidatos com mais agilidade
                     </p>
                 </a>
@@ -126,10 +160,26 @@
         </div>
     </div>
 
+<script>
+    (() => {
+        const body = document.body;
+        const cards = document.querySelectorAll('[data-bg-mode]');
+
+        cards.forEach((card) => {
+            const mode = card.getAttribute('data-bg-mode');
+
+            card.addEventListener('mouseenter', () => {
+                body.classList.remove('bg-student', 'bg-company');
+                body.classList.add(mode === 'student' ? 'bg-student' : 'bg-company');
+            });
+
+            card.addEventListener('mouseleave', () => {
+                body.classList.remove('bg-student', 'bg-company');
+            });
+        });
+    })();
+</script>
 </body>
 </html>
-
-
-
 
 
