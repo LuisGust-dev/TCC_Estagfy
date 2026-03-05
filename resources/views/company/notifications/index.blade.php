@@ -83,7 +83,7 @@
         setInterval(() => {
             if (document.hidden) return;
             window.location.reload();
-        }, 12000);
+        }, 6000);
     });
 </script>
 

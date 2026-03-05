@@ -353,7 +353,7 @@
             }
         };
 
-        setInterval(pollSummary, 8000);
+        setInterval(pollSummary, 6000);
     });
 </script>
 @if(session('login_animation') === 'company')
