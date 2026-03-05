@@ -57,13 +57,18 @@ class JobBrowseController extends Controller
             ->latest()
             ->get();
 
+        $jobsCount = $jobs->count();
+        $jobsLatestTs = optional($jobs->max('updated_at'))?->timestamp ?? 0;
+
         return view('student.jobs.index', compact(
             'jobs',
             'search',
             'language',
             'minVacancies',
             'salaryMin',
-            'salaryMax'
+            'salaryMax',
+            'jobsCount',
+            'jobsLatestTs'
         ));
     }
 

@@ -18,7 +18,14 @@ class ApplicationController extends Controller
             ->latest()
             ->get();
 
-        return view('student.applications.index', compact('applications'));
+        $applicationsCount = $applications->count();
+        $applicationsLatestTs = optional($applications->max('updated_at'))?->timestamp ?? 0;
+
+        return view('student.applications.index', compact(
+            'applications',
+            'applicationsCount',
+            'applicationsLatestTs'
+        ));
     }
 
 

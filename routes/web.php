@@ -157,14 +157,50 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
 
     // 📌 Lista de notificações
     Route::get('/notifications', function () {
-        return view('student.notifications.index');
+        $notifications = auth()->user()->notifications;
+
+        return view('student.notifications.index', [
+            'notifications' => $notifications,
+            'notificationsCount' => $notifications->count(),
+            'notificationsLatestTs' => optional($notifications->max('updated_at'))?->timestamp ?? 0,
+        ]);
     })->name('notifications.index');
 
     Route::get('/realtime/summary', function () {
         $user = auth()->user();
+        $studentCourse = $user->student?->course;
+
+        $jobsQuery = \App\Models\Job::query()
+            ->whereHas('company.user', function ($query) {
+                $query->where('active', true);
+            })
+            ->openForApplications()
+            ->when(!empty($studentCourse), function ($query) use ($studentCourse) {
+                $query->where('area', $studentCourse);
+            }, function ($query) {
+                $query->whereRaw('1 = 0');
+            });
+
+        $jobsCount = (clone $jobsQuery)->count();
+        $jobsLatest = (clone $jobsQuery)->max('updated_at');
+
+        $applicationsQuery = \App\Models\Application::query()
+            ->where('student_id', $user->id);
+        $applicationsCount = (clone $applicationsQuery)->count();
+        $applicationsLatest = (clone $applicationsQuery)->max('updated_at');
+
+        $notificationsQuery = $user->notifications();
+        $notificationsCount = (clone $notificationsQuery)->count();
+        $notificationsLatest = (clone $notificationsQuery)->max('updated_at');
 
         return response()->json([
             'unread_notifications' => $user->unreadNotifications()->count(),
+            'jobs_count' => $jobsCount,
+            'jobs_latest_ts' => $jobsLatest ? strtotime((string) $jobsLatest) : 0,
+            'applications_count' => $applicationsCount,
+            'applications_latest_ts' => $applicationsLatest ? strtotime((string) $applicationsLatest) : 0,
+            'notifications_count' => $notificationsCount,
+            'notifications_latest_ts' => $notificationsLatest ? strtotime((string) $notificationsLatest) : 0,
         ]);
     })->name('realtime.summary');
 
