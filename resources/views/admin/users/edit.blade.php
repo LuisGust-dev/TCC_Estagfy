@@ -3,6 +3,10 @@
 @section('title', 'Editar Usuário | Admin EstagFy')
 
 @section('content')
+    @php
+        $courses = config('internship.courses', []);
+        $selectedCourse = old('course', optional($user->student)->course);
+    @endphp
     <div class="max-w-3xl">
         <div class="mb-6 flex items-center justify-between gap-3">
             <div>
@@ -70,8 +74,17 @@
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-700">Curso</label>
-                        <input type="text" name="course" value="{{ old('course', optional($user->student)->course) }}"
-                               class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                        <select name="course"
+                                class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            @if(filled((string) $selectedCourse) && !in_array($selectedCourse, $courses, true))
+                                <option value="{{ $selectedCourse }}" selected>{{ $selectedCourse }} (atual)</option>
+                            @endif
+
+                            <option value="" disabled @selected(!filled((string) $selectedCourse))>Selecione o curso</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course }}" @selected($selectedCourse === $course)>{{ $course }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <label class="text-sm font-medium text-gray-700">Período</label>

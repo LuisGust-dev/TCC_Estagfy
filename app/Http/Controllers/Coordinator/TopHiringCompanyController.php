@@ -12,13 +12,31 @@ class TopHiringCompanyController extends Controller
     public function index(Request $request)
     {
         $selectedCourse = $this->selectedCourse($request);
+        $search = trim((string) $request->query('q', ''));
 
-        $companies = TopHiringCompany::query()
+        $companiesQuery = TopHiringCompany::query()
             ->when(!empty($selectedCourse), fn ($query) => $query->where('course', $selectedCourse))
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->where('company_name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            });
+
+        $companies = (clone $companiesQuery)
             ->orderBy('company_name')
             ->get();
 
-        return view('coordinator.calendar.hiring-companies', compact('companies', 'selectedCourse'));
+        $companiesCount = $companies->count();
+        $latestUpdateAt = $companies->max('updated_at');
+
+        return view('coordinator.calendar.hiring-companies', compact(
+            'companies',
+            'selectedCourse',
+            'search',
+            'companiesCount',
+            'latestUpdateAt'
+        ));
     }
 
     public function store(Request $request)

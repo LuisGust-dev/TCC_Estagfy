@@ -78,7 +78,7 @@ class UserController extends Controller
         if ($selectedRole === 'student') {
             $extraRules = [
                 'cpf' => ['required', 'digits:11', Rule::unique('students', 'cpf')->ignore(optional($user->student)->id)],
-                'course' => ['required', 'string', 'max:255'],
+                'course' => ['required', Rule::in(config('internship.courses', []))],
                 'period' => ['required', 'string', 'max:50'],
             ];
         }

@@ -76,7 +76,7 @@
     {{-- Badge --}}
     <div class="flex justify-center mb-6">
         <span class="inline-flex items-center gap-2 bg-white/20 px-5 py-2 rounded-full text-sm backdrop-blur shadow">
-            🚀 Conectando talentos às melhores oportunidades
+            Conectando talentos a oportunidades de estágio
         </span>
     </div>
 

@@ -28,10 +28,8 @@ class InternshipCalendarController extends Controller
                 $query->whereRaw('1 = 0');
             })
             ->whereDate('start_date', '<=', $monthEnd->toDateString())
-            ->where(function ($query) use ($monthStart) {
-                $query->whereNull('end_date')
-                    ->orWhereDate('end_date', '>=', $monthStart->toDateString());
-            })
+            // Se end_date for nulo, o evento vale apenas no start_date.
+            ->whereRaw('DATE(COALESCE(end_date, start_date)) >= ?', [$monthStart->toDateString()])
             ->orderBy('start_date')
             ->orderBy('end_date')
             ->get();
