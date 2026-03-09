@@ -8,7 +8,7 @@ Vagas de Estágio
 @php
     $hideSuccess = true;
     $studentCourse = auth()->user()->student?->course;
-    $hasAdvancedFilters = ($minVacancies ?? 0) > 0 || filled((string) ($language ?? '')) || is_numeric($salaryMin ?? null) || is_numeric($salaryMax ?? null);
+    $hasAdvancedFilters = ($minVacancies ?? 0) > 0 || filled((string) ($keyword ?? '')) || is_numeric($salaryMin ?? null) || is_numeric($salaryMax ?? null);
 @endphp
 
 @if(session('success'))
@@ -80,12 +80,12 @@ Vagas de Estágio
                 >
             </div>
             <div>
-                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Linguagem</label>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Palavra-chave / competência</label>
                 <input
                     type="text"
-                    name="language"
-                    value="{{ old('language', (string) $language) }}"
-                    placeholder="Ex.: PHP, Java, Python"
+                    name="keyword"
+                    value="{{ old('keyword', (string) $keyword) }}"
+                    placeholder="Ex.: irrigação, atendimento, Excel"
                     class="w-full rounded-lg border border-blue-100 bg-white px-3 py-2 text-sm text-gray-700 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 >
             </div>
@@ -124,7 +124,7 @@ Vagas de Estágio
                 {{ $jobs->count() }} vaga(s) encontrada(s)
             </span>
 
-            @if(filled((string) $search) || filled((string) $language) || ($minVacancies ?? 0) > 0 || is_numeric($salaryMin) || is_numeric($salaryMax))
+            @if(filled((string) $search) || filled((string) $keyword) || ($minVacancies ?? 0) > 0 || is_numeric($salaryMin) || is_numeric($salaryMax))
                 <a href="{{ route('student.jobs.index') }}"
                    class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200 hover:bg-gray-50">
                     Limpar filtros

@@ -13,7 +13,11 @@ class JobBrowseController extends Controller
     public function index(Request $request)
     {
         $search = $request->string('q')->trim();
-        $language = $request->string('language')->trim();
+        $keyword = $request->string('keyword')->trim();
+        if ($keyword->isEmpty()) {
+            // Compatibilidade com URLs antigas que usavam "language".
+            $keyword = $request->string('language')->trim();
+        }
         $minVacancies = $request->integer('vacancies_min');
         $salaryMin = $request->input('salary_min');
         $salaryMax = $request->input('salary_max');
@@ -40,8 +44,8 @@ class JobBrowseController extends Controller
             ->when($minVacancies > 0, function ($query) use ($minVacancies) {
                 $query->where('vacancies', '>=', $minVacancies);
             })
-            ->when($language->isNotEmpty(), function ($query) use ($language) {
-                $term = mb_strtolower((string) $language);
+            ->when($keyword->isNotEmpty(), function ($query) use ($keyword) {
+                $term = mb_strtolower((string) $keyword);
                 $query->where(function ($q) use ($term) {
                     $q->whereRaw('LOWER(title) like ?', ['%' . $term . '%'])
                         ->orWhereRaw('LOWER(description) like ?', ['%' . $term . '%'])
@@ -63,7 +67,7 @@ class JobBrowseController extends Controller
         return view('student.jobs.index', compact(
             'jobs',
             'search',
-            'language',
+            'keyword',
             'minVacancies',
             'salaryMin',
             'salaryMax',
