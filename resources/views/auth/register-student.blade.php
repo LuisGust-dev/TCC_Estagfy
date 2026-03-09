@@ -148,9 +148,12 @@ rgb(74, 71, 228)
                             <label class="block text-sm font-medium text-gray-700">
                                 Período
                             </label>
-                            <input type="text" name="period" value="{{ old('period') }}" required maxlength="50"
+                            <input type="number" name="period" value="{{ old('period') }}" required min="1" max="20" step="1" inputmode="numeric"
                                    class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                   placeholder="Ex: 6º período">
+                                   placeholder="Ex.: 6">
+                            @error('period')
+                                <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
@@ -253,7 +256,6 @@ rgb(74, 71, 228)
     })();
 </script>
 </html>
-
 
 
 

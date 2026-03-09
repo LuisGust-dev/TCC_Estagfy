@@ -16,6 +16,7 @@ class RegisterStudentController extends Controller
     {
         $request->merge([
             'cpf' => preg_replace('/\D/', '', (string) $request->cpf),
+            'period' => preg_replace('/\D/', '', (string) $request->period),
         ]);
 
         $request->validate(
@@ -25,7 +26,7 @@ class RegisterStudentController extends Controller
                 'password' => 'required|string|min:8|max:255',
                 'cpf' => 'required|digits:11|unique:students,cpf',
                 'course' => ['required', Rule::in(config('internship.courses', []))],
-                'period' => 'required|string|max:50',
+                'period' => 'required|integer|min:1|max:20',
                 'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
                 'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ],
@@ -33,6 +34,9 @@ class RegisterStudentController extends Controller
                 'name.unique' => 'Este nome ja esta cadastrado.',
                 'email.unique' => 'Este e-mail ja esta cadastrado.',
                 'cpf.unique' => 'Este CPF ja esta cadastrado.',
+                'period.integer' => 'O período deve conter apenas números.',
+                'period.min' => 'O período deve ser maior que zero.',
+                'period.max' => 'O período informado é inválido.',
             ]
         );
 
