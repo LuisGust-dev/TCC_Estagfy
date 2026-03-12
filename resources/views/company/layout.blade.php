@@ -210,11 +210,10 @@
                     <span class="sidebar-label text-sm font-medium">Mensagens</span>
                 </span>
 
-                @if($unreadMessagesCount > 0)
-                    <span class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full">
-                        {{ $unreadMessagesCount }}
-                    </span>
-                @endif
+                <span id="company-message-badge"
+                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ $unreadMessagesCount > 0 ? '' : 'hidden' }}">
+                    {{ $unreadMessagesCount }}
+                </span>
             </a>
 
             <a href="{{ route('company.notifications.index') }}"
@@ -333,7 +332,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const notificationBadge = document.getElementById('company-notification-badge');
-        if (!notificationBadge) return;
+        const messageBadge = document.getElementById('company-message-badge');
+        if (!notificationBadge && !messageBadge) return;
 
         const pollSummary = async () => {
             try {
@@ -345,11 +345,19 @@
 
                 const data = await response.json();
                 const unread = Number(data.unread_notifications || 0);
+                const unreadMessages = Number(data.unread_messages || 0);
 
-                notificationBadge.textContent = String(unread);
-                notificationBadge.classList.toggle('hidden', unread <= 0);
+                if (notificationBadge) {
+                    notificationBadge.textContent = String(unread);
+                    notificationBadge.classList.toggle('hidden', unread <= 0);
+                }
+
+                if (messageBadge) {
+                    messageBadge.textContent = String(unreadMessages);
+                    messageBadge.classList.toggle('hidden', unreadMessages <= 0);
+                }
             } catch (error) {
-                console.warn('Falha ao atualizar notificações da empresa.', error);
+                console.warn('Falha ao atualizar resumo lateral da empresa.', error);
             }
         };
 
@@ -371,6 +379,5 @@
 @endif
 </body>
 </html>
-
 
 

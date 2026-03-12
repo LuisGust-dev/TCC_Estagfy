@@ -3,6 +3,7 @@
 @section('title', 'Meu Perfil')
 
 @section('content')
+@php($hideSuccess = true)
 <div class="max-w-6xl mx-auto space-y-6">
 
     <section class="rounded-3xl border bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-8 text-white shadow-sm">

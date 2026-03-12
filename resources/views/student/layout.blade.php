@@ -289,11 +289,10 @@
                     <span class="sidebar-label">Mensagens</span>
                 </span>
 
-                @if($unreadMessagesCount > 0)
-                    <span class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                        {{ $unreadMessagesCount }}
-                    </span>
-                @endif
+                <span id="student-message-badge"
+                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ $unreadMessagesCount > 0 ? '' : 'hidden' }}">
+                    {{ $unreadMessagesCount }}
+                </span>
             </a>
 
         </nav>
@@ -395,7 +394,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const notificationBadge = document.getElementById('student-notification-badge');
-        if (!notificationBadge) return;
+        const messageBadge = document.getElementById('student-message-badge');
+        if (!notificationBadge && !messageBadge) return;
 
         const pollSummary = async () => {
             try {
@@ -407,11 +407,19 @@
 
                 const data = await response.json();
                 const unread = Number(data.unread_notifications || 0);
+                const unreadMessages = Number(data.unread_messages || 0);
 
-                notificationBadge.textContent = String(unread);
-                notificationBadge.classList.toggle('hidden', unread <= 0);
+                if (notificationBadge) {
+                    notificationBadge.textContent = String(unread);
+                    notificationBadge.classList.toggle('hidden', unread <= 0);
+                }
+
+                if (messageBadge) {
+                    messageBadge.textContent = String(unreadMessages);
+                    messageBadge.classList.toggle('hidden', unreadMessages <= 0);
+                }
             } catch (error) {
-                console.warn('Falha ao atualizar notificações do aluno.', error);
+                console.warn('Falha ao atualizar resumo lateral do aluno.', error);
             }
         };
 
@@ -434,6 +442,5 @@
 
 </body>
 </html>
-
 
 

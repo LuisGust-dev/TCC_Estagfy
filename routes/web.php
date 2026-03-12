@@ -192,9 +192,15 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
         $notificationsQuery = $user->notifications();
         $notificationsCount = (clone $notificationsQuery)->count();
         $notificationsLatest = (clone $notificationsQuery)->max('updated_at');
+        $unreadMessages = \App\Models\Message::query()
+            ->where('student_id', $user->id)
+            ->where('sender_id', '!=', $user->id)
+            ->whereNull('read_at')
+            ->count();
 
         return response()->json([
             'unread_notifications' => $user->unreadNotifications()->count(),
+            'unread_messages' => $unreadMessages,
             'jobs_count' => $jobsCount,
             'jobs_latest_ts' => $jobsLatest ? strtotime((string) $jobsLatest) : 0,
             'applications_count' => $applicationsCount,
@@ -368,8 +374,15 @@ Route::middleware(['auth', 'active', 'company'])
             $applicationsQuery = \App\Models\Application::query()
                 ->whereIn('job_id', $jobIds);
 
+            $unreadMessages = \App\Models\Message::query()
+                ->where('company_id', $user->id)
+                ->where('sender_id', '!=', $user->id)
+                ->whereNull('read_at')
+                ->count();
+
             return response()->json([
                 'unread_notifications' => $user->unreadNotifications()->count(),
+                'unread_messages' => $unreadMessages,
                 'dashboard_vagas_ativas' => (clone $jobsQuery)->openForApplications()->count(),
                 'dashboard_candidatos' => (clone $applicationsQuery)->count(),
                 'dashboard_contratacoes' => (clone $applicationsQuery)->where('status', 'aprovado')->count(),

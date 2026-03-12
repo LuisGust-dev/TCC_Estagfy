@@ -3,6 +3,7 @@
 @section('title', 'Perfil da Empresa')
 
 @section('content')
+@php($hideSuccess = true)
 <div class="max-w-6xl mx-auto space-y-6">
 
     <section class="rounded-3xl border bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 p-8 text-white shadow-sm">
@@ -29,6 +30,12 @@
             @foreach($errors->all() as $error)
                 <p>{{ $error }}</p>
             @endforeach
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {{ session('success') }}
         </div>
     @endif
 
