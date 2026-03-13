@@ -27,6 +27,9 @@
         </div>
     </header>
 
+    @isset($slot)
+        {{ $slot }}
+    @endisset
     @yield('content')
 
     {{-- Footer --}}
