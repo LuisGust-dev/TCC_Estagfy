@@ -2,10 +2,10 @@
 
 return [
     'courses' => [
-        'Engenharia Agronomica',
-        'Quimica',
-        'Ciencias Biologicas',
-        'Agroindustria',
-        'Analise e Desenvolvimento de Sistemas (ADS)',
+        'Engenharia Agronômica',
+        'Química',
+        'Ciências Biológicas',
+        'Agroindústria',
+        'Análise e Desenvolvimento de Sistemas (ADS)',
     ],
 ];
