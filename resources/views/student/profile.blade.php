@@ -164,26 +164,50 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="md:col-span-2">
                     <label class="text-sm font-medium text-gray-700">Senha atual</label>
-                    <input type="password"
-                           name="current_password"
-                           placeholder="Digite sua senha atual para alterar"
-                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                    <div class="relative mt-1">
+                        <input type="password"
+                               name="current_password"
+                               data-password-field
+                               placeholder="Digite sua senha atual para alterar"
+                               class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
+                        <button type="button"
+                                data-password-toggle
+                                class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
+                            Mostrar
+                        </button>
+                    </div>
                 </div>
 
                 <div>
                     <label class="text-sm font-medium text-gray-700">Nova senha</label>
-                    <input type="password"
-                           name="password"
-                           placeholder="Deixe em branco para manter a atual"
-                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                    <div class="relative mt-1">
+                        <input type="password"
+                               name="password"
+                               data-password-field
+                               placeholder="Deixe em branco para manter a atual"
+                               class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
+                        <button type="button"
+                                data-password-toggle
+                                class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
+                            Mostrar
+                        </button>
+                    </div>
                 </div>
 
                 <div>
                     <label class="text-sm font-medium text-gray-700">Confirmar nova senha</label>
-                    <input type="password"
-                           name="password_confirmation"
-                           placeholder="Repita a nova senha"
-                           class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
+                    <div class="relative mt-1">
+                        <input type="password"
+                               name="password_confirmation"
+                               data-password-field
+                               placeholder="Repita a nova senha"
+                               class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
+                        <button type="button"
+                                data-password-toggle
+                                class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
+                            Mostrar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,4 +220,19 @@
         </div>
     </form>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+            const wrapper = button.closest('.relative');
+            const input = wrapper?.querySelector('[data-password-field]');
+            if (!input) return;
+
+            button.addEventListener('click', () => {
+                const showing = input.type === 'text';
+                input.type = showing ? 'password' : 'text';
+                button.textContent = showing ? 'Mostrar' : 'Ocultar';
+            });
+        });
+    });
+</script>
 @endsection

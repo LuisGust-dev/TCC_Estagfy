@@ -23,7 +23,7 @@ class CompanyProfileController extends Controller
         $user = Auth::user();
         $company = $user->company;
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
                 'required',
@@ -34,16 +34,22 @@ class CompanyProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'description' => 'nullable|string|max:1000',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'current_password' => 'nullable|required_with:password|current_password',
             'password' => 'nullable|string|min:6|confirmed',
+        ], [
+            'current_password.current_password' => 'A senha atual está incorreta.',
+            'current_password.required_with' => 'Informe a senha atual para definir uma nova senha.',
+            'password.confirmed' => 'A confirmação da nova senha não confere.',
+            'password.min' => 'A nova senha deve ter no mínimo :min caracteres.',
         ]);
 
         $userData = [
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
         ];
 
-        if ($request->filled('password')) {
-            $userData['password'] = Hash::make($request->password);
+        if (!empty($validated['password'])) {
+            $userData['password'] = Hash::make($validated['password']);
         }
 
         if ($request->hasFile('photo')) {
@@ -59,9 +65,9 @@ class CompanyProfileController extends Controller
         $user->update($userData);
 
         $company->update([
-            'cnpj' => $request->cnpj,
-            'phone' => $request->phone,
-            'description' => $request->description,
+            'cnpj' => $validated['cnpj'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'description' => $validated['description'] ?? null,
         ]);
 
         return redirect()
