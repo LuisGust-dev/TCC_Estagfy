@@ -13,7 +13,7 @@
                 <h1 class="text-2xl font-bold text-gray-900">Editar usuário</h1>
                 <p class="text-gray-600">Atualize dados e permissões da conta</p>
             </div>
-            <a href="{{ $redirectTo ?? route('admin.users.index') }}"
+            <a href="{{ $redirectTo ?? route('admin.dashboard') }}"
                class="px-4 py-2 rounded-lg border text-sm font-medium text-gray-700 hover:bg-gray-100">
                 Voltar
             </a>
@@ -131,7 +131,7 @@
                     <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
                         Salvar alterações
                     </button>
-                    <a href="{{ $redirectTo ?? route('admin.users.index') }}"
+                    <a href="{{ $redirectTo ?? route('admin.dashboard') }}"
                        class="px-4 py-2 rounded-lg border text-sm font-medium text-gray-700 hover:bg-gray-100">
                         Cancelar
                     </a>

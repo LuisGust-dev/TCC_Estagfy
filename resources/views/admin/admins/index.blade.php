@@ -1,28 +1,28 @@
 @extends('admin.layout')
 
-@section('title', 'Alunos | Admin EstagFy')
+@section('title', 'Administradores | Admin EstagFy')
 
 @section('content')
     <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Alunos</h1>
-            <p class="text-gray-600">Gestão dos alunos cadastrados</p>
+            <h1 class="text-2xl font-bold text-gray-900">Administradores</h1>
+            <p class="text-gray-600">Gestão dos administradores do sistema</p>
         </div>
-        <a href="{{ route('admin.users.create', ['role' => 'student', 'redirect_to' => request()->fullUrl()]) }}"
-           class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
-            Novo aluno
+        <a href="{{ route('admin.users.create', ['role' => 'admin', 'redirect_to' => request()->fullUrl()]) }}"
+           class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+            Novo administrador
         </a>
     </div>
 
-    <form method="GET" action="{{ route('admin.students.index') }}" class="mb-6">
+    <form method="GET" action="{{ route('admin.admins.index') }}" class="mb-6">
         <div class="flex flex-col sm:flex-row gap-2">
             <input type="text" name="q" value="{{ $search ?? '' }}"
-                   placeholder="Pesquisar por aluno, e-mail, CPF, curso ou período..."
+                   placeholder="Pesquisar por nome ou e-mail..."
                    class="w-full sm:max-w-md rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
             <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
                 Buscar
             </button>
-            <a href="{{ route('admin.students.index') }}"
+            <a href="{{ route('admin.admins.index') }}"
                class="px-4 py-2 rounded-lg border text-sm font-medium text-gray-700 hover:bg-gray-100">
                 Limpar
             </a>
@@ -34,38 +34,26 @@
             <table class="min-w-full text-sm">
                 <thead class="bg-gray-50 text-gray-600">
                     <tr>
-                        <th class="text-left px-6 py-3 font-semibold">Aluno</th>
-                        <th class="text-left px-6 py-3 font-semibold">Curso</th>
-                        <th class="text-left px-6 py-3 font-semibold">Período</th>
+                        <th class="text-left px-6 py-3 font-semibold">Nome</th>
                         <th class="text-left px-6 py-3 font-semibold">E-mail</th>
-                        <th class="text-left px-6 py-3 font-semibold">Currículo</th>
-                        <th class="text-left px-6 py-3 font-semibold">Candidaturas</th>
+                        <th class="text-left px-6 py-3 font-semibold">Perfil</th>
                         <th class="text-left px-6 py-3 font-semibold">Status</th>
+                        <th class="text-left px-6 py-3 font-semibold">Cadastro</th>
                         <th class="text-right px-6 py-3 font-semibold">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    @forelse($students as $student)
+                    @forelse($admins as $admin)
                         <tr>
-                            <td class="px-6 py-4 font-medium text-gray-900">{{ $student->name }}</td>
-                            <td class="px-6 py-4 text-gray-600">{{ $student->student?->course ?? '-' }}</td>
-                            <td class="px-6 py-4 text-gray-600">{{ $student->student?->period ?? '-' }}</td>
-                            <td class="px-6 py-4 text-gray-600">{{ $student->email }}</td>
-                            <td class="px-6 py-4 text-gray-600">
-                                @if($student->student?->resume)
-                                    <a class="text-blue-600 hover:underline" href="{{ asset('storage/' . $student->student->resume) }}">
-                                        Ver currículo
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-gray-600">{{ $student->applications_count }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ $admin->name }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ $admin->email }}</td>
+                            <td class="px-6 py-4 text-gray-600">Admin</td>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold {{ $student->active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                    {{ $student->active ? 'Ativo' : 'Inativo' }}
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold {{ $admin->active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    {{ $admin->active ? 'Ativo' : 'Inativo' }}
                                 </span>
                             </td>
+                            <td class="px-6 py-4 text-gray-600">{{ $admin->created_at?->format('d/m/Y') }}</td>
                             <td class="px-6 py-4 text-right">
                                 <div class="relative inline-flex justify-end text-left" data-admin-actions>
                                     <button type="button"
@@ -76,21 +64,21 @@
                                     </button>
                                     <div class="absolute right-0 top-full z-20 mt-2 hidden w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
                                          data-admin-actions-menu>
-                                        <a href="{{ route('admin.users.edit', ['user' => $student, 'redirect_to' => request()->fullUrl()]) }}"
+                                        <a href="{{ route('admin.users.edit', ['user' => $admin, 'redirect_to' => request()->fullUrl()]) }}"
                                            class="block rounded-md px-3 py-2 text-sm text-blue-600 hover:bg-gray-100">
                                             Editar
                                         </a>
-                                        <form method="POST" action="{{ route('admin.users.toggle', $student) }}">
+                                        <form method="POST" action="{{ route('admin.users.toggle', $admin) }}">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
                                             <button type="submit"
-                                                    class="block w-full rounded-md px-3 py-2 text-left text-sm {{ $student->active ? 'text-amber-700' : 'text-emerald-700' }} hover:bg-gray-100">
-                                                {{ $student->active ? 'Desativar' : 'Ativar' }}
+                                                    class="block w-full rounded-md px-3 py-2 text-left text-sm {{ $admin->active ? 'text-amber-700' : 'text-emerald-700' }} hover:bg-gray-100">
+                                                {{ $admin->active ? 'Desativar' : 'Ativar' }}
                                             </button>
                                         </form>
-                                        <form method="POST" action="{{ route('admin.users.destroy', $student) }}"
-                                              onsubmit="return confirm('Tem certeza que deseja excluir este aluno?');">
+                                        <form method="POST" action="{{ route('admin.users.destroy', $admin) }}"
+                                              onsubmit="return confirm('Tem certeza que deseja excluir este administrador?');">
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="redirect_to" value="{{ request()->fullUrl() }}">
@@ -105,8 +93,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="px-6 py-6 text-center text-gray-500">
-                                Nenhum aluno encontrado.
+                            <td colspan="6" class="px-6 py-6 text-center text-gray-500">
+                                Nenhum administrador encontrado.
                             </td>
                         </tr>
                     @endforelse
@@ -116,7 +104,7 @@
     </div>
 
     <div class="mt-6">
-        {{ $students->links() }}
+        {{ $admins->links() }}
     </div>
 
     <script>

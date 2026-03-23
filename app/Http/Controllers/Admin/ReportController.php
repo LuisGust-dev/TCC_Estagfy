@@ -87,7 +87,7 @@ class ReportController extends Controller
                     fputcsv($handle, [
                         $user->name,
                         $user->email,
-                        $user->role,
+                        $this->roleLabel($user->role),
                         $user->active ? 'Ativo' : 'Inativo',
                         optional($user->created_at)->format('d/m/Y H:i'),
                     ]);
@@ -217,5 +217,16 @@ class ReportController extends Controller
         } catch (\Throwable) {
             return null;
         }
+    }
+
+    private function roleLabel(?string $role): string
+    {
+        return match ($role) {
+            'student' => 'Aluno',
+            'company' => 'Empresa',
+            'admin' => 'Administrador',
+            'coordinator' => 'Coordenador',
+            default => ucfirst((string) $role),
+        };
     }
 }

@@ -6,7 +6,8 @@
     @php
         $courses = config('internship.courses', []);
         $selectedCourse = old('course');
-        $redirectTarget = $redirectTo ?? route('admin.users.index');
+        $selectedRole = old('role', $selectedRole ?? 'student');
+        $redirectTarget = $redirectTo ?? route('admin.dashboard');
     @endphp
     <div class="max-w-3xl">
         <div class="mb-6 flex items-center justify-between gap-3">
@@ -52,7 +53,7 @@
                         <label class="text-sm font-medium text-gray-700">Perfil</label>
                         <select id="user-role" name="role" class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" required>
                             @foreach(['student' => 'Aluno', 'company' => 'Empresa', 'admin' => 'Admin', 'coordinator' => 'Coordenador'] as $value => $label)
-                                <option value="{{ $value }}" @selected(old('role', 'student') === $value)>{{ $label }}</option>
+                                <option value="{{ $value }}" @selected($selectedRole === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>

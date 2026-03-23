@@ -81,19 +81,6 @@
                 <span class="sidebar-label">Dashboard</span>
             </a>
 
-            <a href="{{ route('admin.users.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.users.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-blue-600' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="9" cy="8" r="3"/>
-                        <circle cx="17" cy="9" r="2.5"/>
-                        <path d="M3.5 19a5.5 5.5 0 0 1 11 0"/>
-                        <path d="M14 19c.4-1.9 1.8-3.5 3.9-4.1"/>
-                    </svg>
-                </span>
-                <span class="sidebar-label">Usuários</span>
-            </a>
-
             <a href="{{ route('admin.companies.index') }}"
                class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.companies.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
                 <span class="{{ request()->routeIs('admin.companies.*') ? 'text-white' : 'text-blue-600' }}">
@@ -118,6 +105,30 @@
                     </svg>
                 </span>
                 <span class="sidebar-label">Alunos</span>
+            </a>
+
+            <a href="{{ route('admin.coordinators.index') }}"
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.coordinators.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="{{ request()->routeIs('admin.coordinators.*') ? 'text-white' : 'text-blue-600' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>
+                        <path d="M4 20a8 8 0 0 1 16 0"/>
+                        <path d="M19 7h2"/>
+                        <path d="M20 6v2"/>
+                    </svg>
+                </span>
+                <span class="sidebar-label">Coordenadores</span>
+            </a>
+
+            <a href="{{ route('admin.admins.index') }}"
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.admins.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="{{ request()->routeIs('admin.admins.*') ? 'text-white' : 'text-blue-600' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 3l7 4v5c0 4.5-2.9 7.8-7 9-4.1-1.2-7-4.5-7-9V7l7-4Z"/>
+                        <path d="M9.5 12l1.7 1.7L14.8 10"/>
+                    </svg>
+                </span>
+                <span class="sidebar-label">Administradores</span>
             </a>
 
             <a href="{{ route('admin.reports.index') }}"

@@ -12,32 +12,19 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $role = $request->query('role');
-        $search = trim((string) $request->query('q', ''));
-
-        $usersQuery = User::query();
-
-        if (in_array($role, ['student', 'company', 'admin', 'coordinator'], true)) {
-            $usersQuery->where('role', $role);
-        }
-
-        if ($search !== '') {
-            $usersQuery->where(function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $users = $usersQuery->latest()->paginate(20)->withQueryString();
-
-        return view('admin.users.index', compact('users', 'role', 'search'));
+        return redirect()->route('admin.dashboard');
     }
 
     public function create(Request $request)
     {
         $redirectTo = $this->sanitizeRedirect($request->query('redirect_to'));
+        $selectedRole = $request->query('role');
 
-        return view('admin.users.create', compact('redirectTo'));
+        if (!in_array($selectedRole, ['student', 'company', 'admin', 'coordinator'], true)) {
+            $selectedRole = 'student';
+        }
+
+        return view('admin.users.create', compact('redirectTo', 'selectedRole'));
     }
 
     public function store(Request $request)
@@ -139,7 +126,7 @@ class UserController extends Controller
             return redirect()->to($redirectTo);
         }
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.dashboard');
     }
 
     private function sanitizeRedirect(?string $redirectTo): ?string

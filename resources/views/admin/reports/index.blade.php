@@ -3,6 +3,14 @@
 @section('title', 'Relatórios | Admin EstagFy')
 
 @section('content')
+    @php
+        $roleLabels = [
+            'student' => 'Aluno',
+            'company' => 'Empresa',
+            'admin' => 'Administrador',
+            'coordinator' => 'Coordenador',
+        ];
+    @endphp
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Relatórios</h1>
@@ -28,7 +36,7 @@
                     <option value="">Todos</option>
                     <option value="student" @selected($filters['role'] === 'student')>Aluno</option>
                     <option value="company" @selected($filters['role'] === 'company')>Empresa</option>
-                    <option value="admin" @selected($filters['role'] === 'admin')>Admin</option>
+                    <option value="admin" @selected($filters['role'] === 'admin')>Administrador</option>
                     <option value="coordinator" @selected($filters['role'] === 'coordinator')>Coordenador</option>
                 </select>
             </div>
@@ -111,7 +119,7 @@
                         @forelse($users as $user)
                             <tr>
                                 <td class="px-4 py-2">{{ $user->name }}</td>
-                                <td class="px-4 py-2 capitalize">{{ $user->role }}</td>
+                                <td class="px-4 py-2">{{ $roleLabels[$user->role] ?? ucfirst($user->role) }}</td>
                             </tr>
                         @empty
                             <tr><td colspan="2" class="px-4 py-4 text-gray-500">Sem dados.</td></tr>
