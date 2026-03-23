@@ -58,13 +58,15 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 @if($company->user)
-                                    <details class="relative inline-block text-left">
-                                        <summary class="list-none cursor-pointer px-4 py-2 rounded-lg bg-gray-100 text-sm font-medium text-gray-700 hover:bg-gray-200">
-                                            <span class="inline-flex items-center gap-1">Ações
-                                                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0l-4.25-4.51a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/></svg>
-                                            </span>
-                                        </summary>
-                                        <div class="absolute right-0 z-20 mt-2 w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg">
+                                    <div class="relative inline-flex justify-end text-left" data-admin-actions>
+                                        <button type="button"
+                                                class="inline-flex items-center gap-1 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200"
+                                                data-admin-actions-button>
+                                            Ações
+                                            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0l-4.25-4.51a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                        <div class="absolute right-0 top-full z-20 mt-2 hidden w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
+                                             data-admin-actions-menu>
                                             <a href="{{ route('admin.users.edit', ['user' => $company->user, 'redirect_to' => request()->fullUrl()]) }}"
                                                class="block rounded-md px-3 py-2 text-sm text-blue-600 hover:bg-gray-100">
                                                 Editar
@@ -89,7 +91,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                    </details>
+                                    </div>
                                 @endif
                             </td>
                         </tr>
@@ -108,4 +110,32 @@
     <div class="mt-6">
         {{ $companies->links() }}
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdowns = document.querySelectorAll('[data-admin-actions]');
+
+            const closeAll = () => {
+                dropdowns.forEach((dropdown) => {
+                    dropdown.querySelector('[data-admin-actions-menu]')?.classList.add('hidden');
+                });
+            };
+
+            dropdowns.forEach((dropdown) => {
+                const button = dropdown.querySelector('[data-admin-actions-button]');
+                const menu = dropdown.querySelector('[data-admin-actions-menu]');
+
+                if (!button || !menu) return;
+
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const willOpen = menu.classList.contains('hidden');
+                    closeAll();
+                    menu.classList.toggle('hidden', !willOpen);
+                });
+            });
+
+            document.addEventListener('click', closeAll);
+        });
+    </script>
 @endsection
