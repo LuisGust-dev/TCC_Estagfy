@@ -136,6 +136,36 @@
         color: #475569;
     }
 
+    .feature-card {
+        transition: transform 280ms ease, box-shadow 280ms ease, border-color 240ms ease, background-color 240ms ease;
+    }
+
+    .feature-card .feature-icon,
+    .feature-card .feature-title,
+    .feature-card .feature-text {
+        transition: transform 260ms ease, box-shadow 260ms ease, color 220ms ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 24px 54px -30px rgba(37, 99, 235, 0.28);
+        border-color: rgba(96, 165, 250, 0.45);
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.08);
+        box-shadow: 0 20px 32px -22px rgba(59, 130, 246, 0.55);
+    }
+
+    .feature-card:hover .feature-title {
+        color: #0f172a;
+        transform: translateY(-1px);
+    }
+
+    .feature-card:hover .feature-text {
+        color: #64748b;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .scroll-reveal,
         .scroll-reveal.is-visible,
@@ -154,7 +184,15 @@
         .stack-card:hover,
         .stack-card:hover .stack-icon,
         .stack-card:hover .stack-title,
-        .stack-card:hover .stack-text {
+        .stack-card:hover .stack-text,
+        .feature-card,
+        .feature-card .feature-icon,
+        .feature-card .feature-title,
+        .feature-card .feature-text,
+        .feature-card:hover,
+        .feature-card:hover .feature-icon,
+        .feature-card:hover .feature-title,
+        .feature-card:hover .feature-text {
             opacity: 1;
             transform: none;
             transition: none;
@@ -216,57 +254,73 @@
 2️⃣ FUNCIONALIDADES
 ========================= --}}
 <section class="py-24 bg-white">
-    <h2 class="scroll-reveal text-3xl font-bold text-center mb-4 text-gray-900">
-        Tudo que você precisa em um só lugar
-    </h2>
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <span class="scroll-reveal inline-flex items-center rounded-full bg-indigo-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-indigo-700">
+                Recursos
+            </span>
+            <h2 class="scroll-reveal mt-5 text-3xl font-bold text-center text-gray-900 md:text-5xl" style="--reveal-delay: 70ms;">
+                O que o EstagFy faz por você
+            </h2>
+            <p class="scroll-reveal mx-auto mt-4 max-w-3xl text-lg text-slate-600" style="--reveal-delay: 130ms;">
+                Benefícios práticos para estudantes e empresas conduzirem o estágio com mais clareza, organização e agilidade.
+            </p>
+        </div>
 
-    <p class="scroll-reveal text-gray-600 text-center mb-16" style="--reveal-delay: 80ms;">
-        Ferramentas completas para alunos e empresas gerenciarem todo o processo de estágio
-    </p>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 max-w-6xl mx-auto px-6">
-
-        {{-- Card --}}
         @php
             $features = [
                 [
-                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M4 6.5h16M6 6.5V18a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 18V6.5M9.5 4h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'title' => 'Vagas de Estágio',
-                    'text' => 'Centenas de oportunidades em diversas áreas',
+                    'audience' => 'Para estudantes',
+                    'title' => 'Busca de vagas organizada',
+                    'text' => 'Encontre oportunidades, filtre resultados e acompanhe candidaturas sem perder o histórico do processo.',
+                    'color' => 'blue',
+                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M10.5 18a7.5 7.5 0 1 1 5.18-2.08L21 21" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
                 ],
                 [
-                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M7 11a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm10 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3ZM2.5 18a4.5 4.5 0 0 1 9 0m3 0a4.5 4.5 0 0 1 9 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'title' => 'Gestão de Candidatos',
-                    'text' => 'Empresas gerenciam candidaturas facilmente',
+                    'audience' => 'Para estudantes',
+                    'title' => 'Calendário e documentos',
+                    'text' => 'Visualize prazos, eventos acadêmicos e documentos do estágio em um fluxo mais previsível e controlado.',
+                    'color' => 'indigo',
+                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M7 4v3M17 4v3M4 9.5h16M7 13h3M7 16.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="6.5" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>',
                 ],
                 [
-                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M7 4v3M17 4v3M4 9.5h16M6.5 12.5h3M6.5 16h3M12.5 12.5h3M12.5 16h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="6.5" width="16" height="13" rx="2" stroke="currentColor" stroke-width="1.7"/></svg>',
-                    'title' => 'Calendário Integrado',
-                    'text' => 'Organize entrevistas e prazos',
+                    'audience' => 'Para empresas',
+                    'title' => 'Publicação e gestão de candidatos',
+                    'text' => 'Cadastre vagas, receba candidaturas e organize a análise de perfis em uma área própria da empresa.',
+                    'color' => 'emerald',
+                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M4 20h16M6 20V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v13M9 10h2m2 0h2M9 14h2m2 0h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
                 ],
                 [
-                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M7 18.5l-3.5 2V6.5A2.5 2.5 0 0 1 6 4h12a2.5 2.5 0 0 1 2.5 2.5V14a2.5 2.5 0 0 1-2.5 2.5H7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-                    'title' => 'Chat Direto',
-                    'text' => 'Comunicação direta entre empresas e alunos',
+                    'audience' => 'Para empresas',
+                    'title' => 'Comunicação e acompanhamento',
+                    'text' => 'Fale com alunos, acompanhe movimentações do processo e mantenha a seleção mais fluida e transparente.',
+                    'color' => 'teal',
+                    'icon' => '<svg viewBox="0 0 24 24" fill="none" class="w-7 h-7"><path d="M7 18.5l-3.5 2V6.5A2.5 2.5 0 0 1 6 4h12a2.5 2.5 0 0 1 2.5 2.5V14A2.5 2.5 0 0 1 18 16.5H7Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 9.5h8M8 12.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
                 ],
             ];
         @endphp
 
-        @foreach($features as $feature)
-            <div class="scroll-reveal group bg-white p-8 rounded-2xl border border-gray-100 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-2xl" style="--reveal-delay: {{ $loop->index * 90 }}ms;">
-                <div class="bg-gradient-to-br from-blue-600 to-indigo-600 text-white w-14 h-14 flex items-center justify-center rounded-2xl mb-5 shadow-lg ring-4 ring-blue-600/15 transition duration-300 group-hover:scale-110 group-hover:-rotate-3">
-                    {!! $feature['icon'] !!}
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+            @foreach($features as $feature)
+                <div class="scroll-reveal feature-card rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm {{ $feature['color'] === 'blue' ? 'xl:mt-2' : '' }} {{ $feature['color'] === 'emerald' ? 'xl:-mt-2 xl:shadow-[0_16px_40px_-28px_rgba(16,185,129,0.45)] xl:border-emerald-200' : '' }}" style="--reveal-delay: {{ $loop->index * 90 }}ms;">
+                    <div class="feature-icon flex h-14 w-14 items-center justify-center rounded-2xl {{ $feature['color'] === 'blue' ? 'bg-blue-50 text-blue-600' : ($feature['color'] === 'indigo' ? 'bg-indigo-50 text-indigo-600' : ($feature['color'] === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 'bg-teal-50 text-teal-600')) }}">
+                        {!! $feature['icon'] !!}
+                    </div>
+
+                    <p class="mt-6 text-xs font-semibold uppercase tracking-[0.2em] {{ $feature['color'] === 'blue' ? 'text-blue-600' : ($feature['color'] === 'indigo' ? 'text-indigo-600' : ($feature['color'] === 'emerald' ? 'text-emerald-600' : 'text-teal-600')) }}">
+                        {{ $feature['audience'] }}
+                    </p>
+
+                    <h3 class="feature-title mt-4 text-2xl font-bold leading-tight text-slate-900">
+                        {{ $feature['title'] }}
+                    </h3>
+
+                    <p class="feature-text mt-5 text-base leading-8 text-slate-600">
+                        {{ $feature['text'] }}
+                    </p>
                 </div>
-
-                <h3 class="font-semibold mb-3 text-gray-900 text-lg">
-                    {{ $feature['title'] }}
-                </h3>
-
-                <p class="text-base text-gray-600">
-                    {{ $feature['text'] }}
-                </p>
-            </div>
-        @endforeach
+            @endforeach
+        </div>
     </div>
 </section>
 
@@ -546,6 +600,75 @@
         </div>
     </div>
 </section>
+
+
+{{-- =========================
+4️⃣ SOBRE NÓS
+========================= --}}
+<section class="py-24 bg-gradient-to-b from-slate-50 to-blue-50/40">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center max-w-3xl mx-auto mb-14">
+            <span class="scroll-reveal inline-flex items-center rounded-full bg-blue-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-blue-700">
+                Sobre nós
+            </span>
+            <h2 class="scroll-reveal mt-5 text-3xl font-bold text-slate-900 md:text-5xl" style="--reveal-delay: 70ms;">
+                Pessoas por trás do
+                <span class="text-indigo-600">EstagFy</span>
+            </h2>
+            <p class="scroll-reveal mt-5 text-lg leading-8 text-slate-600" style="--reveal-delay: 130ms;">
+                Um projeto construído com dedicação técnica, acompanhamento acadêmico e foco em entregar uma solução útil para a realidade do estágio.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <article class="scroll-reveal rounded-[2rem] border border-blue-100 bg-white p-8 shadow-sm">
+                <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+                    <img src="{{ asset('images/aluno.jpeg') }}" alt="Foto do desenvolvedor" class="h-28 w-28 rounded-3xl object-cover ring-4 ring-blue-50" />
+                    <div class="flex-1">
+                        <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700">
+                            Desenvolvimento
+                        </span>
+                        <h3 class="mt-4 text-2xl font-bold text-slate-900">Luis Gustavo</h3>
+                        <p class="mt-1 text-sm font-medium text-slate-500">Desenvolvedor do projeto</p>
+                        <p class="mt-5 text-sm leading-7 text-slate-600">
+                            Responsável pela implementação do EstagFy, definição das funcionalidades e evolução da experiência da plataforma para alunos, empresas e gestão acadêmica.
+                        </p>
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Laravel</span>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">PHP</span>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">MySQL</span>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Frontend</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="scroll-reveal rounded-[2rem] border border-amber-100 bg-white p-8 shadow-sm" style="--reveal-delay: 120ms;">
+                <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+                    <img src="{{ asset('images/orientador.png') }}" alt="Foto do orientador" class="h-28 w-28 rounded-3xl object-cover ring-4 ring-amber-50" />
+                    <div class="flex-1">
+                        <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
+                            Orientação acadêmica
+                        </span>
+                        <h3 class="mt-4 text-2xl font-bold text-slate-900">George Gabriel Mendes Dourado</h3>
+                        <p class="mt-1 text-sm font-medium text-slate-500">Professor orientador</p>
+                        <p class="mt-5 text-sm leading-7 text-slate-600">
+                            Responsável pelo acompanhamento metodológico e acadêmico do projeto, contribuindo para o alinhamento técnico da solução com os objetivos institucionais e de formação.
+                        </p>
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Metodologia</span>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Orientação</span>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Qualidade acadêmica</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
