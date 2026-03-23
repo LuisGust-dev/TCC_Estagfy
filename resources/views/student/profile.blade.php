@@ -163,13 +163,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="md:col-span-2">
                     <label class="text-sm font-medium text-gray-700">Senha atual</label>
-                    <div class="relative mt-1">
+                    <div class="relative mt-1" data-password-wrapper>
                         <input type="password"
                                name="current_password"
                                data-password-field
                                placeholder="Digite sua senha atual para alterar"
                                class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
                         <button type="button"
+                                onclick="const input=this.parentElement.querySelector('[data-password-field]'); if(!input) return; input.type = input.type === 'password' ? 'text' : 'password'; this.textContent = input.type === 'text' ? 'Ocultar' : 'Mostrar';"
                                 data-password-toggle
                                 class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
                             Mostrar
@@ -179,13 +180,14 @@
 
                 <div>
                     <label class="text-sm font-medium text-gray-700">Nova senha</label>
-                    <div class="relative mt-1">
+                    <div class="relative mt-1" data-password-wrapper>
                         <input type="password"
                                name="password"
                                data-password-field
                                placeholder="Deixe em branco para manter a atual"
                                class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
                         <button type="button"
+                                onclick="const input=this.parentElement.querySelector('[data-password-field]'); if(!input) return; input.type = input.type === 'password' ? 'text' : 'password'; this.textContent = input.type === 'text' ? 'Ocultar' : 'Mostrar';"
                                 data-password-toggle
                                 class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
                             Mostrar
@@ -195,13 +197,14 @@
 
                 <div>
                     <label class="text-sm font-medium text-gray-700">Confirmar nova senha</label>
-                    <div class="relative mt-1">
+                    <div class="relative mt-1" data-password-wrapper>
                         <input type="password"
                                name="password_confirmation"
                                data-password-field
                                placeholder="Repita a nova senha"
                                class="w-full rounded-xl border-gray-300 px-4 py-2.5 pr-20 focus:border-blue-500 focus:ring-blue-500">
                         <button type="button"
+                                onclick="const input=this.parentElement.querySelector('[data-password-field]'); if(!input) return; input.type = input.type === 'password' ? 'text' : 'password'; this.textContent = input.type === 'text' ? 'Ocultar' : 'Mostrar';"
                                 data-password-toggle
                                 class="absolute inset-y-0 right-3 my-auto h-8 rounded-lg px-2 text-xs font-medium text-blue-600 hover:bg-blue-50">
                             Mostrar
@@ -243,17 +246,6 @@
             });
         });
 
-        document.querySelectorAll('[data-password-toggle]').forEach((button) => {
-            const wrapper = button.closest('.relative');
-            const input = wrapper?.querySelector('[data-password-field]');
-            if (!input) return;
-
-            button.addEventListener('click', () => {
-                const showing = input.type === 'text';
-                input.type = showing ? 'password' : 'text';
-                button.textContent = showing ? 'Mostrar' : 'Ocultar';
-            });
-        });
     });
 </script>
 @endsection

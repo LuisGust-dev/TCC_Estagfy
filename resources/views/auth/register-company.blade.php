@@ -133,9 +133,17 @@
             {{-- Senha --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700">Senha</label>
-                <input type="password" name="password" required minlength="8" maxlength="255"
-                       class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                       placeholder="••••••••">
+                <div class="relative mt-2" data-password-wrapper>
+                    <input type="password" name="password" required minlength="8" maxlength="255"
+                           data-password-field
+                           class="w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 pr-20 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                           placeholder="••••••••">
+                    <button type="button"
+                            class="absolute inset-y-0 right-3 my-auto text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                            onclick="const input=this.parentElement.querySelector('[data-password-field]'); if(!input) return; input.type = input.type === 'password' ? 'text' : 'password'; this.textContent = input.type === 'text' ? 'Ocultar' : 'Mostrar';">
+                        Mostrar
+                    </button>
+                </div>
                 @error('password')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
@@ -261,6 +269,5 @@
     });
 </script>
 </html>
-
 
 
