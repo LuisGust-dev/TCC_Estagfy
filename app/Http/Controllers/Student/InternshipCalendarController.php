@@ -14,10 +14,11 @@ class InternshipCalendarController extends Controller
     {
         $studentCourse = auth()->user()->student?->course;
         $monthInput = (string) $request->query('month', '');
+        $timezone = config('app.timezone', 'America/Bahia');
 
         $monthStart = preg_match('/^\d{4}-\d{2}$/', $monthInput)
-            ? Carbon::createFromFormat('Y-m', $monthInput)->startOfMonth()
-            : now()->startOfMonth();
+            ? Carbon::createFromFormat('Y-m', $monthInput, $timezone)->startOfMonth()
+            : Carbon::now($timezone)->startOfMonth();
 
         $monthEnd = $monthStart->copy()->endOfMonth();
 
@@ -34,7 +35,7 @@ class InternshipCalendarController extends Controller
             ->orderBy('end_date')
             ->get();
 
-        $today = Carbon::today();
+        $today = Carbon::today($timezone);
 
         $calendarEvents = $events->map(function (InternshipCalendar $event) use ($today) {
             $startDate = $event->start_date->copy();
@@ -55,16 +56,21 @@ class InternshipCalendarController extends Controller
         $eventsByDate = [];
 
         foreach ($calendarEvents as $event) {
-            $rangeStart = $event['start_date']->lt($monthStart)
-                ? $monthStart->copy()
-                : $event['start_date']->copy();
+            $datesToMark = [];
 
-            $rangeEnd = $event['end_date']->gt($monthEnd)
-                ? $monthEnd->copy()
-                : $event['end_date']->copy();
+            if ($event['start_date']->betweenIncluded($monthStart, $monthEnd)) {
+                $datesToMark[] = $event['start_date']->toDateString();
+            }
 
-            for ($date = $rangeStart->copy(); $date->lte($rangeEnd); $date->addDay()) {
-                $eventsByDate[$date->toDateString()][] = $event;
+            if (
+                ! $event['start_date']->isSameDay($event['end_date']) &&
+                $event['end_date']->betweenIncluded($monthStart, $monthEnd)
+            ) {
+                $datesToMark[] = $event['end_date']->toDateString();
+            }
+
+            foreach (array_unique($datesToMark) as $date) {
+                $eventsByDate[$date][] = $event;
             }
         }
 
