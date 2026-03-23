@@ -71,7 +71,7 @@
                                             Ações
                                             <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0l-4.25-4.51a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/></svg>
                                         </button>
-                                        <div class="absolute right-0 top-full z-20 mt-2 hidden w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
+                                        <div class="fixed z-[60] hidden w-44 rounded-lg border border-gray-200 bg-white p-1 shadow-lg"
                                              data-admin-actions-menu>
                                             <a href="{{ route('admin.users.edit', ['user' => $company->user, 'redirect_to' => request()->fullUrl()]) }}"
                                                class="block rounded-md px-3 py-2 text-sm text-blue-600 hover:bg-gray-100">
@@ -123,7 +123,11 @@
 
             const closeAll = () => {
                 dropdowns.forEach((dropdown) => {
-                    dropdown.querySelector('[data-admin-actions-menu]')?.classList.add('hidden');
+                    const menu = dropdown.querySelector('[data-admin-actions-menu]');
+                    if (!menu) return;
+                    menu.classList.add('hidden');
+                    menu.style.top = '';
+                    menu.style.left = '';
                 });
             };
 
@@ -137,11 +141,35 @@
                     event.stopPropagation();
                     const willOpen = menu.classList.contains('hidden');
                     closeAll();
-                    menu.classList.toggle('hidden', !willOpen);
+                    if (!willOpen) return;
+
+                    menu.classList.remove('hidden');
+                    menu.style.visibility = 'hidden';
+
+                    const buttonRect = button.getBoundingClientRect();
+                    const menuRect = menu.getBoundingClientRect();
+                    const spacing = 8;
+                    const viewportWidth = window.innerWidth;
+                    const viewportHeight = window.innerHeight;
+
+                    let left = buttonRect.right - menuRect.width;
+                    left = Math.max(12, Math.min(left, viewportWidth - menuRect.width - 12));
+
+                    let top = buttonRect.bottom + spacing;
+                    if (top + menuRect.height > viewportHeight - 12) {
+                        top = buttonRect.top - menuRect.height - spacing;
+                    }
+                    top = Math.max(12, top);
+
+                    menu.style.left = `${left}px`;
+                    menu.style.top = `${top}px`;
+                    menu.style.visibility = '';
                 });
             });
 
             document.addEventListener('click', closeAll);
+            window.addEventListener('resize', closeAll);
+            window.addEventListener('scroll', closeAll, true);
         });
     </script>
 @endsection
