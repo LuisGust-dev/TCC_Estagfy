@@ -14,13 +14,14 @@ class RegisterCompanyController extends Controller
     public function store(Request $request)
     {
         $request->merge([
+            'name' => preg_replace('/[^\pL\s]/u', '', (string) $request->name),
             'cnpj' => preg_replace('/\D/', '', (string) $request->cnpj),
             'phone' => preg_replace('/\D/', '', (string) $request->phone),
         ]);
 
         $request->validate(
             [
-                'name' => 'required|string|max:255|unique:users,name',
+                'name' => ['required', 'string', 'max:255', 'unique:users,name', 'regex:/^[\pL\s]+$/u'],
                 'cnpj' => 'required|digits:14|unique:companies,cnpj',
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|digits_between:10,11',
@@ -32,6 +33,7 @@ class RegisterCompanyController extends Controller
                 'name.required' => 'O nome da empresa e obrigatorio.',
                 'name.max' => 'O nome da empresa deve ter no maximo :max caracteres.',
                 'name.unique' => 'Este nome de empresa ja esta cadastrado.',
+                'name.regex' => 'O nome da empresa deve conter apenas letras e espaços.',
                 'cnpj.required' => 'O CNPJ e obrigatorio.',
                 'cnpj.digits' => 'O CNPJ deve conter exatamente :digits digitos numericos.',
                 'cnpj.unique' => 'Este CNPJ ja esta cadastrado.',

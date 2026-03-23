@@ -21,7 +21,7 @@ class RegisterStudentController extends Controller
 
         $request->validate(
             [
-                'name' => 'required|string|max:255|unique:users,name',
+                'name' => ['required', 'string', 'max:255', 'unique:users,name', 'regex:/^[\pL\s]+$/u'],
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:8|max:255',
                 'cpf' => 'required|digits:11|unique:students,cpf',
@@ -32,6 +32,7 @@ class RegisterStudentController extends Controller
             ],
             [
                 'name.unique' => 'Este nome ja esta cadastrado.',
+                'name.regex' => 'O nome deve conter apenas letras e espaços.',
                 'email.unique' => 'Este e-mail ja esta cadastrado.',
                 'cpf.unique' => 'Este CPF ja esta cadastrado.',
                 'period.integer' => 'O período deve conter apenas números.',

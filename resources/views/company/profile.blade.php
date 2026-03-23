@@ -57,6 +57,9 @@
                 <input type="text"
                        name="name"
                        value="{{ old('name', auth()->user()->name) }}"
+                       pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                       title="Informe apenas letras e espaços."
+                       data-name-only
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
 
@@ -81,6 +84,9 @@
                 <input type="text"
                        name="cnpj"
                        value="{{ old('cnpj', $company->cnpj) }}"
+                       inputmode="numeric"
+                       maxlength="18"
+                       data-mask="cnpj"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
 
@@ -182,6 +188,29 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const applyCnpjMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 14);
+            return digits
+                .replace(/^(\d{2})(\d)/, '$1.$2')
+                .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                .replace(/(\d{4})(\d)/, '$1-$2');
+        };
+
+        document.querySelectorAll('input[data-mask="cnpj"]').forEach((input) => {
+            input.addEventListener('input', () => {
+                input.value = applyCnpjMask(input.value);
+            });
+            input.value = applyCnpjMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-name-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                const sanitized = input.value.replace(/[^\pL\s]/gu, '');
+                if (input.value !== sanitized) input.value = sanitized;
+            });
+        });
+
         document.querySelectorAll('[data-password-toggle]').forEach((button) => {
             const wrapper = button.closest('.relative');
             const input = wrapper?.querySelector('[data-password-field]');

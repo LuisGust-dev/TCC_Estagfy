@@ -58,10 +58,10 @@
                        id="student-name"
                        name="name"
                        value="{{ old('name', $user->name) }}"
-                       pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$"
+                       pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
                        title="Informe apenas letras e espaços."
                        maxlength="255"
-                       oninput="this.value = this.value.replace(/[0-9]/g, '')"
+                       data-name-only
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 
@@ -80,9 +80,8 @@
                        name="cpf"
                        value="{{ old('cpf', $student?->cpf) }}"
                        inputmode="numeric"
-                       pattern="[0-9]{11}"
-                       maxlength="11"
-                       oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)"
+                       maxlength="14"
+                       data-mask="cpf"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 
@@ -222,6 +221,28 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const applyCpfMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 11);
+            return digits
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        };
+
+        document.querySelectorAll('input[data-mask="cpf"]').forEach((input) => {
+            input.addEventListener('input', () => {
+                input.value = applyCpfMask(input.value);
+            });
+            input.value = applyCpfMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-name-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                const sanitized = input.value.replace(/[^\pL\s]/gu, '');
+                if (input.value !== sanitized) input.value = sanitized;
+            });
+        });
+
         document.querySelectorAll('[data-password-toggle]').forEach((button) => {
             const wrapper = button.closest('.relative');
             const input = wrapper?.querySelector('[data-password-field]');

@@ -80,6 +80,9 @@
                     Nome da empresa
                 </label>
                 <input type="text" name="name" value="{{ old('name') }}" required maxlength="255"
+                       pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                       title="Informe apenas letras e espaços."
+                       data-name-only
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                        placeholder="Nome da sua empresa">
                 @error('name')
@@ -90,10 +93,10 @@
             {{-- CNPJ --}}
             <div>
                 <label class="block text-sm font-medium text-gray-700">CNPJ</label>
-                <input type="text" name="cnpj" value="{{ old('cnpj') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="14"
-                       data-only-digits data-maxlen="14"
+                <input type="text" name="cnpj" value="{{ old('cnpj') }}" required inputmode="numeric" maxlength="18"
+                       data-mask="cnpj"
                        class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                       placeholder="00000000000000">
+                       placeholder="00.000.000/0000-00">
                 @error('cnpj')
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
@@ -117,10 +120,10 @@
                     <label class="block text-sm font-medium text-gray-700">
                         Telefone
                     </label>
-                    <input type="text" name="phone" value="{{ old('phone') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="11"
-                           data-only-digits data-maxlen="11"
+                    <input type="text" name="phone" value="{{ old('phone') }}" required inputmode="numeric" maxlength="15"
+                           data-mask="phone"
                            class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                           placeholder="00000000000">
+                           placeholder="(00) 00000-0000">
                     @error('phone')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
@@ -209,22 +212,55 @@
 
 </body>
 <script>
-    (function () {
-        const inputs = document.querySelectorAll('input[data-only-digits]');
-        inputs.forEach((input) => {
-            const maxLen = Number(input.getAttribute('data-maxlen')) || null;
+    document.addEventListener('DOMContentLoaded', () => {
+        const applyCnpjMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 14);
+            return digits
+                .replace(/^(\d{2})(\d)/, '$1.$2')
+                .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                .replace(/(\d{4})(\d)/, '$1-$2');
+        };
+
+        const applyPhoneMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 11);
+
+            if (digits.length <= 10) {
+                return digits
+                    .replace(/^(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{4})(\d)/, '$1-$2');
+            }
+
+            return digits
+                .replace(/^(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2');
+        };
+
+        const sanitizeName = (value) => value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
+
+        document.querySelectorAll('input[data-mask="cnpj"]').forEach((input) => {
             input.addEventListener('input', () => {
-                let v = input.value.replace(/\D/g, '');
-                if (maxLen) v = v.slice(0, maxLen);
-                if (input.value !== v) input.value = v;
+                input.value = applyCnpjMask(input.value);
+            });
+            input.value = applyCnpjMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-mask="phone"]').forEach((input) => {
+            input.addEventListener('input', () => {
+                input.value = applyPhoneMask(input.value);
+            });
+            input.value = applyPhoneMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-name-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                const sanitized = sanitizeName(input.value);
+                if (input.value !== sanitized) input.value = sanitized;
             });
         });
-    })();
+    });
 </script>
 </html>
-
-
-
 
 
 

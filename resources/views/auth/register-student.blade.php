@@ -79,6 +79,9 @@ rgb(74, 71, 228)
                             Nome completo
                         </label>
                         <input type="text" name="name" value="{{ old('name') }}" required maxlength="255"
+                               pattern="^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$"
+                               title="Informe apenas letras e espaços."
+                               data-name-only
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                placeholder="Seu nome completo">
                         @error('name')
@@ -91,10 +94,10 @@ rgb(74, 71, 228)
                         <label class="block text-sm font-medium text-gray-700">
                             CPF
                         </label>
-                        <input type="text" name="cpf" value="{{ old('cpf') }}" required inputmode="numeric" pattern="[0-9]*" maxlength="11"
-                               data-only-digits data-maxlen="11"
+                        <input type="text" name="cpf" value="{{ old('cpf') }}" required inputmode="numeric" maxlength="14"
+                               data-mask="cpf"
                                class="mt-2 w-full rounded-xl border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                               placeholder="00000000000">
+                               placeholder="000.000.000-00">
                         @error('cpf')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -243,20 +246,32 @@ rgb(74, 71, 228)
 
 </body>
 <script>
-    (function () {
-        const inputs = document.querySelectorAll('input[data-only-digits]');
-        inputs.forEach((input) => {
-            const maxLen = Number(input.getAttribute('data-maxlen')) || null;
+    document.addEventListener('DOMContentLoaded', () => {
+        const applyCpfMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 11);
+            return digits
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        };
+
+        const sanitizeName = (value) => value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]/g, '');
+
+        document.querySelectorAll('input[data-mask="cpf"]').forEach((input) => {
             input.addEventListener('input', () => {
-                let v = input.value.replace(/\D/g, '');
-                if (maxLen) v = v.slice(0, maxLen);
-                if (input.value !== v) input.value = v;
+                input.value = applyCpfMask(input.value);
+            });
+            input.value = applyCpfMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-name-only]').forEach((input) => {
+            input.addEventListener('input', () => {
+                const sanitized = sanitizeName(input.value);
+                if (input.value !== sanitized) input.value = sanitized;
             });
         });
-    })();
+    });
 </script>
 </html>
-
-
 
 

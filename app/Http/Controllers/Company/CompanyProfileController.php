@@ -23,20 +23,29 @@ class CompanyProfileController extends Controller
         $user = Auth::user();
         $company = $user->company;
 
+        $request->merge([
+            'name' => preg_replace('/[^\pL\s]/u', '', (string) $request->name),
+            'cnpj' => preg_replace('/\D/', '', (string) $request->cnpj),
+            'phone' => preg_replace('/\D/', '', (string) $request->phone),
+        ]);
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'email' => [
                 'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
-            'cnpj' => 'nullable|string|max:20',
-            'phone' => 'nullable|string|max:20',
+            'cnpj' => 'nullable|digits:14',
+            'phone' => 'nullable|digits_between:10,11',
             'description' => 'nullable|string|max:1000',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'current_password' => 'nullable|required_with:password|current_password',
             'password' => 'nullable|string|min:6|confirmed',
         ], [
+            'name.regex' => 'O nome da empresa deve conter apenas letras e espaços.',
+            'cnpj.digits' => 'O CNPJ deve conter exatamente 14 dígitos numéricos.',
+            'phone.digits_between' => 'O telefone deve conter entre 10 e 11 dígitos numéricos.',
             'current_password.current_password' => 'A senha atual está incorreta.',
             'current_password.required_with' => 'Informe a senha atual para definir uma nova senha.',
             'password.confirmed' => 'A confirmação da nova senha não confere.',
