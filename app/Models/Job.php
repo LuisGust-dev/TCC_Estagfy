@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class Job extends Model
 {
@@ -82,6 +83,24 @@ class Job extends Model
         $date = $date ?: Carbon::today();
 
         return $date->between($this->period_start, $this->period_end);
+    }
+
+    public static function normalizeArea(?string $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        return (string) Str::of($value)
+            ->ascii()
+            ->lower()
+            ->squish();
+    }
+
+    public function matchesCourse(?string $course): bool
+    {
+        return static::normalizeArea($this->area) !== ''
+            && static::normalizeArea($this->area) === static::normalizeArea($course);
     }
 
 }

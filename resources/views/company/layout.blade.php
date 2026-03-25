@@ -186,18 +186,6 @@
                 <span class="sidebar-label text-sm font-medium">Candidatos</span>
             </a>
 
-            <a href="{{ route('company.profile.edit') }}"
-               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.profile.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.profile.*') ? 'text-white' : '' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M4 20a8 8 0 0 1 16 0"/>
-                    </svg>
-                </span>
-                <span class="sidebar-label text-sm font-medium">Perfil</span>
-            </a>
-
             <a href="{{ route('company.messages.index') }}"
                class="sidebar-link group flex items-center justify-between gap-3 px-4 py-2 rounded-xl transition
                {{ request()->routeIs('company.messages.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
@@ -233,6 +221,18 @@
                       class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ $unreadCount > 0 ? '' : 'hidden' }}">
                     {{ $unreadCount }}
                 </span>
+            </a>
+
+            <a href="{{ route('company.profile.edit') }}"
+               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
+               {{ request()->routeIs('company.profile.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-green-600 {{ request()->routeIs('company.profile.*') ? 'text-white' : '' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20a8 8 0 0 1 16 0"/>
+                    </svg>
+                </span>
+                <span class="sidebar-label text-sm font-medium">Perfil</span>
             </a>
 
         </nav>
@@ -379,5 +379,4 @@
 @endif
 </body>
 </html>
-
 

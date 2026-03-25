@@ -170,21 +170,6 @@
                 <span class="sidebar-label">Dashboard</span>
             </a>
 
-            {{-- PERFIL --}}
-            <a href="{{ route('student.profile.show') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
-               {{ request()->routeIs('student.profile.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.profile.*') ? 'text-white' : '' }}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M4 20a8 8 0 0 1 16 0"/>
-                    </svg>
-                </span>
-                <span class="sidebar-label">Perfil</span>
-            </a>
-
             {{-- VAGAS --}}
             <a href="{{ route('student.jobs.index') }}"
                class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
@@ -293,6 +278,21 @@
                       class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ $unreadMessagesCount > 0 ? '' : 'hidden' }}">
                     {{ $unreadMessagesCount }}
                 </span>
+            </a>
+
+            {{-- PERFIL --}}
+            <a href="{{ route('student.profile.show') }}"
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               {{ request()->routeIs('student.profile.*')
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-gray-600 hover:bg-gray-100' }}">
+                <span class="text-blue-600 {{ request()->routeIs('student.profile.*') ? 'text-white' : '' }}">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 20a8 8 0 0 1 16 0"/>
+                    </svg>
+                </span>
+                <span class="sidebar-label">Perfil</span>
             </a>
 
         </nav>
@@ -442,5 +442,4 @@
 
 </body>
 </html>
-
 

@@ -27,7 +27,7 @@ class ApplicationController extends Controller
              return back()->with('error', 'Defina seu curso no perfil antes de se candidatar.');
          }
 
-         if ($job->area !== $studentProfile->course) {
+         if (! $job->matchesCourse($studentProfile->course)) {
              return back()->with('error', 'Esta vaga não é da área do seu curso.');
          }
 

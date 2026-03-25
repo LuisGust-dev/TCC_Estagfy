@@ -28,9 +28,7 @@ class JobBrowseController extends Controller
                 $query->where('active', true);
             })
             ->openForApplications()
-            ->when(!empty($studentCourse), function ($query) use ($studentCourse) {
-                $query->where('area', $studentCourse);
-            }, function ($query) {
+            ->when(empty($studentCourse), function ($query) {
                 $query->whereRaw('1 = 0');
             })
             ->when($search->isNotEmpty(), function ($query) use ($search) {
@@ -59,7 +57,9 @@ class JobBrowseController extends Controller
                 $query->where('salary', '<=', (float) $salaryMax);
             })
             ->latest()
-            ->get();
+            ->get()
+            ->filter(fn (Job $job) => $job->matchesCourse($studentCourse))
+            ->values();
 
         $jobsCount = $jobs->count();
         $jobsLatestTs = optional($jobs->max('updated_at'))?->timestamp ?? 0;
@@ -101,7 +101,7 @@ public function show(Job $job)
     $student = Auth::user();
     $studentCourse = $student->student?->course;
 
-    if (empty($studentCourse) || $job->area !== $studentCourse) {
+    if (empty($studentCourse) || ! $job->matchesCourse($studentCourse)) {
         abort(404);
     }
 

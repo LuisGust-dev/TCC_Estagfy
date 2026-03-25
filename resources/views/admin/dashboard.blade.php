@@ -124,7 +124,7 @@
                             <p class="text-gray-600">{{ $item['count'] }} ({{ $percent }}%)</p>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full {{ $item['color'] }}" style="width: {{ $percent }}%"></div>
+                            <div class="h-full rounded-full" style="width: {{ $percent }}%; background-color: {{ $item['color'] }};"></div>
                         </div>
                     </div>
                 @endforeach
@@ -150,7 +150,7 @@
                             <p class="text-gray-600">{{ $item['count'] }} ({{ $percent }}%)</p>
                         </div>
                         <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full {{ $item['color'] }}" style="width: {{ $percent }}%"></div>
+                            <div class="h-full rounded-full" style="width: {{ $percent }}%; background-color: {{ $item['color'] }};"></div>
                         </div>
                     </div>
                 @endforeach

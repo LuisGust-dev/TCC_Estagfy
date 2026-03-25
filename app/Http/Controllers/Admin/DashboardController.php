@@ -20,17 +20,17 @@ class DashboardController extends Controller
         $totalCoordinators = User::where('role', 'coordinator')->count();
 
         $roleDistribution = [
-            ['label' => 'Alunos', 'count' => $totalStudents, 'color' => 'bg-blue-500'],
-            ['label' => 'Empresas', 'count' => $totalCompanies, 'color' => 'bg-emerald-500'],
-            ['label' => 'Admins', 'count' => User::where('role', 'admin')->count(), 'color' => 'bg-indigo-500'],
-            ['label' => 'Coordenadores', 'count' => $totalCoordinators, 'color' => 'bg-amber-500'],
+            ['label' => 'Alunos', 'count' => $totalStudents, 'color' => '#3b82f6'],
+            ['label' => 'Empresas', 'count' => $totalCompanies, 'color' => '#10b981'],
+            ['label' => 'Admins', 'count' => User::where('role', 'admin')->count(), 'color' => '#6366f1'],
+            ['label' => 'Coordenadores', 'count' => $totalCoordinators, 'color' => '#f59e0b'],
         ];
 
         $applicationStatus = [
-            ['label' => 'Em análise', 'count' => Application::where('status', 'em_analise')->count(), 'color' => 'bg-amber-500'],
-            ['label' => 'Aprovado', 'count' => Application::where('status', 'aprovado')->count(), 'color' => 'bg-emerald-500'],
-            ['label' => 'Recusado', 'count' => Application::where('status', 'recusado')->count(), 'color' => 'bg-rose-500'],
-            ['label' => 'Finalizado', 'count' => Application::where('status', 'finalizado')->count(), 'color' => 'bg-slate-500'],
+            ['label' => 'Em análise', 'count' => Application::where('status', 'em_analise')->count(), 'color' => '#f59e0b'],
+            ['label' => 'Aprovado', 'count' => Application::where('status', 'aprovado')->count(), 'color' => '#10b981'],
+            ['label' => 'Recusado', 'count' => Application::where('status', 'recusado')->count(), 'color' => '#f43f5e'],
+            ['label' => 'Finalizado', 'count' => Application::where('status', 'finalizado')->count(), 'color' => '#6366f1'],
         ];
 
         $monthlyLabels = [];
