@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
     }
 
     if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.dashboard')->with('login_animation', 'admin');
     }
 
     if ($user->role === 'coordinator') {
@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('coordinator.login');
         }
 
-        return redirect()->route('coordinator.calendar.index');
+        return redirect()->route('coordinator.calendar.index')->with('login_animation', 'coordinator');
     }
 
     return redirect('/'); // fallback

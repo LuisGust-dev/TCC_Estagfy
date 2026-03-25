@@ -7,6 +7,47 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo1-removebg-preview.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        .estagfy-login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 18% 18%, rgba(147, 197, 253, 0.32), transparent 36%), #eff6ff;
+            opacity: 1;
+            transition: opacity .35s ease;
+        }
+
+        .estagfy-login-overlay.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .estagfy-login-card {
+            border: 1px solid rgba(59, 130, 246, .18);
+            background: rgba(255, 255, 255, .96);
+            border-radius: 1rem;
+            padding: 1.5rem 1.75rem;
+            box-shadow: 0 24px 48px -30px rgba(30, 64, 175, .45);
+            min-width: 320px;
+            text-align: center;
+        }
+
+        .estagfy-login-spinner {
+            width: 2.2rem;
+            height: 2.2rem;
+            border: 3px solid #bfdbfe;
+            border-top-color: #2563eb;
+            border-radius: 9999px;
+            margin: 0 auto .75rem;
+            animation: estagfySpin .8s linear infinite;
+        }
+
+        @keyframes estagfySpin {
+            to { transform: rotate(360deg); }
+        }
+
         #admin-sidebar {
             transition: width 220ms ease, padding 220ms ease;
         }
@@ -42,6 +83,15 @@
     </style>
 </head>
 <body class="bg-slate-100 text-gray-900">
+@if(session('login_animation') === 'admin')
+    <div id="admin-login-overlay" class="estagfy-login-overlay" aria-hidden="true">
+        <div class="estagfy-login-card">
+            <div class="estagfy-login-spinner"></div>
+            <p class="text-sm font-semibold text-blue-700">Entrando na área administrativa</p>
+            <p class="mt-1 text-xs text-gray-500">Carregando indicadores e controles...</p>
+        </div>
+    </div>
+@endif
 <div class="relative flex min-h-screen">
     <aside id="admin-sidebar" class="fixed inset-y-0 left-0 z-40 w-72 max-w-[85vw] -translate-x-full bg-white border-r flex h-screen shrink-0 flex-col px-4 transition-transform duration-200 md:sticky md:top-0 md:z-10 md:max-w-none md:translate-x-0">
         <div class="admin-profile border-b px-2 py-5 flex items-start justify-between gap-2">
@@ -238,5 +288,18 @@
         });
     });
 </script>
+@if(session('login_animation') === 'admin')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.getElementById('admin-login-overlay');
+        if (!overlay) return;
+
+        setTimeout(() => {
+            overlay.classList.add('is-hidden');
+            setTimeout(() => overlay.remove(), 380);
+        }, 1900);
+    });
+</script>
+@endif
 </body>
 </html>

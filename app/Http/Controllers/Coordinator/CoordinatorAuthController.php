@@ -51,7 +51,7 @@ class CoordinatorAuthController extends Controller
             if ($currentUser->isCoordinator()) {
                 $request->session()->put('coordinator_course', $validated['course']);
 
-                return redirect()->route('coordinator.calendar.index');
+                return redirect()->route('coordinator.calendar.index')->with('login_animation', 'coordinator');
             }
 
             return $this->redirectByRole($currentUser->role);
@@ -72,7 +72,7 @@ class CoordinatorAuthController extends Controller
         $request->session()->regenerate();
         $request->session()->put('coordinator_course', $validated['course']);
 
-        return redirect()->route('coordinator.calendar.index');
+        return redirect()->route('coordinator.calendar.index')->with('login_animation', 'coordinator');
     }
 
     private function redirectByRole(?string $role): RedirectResponse

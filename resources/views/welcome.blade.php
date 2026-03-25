@@ -435,7 +435,7 @@
                     @foreach([
                         ['step' => 'Passo 01', 'title' => 'Cadastro', 'text' => 'O aluno e a empresa criam seus perfis com dados essenciais para participação no processo.', 'accent' => 'blue'],
                         ['step' => 'Passo 02', 'title' => 'Acompanhamento', 'text' => 'As vagas e candidaturas são gerenciadas em painéis próprios com status atualizados.', 'accent' => 'indigo'],
-                        ['step' => 'Passo 03', 'title' => 'Documentos', 'text' => 'Documentação, calendário e orientações ficam organizados dentro do fluxo de estágio.', 'accent' => 'emerald'],
+                        ['step' => 'Passo 03', 'title' => 'Orientações', 'text' => 'Calendário e orientações ficam organizados dentro do fluxo de estágio.', 'accent' => 'emerald'],
                         ['step' => 'Passo 04', 'title' => 'Conclusão', 'text' => 'O estágio pode ser finalizado com registro das etapas e acompanhamento institucional.', 'accent' => 'amber'],
                     ] as $item)
                         <div class="scroll-reveal process-step-card relative text-center" style="--reveal-delay: {{ $loop->index * 110 }}ms;">
