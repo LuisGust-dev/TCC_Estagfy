@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Support\ProfilePhotoStorage;
 use App\Support\ResumeStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
 class StudentProfileController extends Controller
@@ -66,11 +66,12 @@ class StudentProfileController extends Controller
 
         if ($request->hasFile('photo')) {
             $oldPhoto = $user->photo;
-            $newPhoto = $request->file('photo')->store('profiles', 'public');
-            $userData['photo'] = $newPhoto;
-
-            if (!empty($oldPhoto) && $oldPhoto !== $newPhoto) {
-                Storage::disk('public')->delete($oldPhoto);
+            try {
+                $newPhoto = ProfilePhotoStorage::store($request->file('photo'));
+                $userData['photo'] = $newPhoto;
+                ProfilePhotoStorage::delete($oldPhoto);
+            } catch (RuntimeException $exception) {
+                return back()->with('error', 'Não foi possível atualizar a foto de perfil no momento.');
             }
         }
 

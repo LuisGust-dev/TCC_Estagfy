@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
+use App\Support\ProfilePhotoStorage;
 use App\Support\ResumeStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,7 +54,13 @@ class RegisterStudentController extends Controller
         $photoPath = null;
 
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('profiles', 'public');
+            try {
+                $photoPath = ProfilePhotoStorage::store($request->file('photo'));
+            } catch (RuntimeException $exception) {
+                return back()
+                    ->withInput($request->except(['password', 'photo', 'resume']))
+                    ->with('error', 'Não foi possível enviar a foto de perfil no momento. Tente novamente.');
+            }
         }
 
         $user = User::create([
