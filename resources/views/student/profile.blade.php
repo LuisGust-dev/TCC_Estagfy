@@ -82,6 +82,8 @@
                        inputmode="numeric"
                        maxlength="14"
                        data-mask="cpf"
+                       pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$"
+                       oninput="const digits=this.value.replace(/\D/g,'').slice(0,11); this.value = digits.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>
 

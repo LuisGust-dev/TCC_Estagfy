@@ -76,6 +76,11 @@
                 <input type="text"
                        name="phone"
                        value="{{ old('phone', $company->phone) }}"
+                       inputmode="numeric"
+                       maxlength="15"
+                       data-mask="phone"
+                       pattern="^\(\d{2}\)\s\d{4,5}-\d{4}$"
+                       oninput="const digits=this.value.replace(/\D/g,'').slice(0,11); this.value = digits.length <= 10 ? digits.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d)/,'$1-$2') : digits.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
 
@@ -87,6 +92,8 @@
                        inputmode="numeric"
                        maxlength="18"
                        data-mask="cnpj"
+                       pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
+                       oninput="const digits=this.value.replace(/\D/g,'').slice(0,14); this.value = digits.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
 
@@ -200,11 +207,32 @@
                 .replace(/(\d{4})(\d)/, '$1-$2');
         };
 
+        const applyPhoneMask = (value) => {
+            const digits = value.replace(/\D/g, '').slice(0, 11);
+
+            if (digits.length <= 10) {
+                return digits
+                    .replace(/^(\d{2})(\d)/, '($1) $2')
+                    .replace(/(\d{4})(\d)/, '$1-$2');
+            }
+
+            return digits
+                .replace(/^(\d{2})(\d)/, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2');
+        };
+
         document.querySelectorAll('input[data-mask="cnpj"]').forEach((input) => {
             input.addEventListener('input', () => {
                 input.value = applyCnpjMask(input.value);
             });
             input.value = applyCnpjMask(input.value);
+        });
+
+        document.querySelectorAll('input[data-mask="phone"]').forEach((input) => {
+            input.addEventListener('input', () => {
+                input.value = applyPhoneMask(input.value);
+            });
+            input.value = applyPhoneMask(input.value);
         });
 
         document.querySelectorAll('input[data-name-only]').forEach((input) => {
