@@ -4,6 +4,13 @@
 
 @section('content')
 @php($hideSuccess = true)
+@php(
+    $formattedCpf = preg_replace(
+        '/(\d{3})(\d{3})(\d{3})(\d{2})/',
+        '$1.$2.$3-$4',
+        substr(preg_replace('/\D/', '', old('cpf', $student?->cpf ?? '')), 0, 11)
+    )
+)
 <div class="max-w-6xl mx-auto space-y-6">
 
     <section class="rounded-3xl border bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-8 text-white shadow-sm">
@@ -78,11 +85,11 @@
                 <input type="text"
                        id="student-cpf"
                        name="cpf"
-                       value="{{ old('cpf', $student?->cpf) }}"
+                       value="{{ $formattedCpf }}"
                        inputmode="numeric"
                        maxlength="14"
                        data-mask="cpf"
-                       pattern="^\d{3}\.\d{3}\.\d{3}-\d{2}$"
+                       pattern="^(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})$"
                        oninput="const digits=this.value.replace(/\D/g,'').slice(0,11); this.value = digits.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-blue-500 focus:ring-blue-500">
             </div>

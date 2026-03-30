@@ -4,6 +4,20 @@
 
 @section('content')
 @php($hideSuccess = true)
+@php($phoneDigits = substr(preg_replace('/\D/', '', old('phone', $company->phone ?? '')), 0, 11))
+@php(
+    $formattedPhone = strlen($phoneDigits) <= 10
+        ? preg_replace('/(\d{2})(\d{4})(\d{0,4})/', '($1) $2-$3', $phoneDigits)
+        : preg_replace('/(\d{2})(\d{5})(\d{0,4})/', '($1) $2-$3', $phoneDigits)
+)
+@php($cnpjDigits = substr(preg_replace('/\D/', '', old('cnpj', $company->cnpj ?? '')), 0, 14))
+@php(
+    $formattedCnpj = preg_replace(
+        '/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/',
+        '$1.$2.$3/$4-$5',
+        $cnpjDigits
+    )
+)
 <div class="max-w-6xl mx-auto space-y-6">
 
     <section class="rounded-3xl border bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-500 p-8 text-white shadow-sm">
@@ -75,11 +89,11 @@
                 <label class="text-sm font-medium text-gray-700">Telefone</label>
                 <input type="text"
                        name="phone"
-                       value="{{ old('phone', $company->phone) }}"
+                       value="{{ trim($formattedPhone, '-') }}"
                        inputmode="numeric"
                        maxlength="15"
                        data-mask="phone"
-                       pattern="^\(\d{2}\)\s\d{4,5}-\d{4}$"
+                       pattern="^(\(\d{2}\)\s\d{4,5}-\d{4}|\d{10,11})$"
                        oninput="const digits=this.value.replace(/\D/g,'').slice(0,11); this.value = digits.length <= 10 ? digits.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{4})(\d)/,'$1-$2') : digits.replace(/^(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
@@ -88,11 +102,11 @@
                 <label class="text-sm font-medium text-gray-700">CNPJ</label>
                 <input type="text"
                        name="cnpj"
-                       value="{{ old('cnpj', $company->cnpj) }}"
+                       value="{{ trim($formattedCnpj, '-/') }}"
                        inputmode="numeric"
                        maxlength="18"
                        data-mask="cnpj"
-                       pattern="^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$"
+                       pattern="^(\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}|\d{14})$"
                        oninput="const digits=this.value.replace(/\D/g,'').slice(0,14); this.value = digits.replace(/^(\d{2})(\d)/,'$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3').replace(/\.(\d{3})(\d)/,'.$1/$2').replace(/(\d{4})(\d)/,'$1-$2');"
                        class="mt-1 w-full rounded-xl border-gray-300 px-4 py-2.5 focus:border-emerald-500 focus:ring-emerald-500">
             </div>
