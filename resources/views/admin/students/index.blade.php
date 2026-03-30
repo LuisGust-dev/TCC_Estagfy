@@ -53,7 +53,7 @@
                             <td class="px-6 py-4 text-gray-600">{{ $student->email }}</td>
                             <td class="px-6 py-4 text-gray-600">
                                 @if($student->student?->resume)
-                                    <a class="text-blue-600 hover:underline" href="{{ asset('storage/' . $student->student->resume) }}">
+                                    <a class="text-blue-600 hover:underline" href="{{ $student->student->resume_url }}" target="_blank" rel="noopener noreferrer">
                                         Ver currículo
                                     </a>
                                 @else

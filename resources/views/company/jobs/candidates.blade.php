@@ -107,7 +107,8 @@
 
                     <td class="px-6 py-4">
                         @if ($application->resume)
-                            <a href="{{ asset('storage/' . $application->resume) }}"
+                            <a href="{{ $application->resume_url }}"
+                               target="_blank" rel="noopener noreferrer"
                                class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-blue-700 text-xs font-medium transition hover:bg-blue-100">
                                 <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>

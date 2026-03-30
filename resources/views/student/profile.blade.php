@@ -140,7 +140,8 @@
             <div class="rounded-2xl border border-dashed border-blue-200 bg-blue-50/40 p-5 text-center">
                 @if($student?->resume)
                     <p class="text-sm text-gray-700 mb-3">Currículo disponível</p>
-                    <a href="{{ asset('storage/' . $student->resume) }}"
+                    <a href="{{ $student->resume_url }}"
+                       target="_blank" rel="noopener noreferrer"
                        class="inline-flex items-center rounded-lg border border-blue-200 bg-white px-4 py-2 text-sm text-blue-700 hover:bg-blue-50">
                         Ver currículo
                     </a>

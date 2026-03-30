@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\User;
+use App\Support\ResumeStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use RuntimeException;
 
 class RegisterStudentController extends Controller
 {
@@ -41,7 +43,13 @@ class RegisterStudentController extends Controller
             ]
         );
 
-        $resumePath = $request->file('resume')->store('resumes', 'public');
+        try {
+            $resumePath = ResumeStorage::store($request->file('resume'));
+        } catch (RuntimeException $exception) {
+            return back()
+                ->withInput($request->except(['password', 'photo', 'resume']))
+                ->with('error', 'Não foi possível enviar o currículo no momento. Tente novamente.');
+        }
         $photoPath = null;
 
         if ($request->hasFile('photo')) {

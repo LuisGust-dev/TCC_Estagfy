@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Support\ResumeStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class StudentProfileController extends Controller
 {
@@ -85,7 +87,12 @@ class StudentProfileController extends Controller
         ];
 
         if ($request->hasFile('resume')) {
-            $studentData['resume'] = $request->file('resume')->store('resumes', 'public');
+            try {
+                $studentData['resume'] = ResumeStorage::store($request->file('resume'));
+                ResumeStorage::delete($student?->resume);
+            } catch (RuntimeException $exception) {
+                return back()->with('error', 'Não foi possível atualizar o currículo no momento.');
+            }
         }
 
         if ($student) {
