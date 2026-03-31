@@ -80,6 +80,52 @@
         #admin-sidebar.is-open {
             transform: translateX(0);
         }
+
+        .sidebar-link {
+            position: relative;
+            overflow: hidden;
+            transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-link::before {
+            content: "";
+            position: absolute;
+            left: -0.75rem;
+            top: 50%;
+            width: 1.1rem;
+            height: 70%;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, #60a5fa, #2563eb);
+            opacity: 0;
+            transform: translateY(-50%) scale(.85);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(3px);
+        }
+
+        .sidebar-link.is-active {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-color: rgba(96, 165, 250, .32);
+            color: #1d4ed8;
+            box-shadow: 0 16px 34px -24px rgba(37, 99, 235, .55);
+        }
+
+        .sidebar-link.is-active::before {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .sidebar-link.is-active .sidebar-icon {
+            color: #2563eb;
+        }
+
+        .sidebar-link.is-active .sidebar-label {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-gray-900">
@@ -120,8 +166,8 @@
             </p>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.dashboard') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.dashboard') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 12h4v8H4z"/>
                         <path d="M10 8h4v12h-4z"/>
@@ -132,8 +178,8 @@
             </a>
 
             <a href="{{ route('admin.companies.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.companies.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.companies.*') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.companies.*') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M3 21h18"/>
                         <path d="M6 21V7h12v14"/>
@@ -147,8 +193,8 @@
             </a>
 
             <a href="{{ route('admin.students.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.students.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.students.*') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.students.*') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M12 3 1 9l11 6 11-6-11-6Z"/>
                         <path d="M5 11.5V15c0 2.8 3.1 5 7 5s7-2.2 7-5v-3.5"/>
@@ -158,8 +204,8 @@
             </a>
 
             <a href="{{ route('admin.coordinators.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.coordinators.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.coordinators.*') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.coordinators.*') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M12 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>
                         <path d="M4 20a8 8 0 0 1 16 0"/>
@@ -171,8 +217,8 @@
             </a>
 
             <a href="{{ route('admin.admins.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.admins.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.admins.*') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.admins.*') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M12 3l7 4v5c0 4.5-2.9 7.8-7 9-4.1-1.2-7-4.5-7-9V7l7-4Z"/>
                         <path d="M9.5 12l1.7 1.7L14.8 10"/>
@@ -182,8 +228,8 @@
             </a>
 
             <a href="{{ route('admin.reports.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg {{ request()->routeIs('admin.reports.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="{{ request()->routeIs('admin.reports.*') ? 'text-white' : 'text-blue-600' }}">
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl {{ request()->routeIs('admin.reports.*') ? 'is-active' : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 19h16"/>
                         <path d="M7 16V9"/>

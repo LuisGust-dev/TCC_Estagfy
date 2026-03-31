@@ -84,6 +84,52 @@
         #company-sidebar.is-open {
             transform: translateX(0);
         }
+
+        .sidebar-link {
+            position: relative;
+            overflow: hidden;
+            transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-link::before {
+            content: "";
+            position: absolute;
+            left: -0.75rem;
+            top: 50%;
+            width: 1.1rem;
+            height: 70%;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, #6ee7b7, #10b981);
+            opacity: 0;
+            transform: translateY(-50%) scale(.85);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(3px);
+        }
+
+        .sidebar-link.is-active {
+            background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+            border-color: rgba(52, 211, 153, .32);
+            color: #047857;
+            box-shadow: 0 16px 34px -24px rgba(16, 185, 129, .45);
+        }
+
+        .sidebar-link.is-active::before {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .sidebar-link.is-active .sidebar-icon {
+            color: #10b981;
+        }
+
+        .sidebar-link.is-active .sidebar-label {
+            color: #065f46;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -149,9 +195,9 @@
             <p class="menu-title px-2 text-xs font-semibold uppercase tracking-widest text-gray-400">Navegação</p>
 
             <a href="{{ route('company.dashboard') }}"
-               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.dashboard') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.dashboard') ? 'text-white' : '' }}">
+               class="sidebar-link group flex items-center gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ request()->routeIs('company.dashboard') ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
+                <span class="sidebar-icon text-green-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 12h4v8H4z"/>
                         <path d="M10 8h4v12h-4z"/>
@@ -162,9 +208,9 @@
             </a>
 
             <a href="{{ route('company.jobs.index') }}"
-               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ $isJobsRoute ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ $isJobsRoute ? 'text-white' : '' }}">
+               class="sidebar-link group flex items-center gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ $isJobsRoute ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
+                <span class="sidebar-icon text-green-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 8a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
                     </svg>
@@ -173,9 +219,9 @@
             </a>
 
             <a href="{{ route('company.candidates.index') }}"
-               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ $isCandidatesRoute ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ $isCandidatesRoute ? 'text-white' : '' }}">
+               class="sidebar-link group flex items-center gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ $isCandidatesRoute ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
+                <span class="sidebar-icon text-green-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M8 6h8"/>
                         <path d="M8 10h8"/>
@@ -187,10 +233,10 @@
             </a>
 
             <a href="{{ route('company.messages.index') }}"
-               class="sidebar-link group flex items-center justify-between gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.messages.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="sidebar-link group flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ request()->routeIs('company.messages.*') ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
                 <span class="flex items-center gap-3">
-                    <span class="text-green-600 {{ request()->routeIs('company.messages.*') ? 'text-white' : '' }}">
+                    <span class="sidebar-icon text-green-600">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
                         </svg>
@@ -205,10 +251,10 @@
             </a>
 
             <a href="{{ route('company.notifications.index') }}"
-               class="sidebar-link flex items-center justify-between gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.notifications.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
+               class="sidebar-link flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ request()->routeIs('company.notifications.*') ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
                 <span class="flex items-center gap-3">
-                    <span class="text-green-600 {{ request()->routeIs('company.notifications.*') ? 'text-white' : '' }}">
+                    <span class="sidebar-icon text-green-600">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="M6 9a6 6 0 1 1 12 0v4l2 3H4l2-3z"/>
                             <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
@@ -224,9 +270,9 @@
             </a>
 
             <a href="{{ route('company.profile.edit') }}"
-               class="sidebar-link group flex items-center gap-3 px-4 py-2 rounded-xl transition
-               {{ request()->routeIs('company.profile.*') ? 'bg-green-600 text-white shadow-sm' : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-green-600 {{ request()->routeIs('company.profile.*') ? 'text-white' : '' }}">
+               class="sidebar-link group flex items-center gap-3 px-4 py-2.5 rounded-2xl transition
+               {{ request()->routeIs('company.profile.*') ? 'is-active' : 'text-gray-600 hover:bg-emerald-50/70 hover:text-emerald-700' }}">
+                <span class="sidebar-icon text-green-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <circle cx="12" cy="8" r="4"/>
                         <path d="M4 20a8 8 0 0 1 16 0"/>
@@ -379,4 +425,3 @@
 @endif
 </body>
 </html>
-

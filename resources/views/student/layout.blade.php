@@ -84,6 +84,56 @@
         #student-sidebar.is-open {
             transform: translateX(0);
         }
+
+        .sidebar-link {
+            position: relative;
+            overflow: hidden;
+            transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-link::before {
+            content: "";
+            position: absolute;
+            left: -0.75rem;
+            top: 50%;
+            width: 1.1rem;
+            height: 70%;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, #60a5fa, #2563eb);
+            opacity: 0;
+            transform: translateY(-50%) scale(.85);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(3px);
+        }
+
+        .sidebar-link.is-active {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+            border-color: rgba(96, 165, 250, .32);
+            color: #1d4ed8;
+            box-shadow: 0 16px 34px -24px rgba(37, 99, 235, .55);
+        }
+
+        .sidebar-link.is-active::before {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .sidebar-link.is-active .sidebar-icon {
+            color: #2563eb;
+        }
+
+        .sidebar-link.is-active .sidebar-label {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .sidebar-link.has-badge {
+            padding-right: 0.875rem;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-gray-900">
@@ -156,11 +206,11 @@
 
             {{-- DASHBOARD --}}
             <a href="{{ route('student.dashboard') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.dashboard')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.dashboard') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 12h4v8H4z"/>
                         <path d="M10 8h4v12h-4z"/>
@@ -172,11 +222,11 @@
 
             {{-- VAGAS --}}
             <a href="{{ route('student.jobs.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.jobs.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.jobs.*') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M9 6h6a2 2 0 0 1 2 2v2H7V8a2 2 0 0 1 2-2Z"/>
                         <path d="M6 10h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2Z"/>
@@ -187,11 +237,11 @@
 
             {{-- CANDIDATURAS --}}
             <a href="{{ route('student.applications.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.applications.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.applications.*') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M8 6h8"/>
                         <path d="M8 10h8"/>
@@ -204,11 +254,11 @@
 
             {{-- CALENDÁRIO DE ESTÁGIO --}}
             <a href="{{ route('student.calendar.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.calendar.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.calendar.*') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <rect x="4" y="5" width="16" height="15" rx="2"/>
                         <path d="M8 3v4"/>
@@ -221,11 +271,11 @@
 
             {{-- FLUXO DE ESTÁGIO --}}
             <a href="{{ route('student.flow.index') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.flow.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.flow.*') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <path d="M4 7h16"/>
                         <path d="M4 12h10"/>
@@ -238,13 +288,13 @@
 
             {{-- NOTIFICAÇÕES --}}
             <a href="{{ route('student.notifications.index') }}"
-               class="sidebar-link flex justify-between items-center px-4 py-2.5 rounded-lg
+               class="sidebar-link has-badge flex justify-between items-center px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.notifications.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
 
                 <span class="flex items-center gap-3">
-                    <span class="text-blue-600 {{ request()->routeIs('student.notifications.*') ? 'text-white' : '' }}">
+                    <span class="sidebar-icon text-blue-600">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="M6 9a6 6 0 1 1 12 0v4l2 3H4l2-3z"/>
                             <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
@@ -261,12 +311,12 @@
 
             {{-- MENSAGENS --}}
             <a href="{{ route('student.messages.index') }}"
-               class="sidebar-link flex items-center justify-between px-4 py-2.5 rounded-lg
+               class="sidebar-link has-badge flex items-center justify-between px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.messages.*') || request()->routeIs('student.chat.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
                 <span class="flex items-center gap-3">
-                    <span class="text-blue-600 {{ request()->routeIs('student.messages.*') || request()->routeIs('student.chat.*') ? 'text-white' : '' }}">
+                    <span class="sidebar-icon text-blue-600">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                             <path d="M21 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 1 1 18 0Z"/>
                         </svg>
@@ -282,11 +332,11 @@
 
             {{-- PERFIL --}}
             <a href="{{ route('student.profile.show') }}"
-               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-lg
+               class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-2xl
                {{ request()->routeIs('student.profile.*')
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100' }}">
-                <span class="text-blue-600 {{ request()->routeIs('student.profile.*') ? 'text-white' : '' }}">
+                    ? 'is-active'
+                    : 'text-gray-600 hover:bg-blue-50/70 hover:text-blue-700' }}">
+                <span class="sidebar-icon text-blue-600">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                         <circle cx="12" cy="8" r="4"/>
                         <path d="M4 20a8 8 0 0 1 16 0"/>
@@ -442,4 +492,3 @@
 
 </body>
 </html>
-
