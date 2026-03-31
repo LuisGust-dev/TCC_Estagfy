@@ -47,6 +47,7 @@
                     <option value="em_analise" @selected($filters['status'] === 'em_analise')>Em análise</option>
                     <option value="aprovado" @selected($filters['status'] === 'aprovado')>Aprovado</option>
                     <option value="recusado" @selected($filters['status'] === 'recusado')>Recusado</option>
+                    <option value="finalizado" @selected($filters['status'] === 'finalizado')>Finalizado</option>
                 </select>
             </div>
             <div>
@@ -157,7 +158,7 @@
 
         <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
             <div class="px-5 py-4 border-b">
-                <h3 class="font-semibold text-gray-900">Últimas candidaturas</h3>
+                <h3 class="font-semibold text-gray-900">Últimas 10 candidaturas</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full text-sm">

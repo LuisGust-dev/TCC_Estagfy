@@ -191,7 +191,7 @@ class ReportController extends Controller
             $role = null;
         }
 
-        if (!in_array($status, ['em_analise', 'aprovado', 'recusado'], true)) {
+        if (!in_array($status, ['em_analise', 'aprovado', 'recusado', 'finalizado'], true)) {
             $status = null;
         }
 

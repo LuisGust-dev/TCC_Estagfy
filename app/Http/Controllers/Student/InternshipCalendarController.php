@@ -17,7 +17,7 @@ class InternshipCalendarController extends Controller
         $timezone = config('app.timezone', 'America/Bahia');
 
         $monthStart = preg_match('/^\d{4}-\d{2}$/', $monthInput)
-            ? Carbon::createFromFormat('Y-m', $monthInput, $timezone)->startOfMonth()
+            ? Carbon::createFromFormat('Y-m-d', $monthInput . '-01', $timezone)->startOfMonth()
             : Carbon::now($timezone)->startOfMonth();
 
         $monthEnd = $monthStart->copy()->endOfMonth();
