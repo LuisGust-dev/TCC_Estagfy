@@ -145,11 +145,11 @@
                                         <span class="text-sm font-bold text-blue-700">{{ strtoupper(substr($company->company_name, 0, 1)) }}</span>
                                     @endif
                                 </div>
-                                <div class="min-w-0">
-                                    <h4 class="text-sm font-semibold text-gray-900">{{ $company->company_name }}</h4>
+                                <div class="min-w-0 flex-1">
+                                    <h4 class="text-sm font-semibold leading-5 text-gray-900">{{ $company->company_name }}</h4>
                                     @if(!empty($company->description))
-                                        <p class="mt-2 text-xs leading-relaxed text-gray-600">
-                                            {{ \Illuminate\Support\Str::limit($company->description, 95) }}
+                                        <p class="mt-2 text-xs leading-6 text-gray-600 break-words">
+                                            {{ $company->description }}
                                         </p>
                                     @endif
                                 </div>
