@@ -56,21 +56,6 @@
         <p class="text-gray-600">Visualização em board para acompanhar o andamento do calendário.</p>
     </div>
 
-    <div class="mb-6 flex flex-wrap items-center gap-2">
-        <a href="{{ route('coordinator.calendar.index') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Novo evento
-        </a>
-        <a href="{{ route('coordinator.calendar.events') }}"
-           class="rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white">
-            Eventos cadastrados
-        </a>
-        <a href="{{ route('coordinator.calendar.hiring-companies.index') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Empresas destaque
-        </a>
-    </div>
-
     <div class="grid grid-cols-1 gap-6">
         <section class="space-y-4">
             <div class="rounded-2xl border bg-white px-5 py-4 shadow-sm">

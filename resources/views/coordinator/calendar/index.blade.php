@@ -9,21 +9,6 @@
         <p class="text-gray-600">Cadastre novas datas e mantenha o cronograma atualizado por curso.</p>
     </div>
 
-    <div class="mb-6 flex flex-wrap items-center gap-2">
-        <a href="{{ route('coordinator.calendar.index') }}"
-           class="rounded-lg px-3 py-2 text-sm font-medium {{ request()->routeIs('coordinator.calendar.index') ? 'bg-amber-600 text-white' : 'border text-gray-600 hover:bg-gray-100' }}">
-            Novo evento
-        </a>
-        <a href="{{ route('coordinator.calendar.events') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Eventos cadastrados
-        </a>
-        <a href="{{ route('coordinator.calendar.hiring-companies.index') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Empresas destaque
-        </a>
-    </div>
-
     <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="rounded-2xl border bg-white p-4 shadow-sm">
             <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Curso selecionado</p>

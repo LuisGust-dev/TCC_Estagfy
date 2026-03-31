@@ -9,21 +9,6 @@
         <p class="text-gray-600">Cadastro manual das empresas destaque por curso.</p>
     </div>
 
-    <div class="mb-6 flex flex-wrap items-center gap-2">
-        <a href="{{ route('coordinator.calendar.index') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Novo evento
-        </a>
-        <a href="{{ route('coordinator.calendar.events') }}"
-           class="rounded-lg border px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100">
-            Eventos cadastrados
-        </a>
-        <a href="{{ route('coordinator.calendar.hiring-companies.index') }}"
-           class="rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white">
-            Empresas destaque
-        </a>
-    </div>
-
     <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
         <div class="rounded-2xl border bg-white p-4 shadow-sm">
             <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">Curso selecionado</p>
@@ -47,7 +32,7 @@
                 <h2 class="text-lg font-semibold text-gray-900">Nova empresa destaque</h2>
                 <p class="mb-4 text-sm text-gray-500">Curso selecionado: <strong>{{ $selectedCourse }}</strong></p>
 
-                <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.store') }}" class="space-y-4">
+                <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.store') }}" enctype="multipart/form-data" class="space-y-4">
                     @csrf
                     <input type="hidden" name="course" value="{{ $selectedCourse }}">
 
@@ -62,6 +47,13 @@
                             <label class="mb-1 block text-sm font-medium text-gray-700">Descrição (opcional)</label>
                             <textarea name="description" rows="2"
                                       class="w-full rounded-xl border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">{{ old('description') }}</textarea>
+                        </div>
+
+                        <div class="md:col-span-3">
+                            <label class="mb-1 block text-sm font-medium text-gray-700">Foto da empresa (opcional)</label>
+                            <input type="file" name="photo" accept="image/png,image/jpeg"
+                                   class="w-full rounded-xl border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500">
+                            <p class="mt-1 text-xs text-gray-500">Envie uma logo ou imagem da empresa em JPG ou PNG, até 2MB.</p>
                         </div>
                     </div>
 
@@ -110,9 +102,18 @@
                         @forelse($companies as $company)
                             <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
                                 <div class="mb-3 flex items-start justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">Empresa destaque</p>
-                                        <p class="truncate text-base font-semibold text-gray-900">{{ $company->company_name }}</p>
+                                    <div class="flex min-w-0 items-start gap-3">
+                                        <div class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-amber-100 bg-amber-50">
+                                            @if($company->photo_url)
+                                                <img src="{{ $company->photo_url }}" alt="Foto da empresa" class="h-full w-full object-cover">
+                                            @else
+                                                <span class="text-sm font-bold text-amber-700">{{ strtoupper(substr($company->company_name, 0, 1)) }}</span>
+                                            @endif
+                                        </div>
+                                        <div class="min-w-0">
+                                            <p class="text-xs font-semibold uppercase tracking-wide text-amber-600">Empresa destaque</p>
+                                            <p class="truncate text-base font-semibold text-gray-900">{{ $company->company_name }}</p>
+                                        </div>
                                     </div>
                                     <span class="shrink-0 rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
                                         #{{ $loop->iteration }}
@@ -120,7 +121,7 @@
                                 </div>
 
                                 <div class="space-y-3">
-                                <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.update', $company) }}" class="space-y-3">
+                                <form method="POST" action="{{ route('coordinator.calendar.hiring-companies.update', $company) }}" enctype="multipart/form-data" class="space-y-3">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="course" value="{{ $selectedCourse }}">
@@ -148,6 +149,15 @@
                                                 rows="2"
                                                 class="w-full rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500"
                                             >{{ $company->description }}</textarea>
+                                        </div>
+                                        <div class="lg:col-span-3">
+                                            <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">Foto da empresa</label>
+                                            <input
+                                                type="file"
+                                                name="photo"
+                                                accept="image/png,image/jpeg"
+                                                class="w-full rounded-lg border-gray-300 text-sm focus:border-amber-500 focus:ring-amber-500"
+                                            >
                                         </div>
                                     </div>
 

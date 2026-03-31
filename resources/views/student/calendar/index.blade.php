@@ -137,12 +137,23 @@
                 <div class="mt-3 space-y-3">
                     @forelse($topHiringCompanies as $company)
                         <article class="rounded-xl border border-blue-100 bg-blue-50/40 p-3">
-                            <h4 class="text-sm font-semibold text-gray-900">{{ $company->company_name }}</h4>
-                            @if(!empty($company->description))
-                                <p class="mt-2 text-xs leading-relaxed text-gray-600">
-                                    {{ \Illuminate\Support\Str::limit($company->description, 95) }}
-                                </p>
-                            @endif
+                            <div class="flex items-start gap-3">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-blue-100 bg-white">
+                                    @if($company->photo_url)
+                                        <img src="{{ $company->photo_url }}" alt="Foto da empresa" class="h-full w-full object-cover">
+                                    @else
+                                        <span class="text-sm font-bold text-blue-700">{{ strtoupper(substr($company->company_name, 0, 1)) }}</span>
+                                    @endif
+                                </div>
+                                <div class="min-w-0">
+                                    <h4 class="text-sm font-semibold text-gray-900">{{ $company->company_name }}</h4>
+                                    @if(!empty($company->description))
+                                        <p class="mt-2 text-xs leading-relaxed text-gray-600">
+                                            {{ \Illuminate\Support\Str::limit($company->description, 95) }}
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
                         </article>
                     @empty
                         <div class="rounded-xl border border-dashed p-4 text-sm text-gray-500">

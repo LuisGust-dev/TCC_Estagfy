@@ -35,7 +35,7 @@ Vagas de Estágio
                 name="q"
                 value="{{ $search }}"
                 placeholder="Buscar por cargo ou empresa..."
-                class="w-full bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                class="w-full border-0 bg-transparent text-sm text-gray-700 placeholder:text-gray-400 outline-none ring-0 focus:border-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
             >
 
             @if(filled((string) $search))

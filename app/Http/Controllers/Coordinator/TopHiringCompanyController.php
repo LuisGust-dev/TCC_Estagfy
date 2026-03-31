@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Coordinator;
 
 use App\Http\Controllers\Controller;
 use App\Models\TopHiringCompany;
+use App\Support\TopHiringCompanyPhotoStorage;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use RuntimeException;
 
 class TopHiringCompanyController extends Controller
 {
@@ -45,7 +47,16 @@ class TopHiringCompanyController extends Controller
             'company_name' => 'required|string|max:255',
             'course' => ['required', Rule::in(config('internship.courses', []))],
             'description' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            try {
+                $validated['photo'] = TopHiringCompanyPhotoStorage::store($request->file('photo'));
+            } catch (RuntimeException $e) {
+                return back()->withInput()->withErrors(['photo' => $e->getMessage()]);
+            }
+        }
 
         TopHiringCompany::create([
             ...$validated,
@@ -61,7 +72,17 @@ class TopHiringCompanyController extends Controller
             'company_name' => 'required|string|max:255',
             'course' => ['required', Rule::in(config('internship.courses', []))],
             'description' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        if ($request->hasFile('photo')) {
+            try {
+                $validated['photo'] = TopHiringCompanyPhotoStorage::store($request->file('photo'));
+                TopHiringCompanyPhotoStorage::delete($company->photo);
+            } catch (RuntimeException $e) {
+                return back()->withInput()->withErrors(['photo' => $e->getMessage()]);
+            }
+        }
 
         $company->update($validated);
 
@@ -70,6 +91,7 @@ class TopHiringCompanyController extends Controller
 
     public function destroy(TopHiringCompany $company)
     {
+        TopHiringCompanyPhotoStorage::delete($company->photo);
         $company->delete();
 
         return back()->with('success', 'Empresa destaque removida.');
