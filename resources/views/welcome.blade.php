@@ -254,7 +254,7 @@
 2️⃣ FUNCIONALIDADES
 ========================= --}}
 <section class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
+    <div class="mx-auto w-full max-w-[90rem] px-6">
         <div class="text-center mb-16">
             <span class="scroll-reveal inline-flex items-center rounded-full bg-indigo-100 px-4 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-indigo-700">
                 Recursos
@@ -622,44 +622,76 @@
 
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <article class="scroll-reveal rounded-[2rem] border border-blue-100 bg-white p-8 shadow-sm">
-                <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-                    <img src="{{ asset('images/aluno.jpeg') }}" alt="Foto do desenvolvedor" class="h-28 w-28 rounded-3xl object-cover ring-4 ring-blue-50" />
-                    <div class="flex-1">
+                <div class="flex flex-col gap-6">
+                    <div class="flex items-start gap-5">
+                        <img src="{{ asset('images/aluno.jpeg') }}" alt="Foto do desenvolvedor" class="h-24 w-24 rounded-3xl object-cover ring-4 ring-blue-50 shrink-0" />
+                        <div class="min-w-0 flex-1">
                         <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-blue-700">
                             Desenvolvimento
                         </span>
-                        <h3 class="mt-4 text-2xl font-bold text-slate-900">Luis Gustavo</h3>
+                        <h3 class="mt-4 text-[2rem] font-bold leading-tight tracking-tight text-slate-900">Luis Gustavo</h3>
                         <p class="mt-1 text-sm font-medium text-slate-500">Desenvolvedor do projeto</p>
-                        <p class="mt-5 text-sm leading-7 text-slate-600">
-                            Responsável pela implementação do EstagFy, definição das funcionalidades e evolução da experiência da plataforma para alunos, empresas e gestão acadêmica.
-                        </p>
-                        <div class="mt-5 flex flex-wrap gap-2">
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Laravel</span>
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">PHP</span>
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">MySQL</span>
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Frontend</span>
                         </div>
+                    </div>
+                    <p class="text-sm leading-7 text-slate-600">
+                        Responsável pela implementação do EstagFy, definição das funcionalidades e evolução da experiência da plataforma para alunos, empresas e gestão acadêmica.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Laravel</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">PHP</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">MySQL</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Frontend</span>
                     </div>
                 </div>
             </article>
 
             <article class="scroll-reveal rounded-[2rem] border border-amber-100 bg-white p-8 shadow-sm" style="--reveal-delay: 120ms;">
-                <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-                    <img src="{{ asset('images/orientador.png') }}" alt="Foto do orientador" class="h-28 w-28 rounded-3xl object-cover ring-4 ring-amber-50" />
-                    <div class="flex-1">
+                <div class="flex flex-col gap-6">
+                    <div class="flex items-start gap-5">
+                        <img src="{{ asset('images/orientador.png') }}" alt="Foto do orientador" class="h-24 w-24 rounded-3xl object-cover ring-4 ring-amber-50 shrink-0" />
+                        <div class="min-w-0 flex-1">
                         <span class="inline-flex items-center rounded-full bg-amber-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
                             Orientação acadêmica
                         </span>
-                        <h3 class="mt-4 text-2xl font-bold text-slate-900">George Gabriel Mendes Dourado</h3>
+                        <h3 class="mt-4 text-[1.9rem] font-bold leading-tight tracking-tight text-slate-900">George Gabriel Mendes Dourado</h3>
                         <p class="mt-1 text-sm font-medium text-slate-500">Professor orientador</p>
-                        <p class="mt-5 text-sm leading-7 text-slate-600">
-                            Responsável pelo acompanhamento metodológico e acadêmico do projeto, contribuindo para o alinhamento técnico da solução com os objetivos institucionais e de formação.
-                        </p>
-                        <div class="mt-5 flex flex-wrap gap-2">
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Metodologia</span>
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Orientação</span>
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Qualidade acadêmica</span>
                         </div>
+                    </div>
+                    <p class="text-sm leading-7 text-slate-600">
+                        Responsável pelo acompanhamento metodológico e acadêmico do projeto, contribuindo para o alinhamento técnico da solução com os objetivos institucionais e de formação.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Metodologia</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Orientação</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Qualidade acadêmica</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="scroll-reveal rounded-[2rem] border border-emerald-100 bg-white p-8 shadow-sm lg:col-span-2" style="--reveal-delay: 220ms;">
+                <div class="flex flex-col gap-6">
+                    <div class="flex items-start gap-5">
+                    <div class="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-cyan-600 text-center text-white ring-4 ring-emerald-50 shadow-sm">
+                        <span class="text-3xl font-black tracking-tight">IF</span>
+                        <span class="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-50">Baiano</span>
+                        <span class="mt-2 text-[10px] leading-4 text-emerald-50/90">Campus<br>Guanambi</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                            Instituição
+                        </span>
+                        <h3 class="mt-4 text-[1.9rem] font-bold leading-tight tracking-tight text-slate-900">Instituto Federal Baiano</h3>
+                        <p class="mt-1 text-sm font-medium text-slate-500">Campus Guanambi</p>
+                        </div>
+                    </div>
+                    </div>
+                    <p class="text-sm leading-7 text-slate-600">
+                        Instituição de ensino vinculada à formação acadêmica e profissional dos estudantes, contexto em que o EstagFy foi pensado como apoio à organização, acompanhamento e valorização do estágio supervisionado.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Formação acadêmica</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Integração com empresas</span>
+                        <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">Apoio institucional</span>
                     </div>
                 </div>
             </article>
