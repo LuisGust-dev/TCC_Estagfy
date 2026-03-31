@@ -31,6 +31,7 @@ class NewApplicationNotification extends Notification
             'type' => 'new_application',
             'job_id' => $this->application->job->id,
             'job_title' => $this->application->job->title,
+            'student_id' => $this->application->student->id,
             'student_name' => $this->application->student->name,
             'message' => 'Novo candidato para sua vaga',
         ];

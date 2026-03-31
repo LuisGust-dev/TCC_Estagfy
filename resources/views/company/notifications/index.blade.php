@@ -11,7 +11,7 @@
         <p class="text-gray-600">Acompanhe atualizações de vagas e candidatos</p>
     </div>
 
-    @if(auth()->user()->notifications->isNotEmpty())
+    @if($notifications->isNotEmpty())
         <div class="mb-6 flex justify-end">
             <form method="POST" action="{{ route('company.notifications.clearAll') }}"
                   onsubmit="return confirm('Deseja apagar todas as notificações? Esta ação não pode ser desfeita.');">
@@ -26,28 +26,31 @@
 
     <div class="space-y-4">
 
-    @forelse(auth()->user()->notifications as $notification)
+    @forelse($notifications as $notification)
 
         <form method="POST" action="{{ route('company.notifications.readAndGo', $notification->id) }}">
             @csrf
             <button type="submit"
                     class="w-full text-left bg-white border rounded-2xl p-6 flex items-start justify-between gap-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-emerald-200">
                 <div class="flex items-start gap-4">
-                    <div class="h-10 w-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold">
-                        🔔
-                    </div>
+                    @if(!empty($notification->sender_photo_url))
+                        <img src="{{ $notification->sender_photo_url }}"
+                             alt="{{ $notification->sender_name }}"
+                             class="h-12 w-12 rounded-full object-cover ring-2 ring-emerald-100">
+                    @else
+                        <div class="h-12 w-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold ring-2 ring-emerald-100">
+                            {{ $notification->sender_initial }}
+                        </div>
+                    @endif
 
                     <div>
-                        <p class="font-medium {{ is_null($notification->read_at) ? 'text-emerald-700' : 'text-gray-700' }}">
-                            {{ $notification->data['message'] }}
+                        <p class="font-medium leading-6 {{ is_null($notification->read_at) ? 'text-emerald-700' : 'text-gray-700' }}">
+                            <span class="text-gray-900">{{ $notification->sender_name }}</span>
+                            <span class="font-normal text-gray-600">{{ ' ' . $notification->data['message'] }}</span>
                         </p>
 
                         <p class="text-sm text-gray-500 mt-1">
                             Vaga: {{ $notification->data['job_title'] }}
-                        </p>
-
-                        <p class="text-sm text-gray-500">
-                            Aluno: {{ $notification->data['student_name'] }}
                         </p>
 
                         <p class="text-xs text-gray-400 mt-2">

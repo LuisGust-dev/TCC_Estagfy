@@ -84,7 +84,7 @@
                                     name="q"
                                     value="{{ $search ?? '' }}"
                                     placeholder="Buscar empresa ou descrição..."
-                                    class="w-full bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none lg:w-72"
+                                    class="w-full border-0 bg-transparent text-sm text-gray-700 shadow-none outline-none ring-0 placeholder:text-gray-400 focus:border-0 focus:outline-none focus:ring-0 lg:w-72"
                                 >
                                 <button
                                     type="submit"

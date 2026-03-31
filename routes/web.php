@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -159,6 +160,37 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
     // 📌 Lista de notificações
     Route::get('/notifications', function () {
         $notifications = auth()->user()->notifications;
+
+        $companyUsersByJobId = \App\Models\Job::query()
+            ->with('company.user')
+            ->whereIn('id', $notifications->pluck('data.job_id')->filter()->unique()->values())
+            ->get()
+            ->mapWithKeys(function (\App\Models\Job $job) {
+                return [$job->id => $job->company?->user];
+            });
+
+        $notifications = $notifications->map(function ($notification) use ($companyUsersByJobId) {
+            $sender = null;
+            $senderName = $notification->data['company_name'] ?? null;
+
+            if (!empty($notification->data['company_user_id'])) {
+                $sender = \App\Models\User::query()->find($notification->data['company_user_id']);
+            }
+
+            if (!$sender && !empty($notification->data['job_id'])) {
+                $sender = $companyUsersByJobId->get($notification->data['job_id']);
+            }
+
+            if ($sender) {
+                $senderName = $sender->name;
+            }
+
+            $notification->sender_name = $senderName ?: 'Empresa';
+            $notification->sender_photo_url = $sender?->photo_url;
+            $notification->sender_initial = Str::upper(Str::substr($notification->sender_name, 0, 1));
+
+            return $notification;
+        });
 
         return view('student.notifications.index', [
             'notifications' => $notifications,
@@ -360,7 +392,30 @@ Route::middleware(['auth', 'active', 'company'])
 
              // 📌 Lista de notificações da empresa
         Route::get('/notifications', function () {
-            return view('company.notifications.index');
+            $notifications = auth()->user()->notifications;
+            $studentsById = \App\Models\User::query()
+                ->whereIn('id', $notifications->pluck('data.student_id')->filter()->unique()->values())
+                ->get()
+                ->keyBy('id');
+
+            $notifications = $notifications->map(function ($notification) use ($studentsById) {
+                $sender = null;
+
+                if (!empty($notification->data['student_id'])) {
+                    $sender = $studentsById->get($notification->data['student_id']);
+                }
+
+                $senderName = $sender?->name ?: ($notification->data['student_name'] ?? 'Aluno');
+                $notification->sender_name = $senderName;
+                $notification->sender_photo_url = $sender?->photo_url;
+                $notification->sender_initial = Str::upper(Str::substr($senderName, 0, 1));
+
+                return $notification;
+            });
+
+            return view('company.notifications.index', [
+                'notifications' => $notifications,
+            ]);
         })->name('notifications.index');
 
         Route::get('/realtime/summary', function () {

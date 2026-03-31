@@ -28,6 +28,8 @@ class ApplicationStatusNotification extends Notification
             'type' => 'application_status',
             'job_id' => $this->application->job->id,
             'job_title' => $this->application->job->title,
+            'company_user_id' => $this->application->job->company->user?->id,
+            'company_name' => $this->application->job->company->user?->name,
             'status' => $this->application->status,
             'message' => match ($this->application->status) {
                 'aprovado' => 'Sua candidatura foi aprovada 🎉',
