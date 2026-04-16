@@ -4,8 +4,8 @@
 
 @section('content')
     @php
-        $courses = config('internship.courses', []);
         $selectedCourse = old('course');
+        $selectedCoordinatorCourse = old('coordinator_course');
         $selectedRole = old('role', $selectedRole ?? 'student');
         $redirectTarget = $redirectTo ?? route('admin.dashboard');
     @endphp
@@ -107,6 +107,19 @@
                         <label class="text-sm font-medium text-gray-700">Descrição</label>
                         <textarea name="description" rows="4"
                                   class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('description') }}</textarea>
+                    </div>
+                </div>
+
+                <div id="coordinator-fields" data-role-target="coordinator" class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Curso coordenado</label>
+                        <select name="coordinator_course"
+                                class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            <option value="" disabled @selected(!filled((string) $selectedCoordinatorCourse))>Selecione o curso</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course }}" @selected($selectedCoordinatorCourse === $course)>{{ $course }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

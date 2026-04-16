@@ -47,6 +47,7 @@ class AuthenticationTest extends TestCase
     {
         $coordinator = User::factory()->create([
             'role' => 'coordinator',
+            'coordinator_course' => 'Análise e Desenvolvimento de Sistemas (ADS)',
         ]);
 
         $response = $this->from('/login')->post('/login', [
@@ -57,6 +58,34 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/login');
         $response->assertSessionHasErrors('email');
+    }
+
+    public function test_coordinator_can_authenticate_only_with_the_assigned_course(): void
+    {
+        $coordinator = User::factory()->create([
+            'role' => 'coordinator',
+            'coordinator_course' => 'Análise e Desenvolvimento de Sistemas (ADS)',
+        ]);
+
+        $invalidResponse = $this->from('/coordinator/login')->post('/coordinator/login', [
+            'email' => $coordinator->email,
+            'password' => 'password',
+            'course' => 'Química',
+        ]);
+
+        $this->assertGuest();
+        $invalidResponse->assertRedirect('/coordinator/login');
+        $invalidResponse->assertSessionHasErrors('course');
+
+        $validResponse = $this->post('/coordinator/login', [
+            'email' => $coordinator->email,
+            'password' => 'password',
+            'course' => 'Análise e Desenvolvimento de Sistemas (ADS)',
+        ]);
+
+        $this->assertAuthenticated();
+        $this->assertSame('Análise e Desenvolvimento de Sistemas (ADS)', session('coordinator_course'));
+        $validResponse->assertRedirect(route('coordinator.calendar.index'));
     }
 
     public function test_users_can_logout(): void

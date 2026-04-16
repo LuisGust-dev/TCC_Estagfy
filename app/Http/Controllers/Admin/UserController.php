@@ -19,12 +19,13 @@ class UserController extends Controller
     {
         $redirectTo = $this->sanitizeRedirect($request->query('redirect_to'));
         $selectedRole = $request->query('role');
+        $courses = config('internship.courses', []);
 
         if (!in_array($selectedRole, ['student', 'company', 'admin', 'coordinator'], true)) {
             $selectedRole = 'student';
         }
 
-        return view('admin.users.create', compact('redirectTo', 'selectedRole'));
+        return view('admin.users.create', compact('redirectTo', 'selectedRole', 'courses'));
     }
 
     public function store(Request $request)
@@ -42,6 +43,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'role' => $validated['role'],
             'active' => ($validated['active'] ?? '1') === '1',
+            'coordinator_course' => $validated['role'] === 'coordinator' ? $validated['coordinator_course'] : null,
             'password' => Hash::make($validated['password']),
         ]);
 
@@ -70,8 +72,9 @@ class UserController extends Controller
     {
         $user->load(['student', 'company']);
         $redirectTo = $this->sanitizeRedirect($request->query('redirect_to'));
+        $courses = config('internship.courses', []);
 
-        return view('admin.users.edit', compact('user', 'redirectTo'));
+        return view('admin.users.edit', compact('user', 'redirectTo', 'courses'));
     }
 
     public function update(User $user, Request $request)
@@ -93,6 +96,7 @@ class UserController extends Controller
             'email' => $validated['email'],
             'role' => $validated['role'],
             'active' => $validated['active'] === '1',
+            'coordinator_course' => $validated['role'] === 'coordinator' ? $validated['coordinator_course'] : null,
         ]);
 
         if (!empty($validated['password'])) {
@@ -163,6 +167,12 @@ class UserController extends Controller
                 'cnpj' => ['required', 'digits:14', Rule::unique('companies', 'cnpj')->ignore(optional($user?->company)->id)],
                 'phone' => ['required', 'digits_between:10,11'],
                 'description' => ['required', 'string', 'max:1000'],
+            ]);
+        }
+
+        if ($selectedRole === 'coordinator') {
+            return array_merge($baseRules, [
+                'coordinator_course' => ['required', Rule::in(config('internship.courses', []))],
             ]);
         }
 

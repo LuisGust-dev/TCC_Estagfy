@@ -4,8 +4,8 @@
 
 @section('content')
     @php
-        $courses = config('internship.courses', []);
         $selectedCourse = old('course', optional($user->student)->course);
+        $selectedCoordinatorCourse = old('coordinator_course', $user->coordinator_course);
     @endphp
     <div class="max-w-3xl">
         <div class="mb-6 flex items-center justify-between gap-3">
@@ -110,6 +110,23 @@
                         <label class="text-sm font-medium text-gray-700">Descrição</label>
                         <textarea name="description" rows="4"
                                   class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('description', optional($user->company)->description) }}</textarea>
+                    </div>
+                </div>
+
+                <div id="coordinator-fields" data-role-target="coordinator" class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="text-sm font-medium text-gray-700">Curso coordenado</label>
+                        <select name="coordinator_course"
+                                class="mt-1 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            @if(filled((string) $selectedCoordinatorCourse) && !in_array($selectedCoordinatorCourse, $courses, true))
+                                <option value="{{ $selectedCoordinatorCourse }}" selected>{{ $selectedCoordinatorCourse }} (atual)</option>
+                            @endif
+
+                            <option value="" disabled @selected(!filled((string) $selectedCoordinatorCourse))>Selecione o curso</option>
+                            @foreach($courses as $course)
+                                <option value="{{ $course }}" @selected($selectedCoordinatorCourse === $course)>{{ $course }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

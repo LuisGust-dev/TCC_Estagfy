@@ -17,7 +17,8 @@ class InternalRoleController extends Controller
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($subQuery) use ($search) {
                     $subQuery->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('coordinator_course', 'like', "%{$search}%");
                 });
             })
             ->latest()

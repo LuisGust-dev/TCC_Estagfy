@@ -21,11 +21,20 @@ class CoordinatorMiddleware
 
         $selectedCourse = $request->session()->get('coordinator_course');
         $courses = config('internship.courses', []);
+        $assignedCourse = auth()->user()->coordinator_course;
 
         if (!in_array($selectedCourse, $courses, true)) {
             return redirect()
                 ->route('coordinator.login')
                 ->with('error', 'Selecione o curso que você coordena para continuar.');
+        }
+
+        if ($assignedCourse !== $selectedCourse) {
+            $request->session()->forget('coordinator_course');
+
+            return redirect()
+                ->route('coordinator.login')
+                ->with('error', 'O curso selecionado não corresponde ao vínculo deste coordenador.');
         }
 
         return $next($request);

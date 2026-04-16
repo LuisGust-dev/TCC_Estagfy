@@ -17,7 +17,7 @@
     <form method="GET" action="{{ route('admin.coordinators.index') }}" class="mb-6">
         <div class="flex flex-col sm:flex-row gap-2">
             <input type="text" name="q" value="{{ $search ?? '' }}"
-                   placeholder="Pesquisar por nome ou e-mail..."
+                   placeholder="Pesquisar por nome, e-mail ou curso..."
                    class="w-full sm:max-w-md rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
             <button type="submit" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700">
                 Buscar
@@ -36,6 +36,7 @@
                     <tr>
                         <th class="text-left px-6 py-3 font-semibold">Nome</th>
                         <th class="text-left px-6 py-3 font-semibold">E-mail</th>
+                        <th class="text-left px-6 py-3 font-semibold">Curso</th>
                         <th class="text-left px-6 py-3 font-semibold">Perfil</th>
                         <th class="text-left px-6 py-3 font-semibold">Status</th>
                         <th class="text-left px-6 py-3 font-semibold">Cadastro</th>
@@ -47,6 +48,7 @@
                         <tr>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ $coordinator->name }}</td>
                             <td class="px-6 py-4 text-gray-600">{{ $coordinator->email }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ $coordinator->coordinator_course ?? 'Nao definido' }}</td>
                             <td class="px-6 py-4 text-gray-600">Coordenador</td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold {{ $coordinator->active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
@@ -93,7 +95,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-6 text-center text-gray-500">
+                            <td colspan="7" class="px-6 py-6 text-center text-gray-500">
                                 Nenhum coordenador encontrado.
                             </td>
                         </tr>

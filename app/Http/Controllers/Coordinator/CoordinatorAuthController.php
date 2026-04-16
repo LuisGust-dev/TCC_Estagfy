@@ -49,6 +49,12 @@ class CoordinatorAuthController extends Controller
             $currentUser = Auth::user();
 
             if ($currentUser->isCoordinator()) {
+                if ($currentUser->coordinator_course !== $validated['course']) {
+                    return back()
+                        ->withInput($request->only('email', 'course'))
+                        ->withErrors(['course' => 'Este coordenador não possui acesso ao curso selecionado.']);
+                }
+
                 $request->session()->put('coordinator_course', $validated['course']);
 
                 return redirect()->route('coordinator.calendar.index')->with('login_animation', 'coordinator');
@@ -67,6 +73,16 @@ class CoordinatorAuthController extends Controller
             return back()
                 ->withInput($request->only('email', 'course'))
                 ->withErrors(['email' => 'Credenciais inválidas para coordenador.']);
+        }
+
+        $user = Auth::user();
+
+        if ($user->coordinator_course !== $validated['course']) {
+            Auth::logout();
+
+            return back()
+                ->withInput($request->only('email', 'course'))
+                ->withErrors(['course' => 'Este coordenador não possui acesso ao curso selecionado.']);
         }
 
         $request->session()->regenerate();
