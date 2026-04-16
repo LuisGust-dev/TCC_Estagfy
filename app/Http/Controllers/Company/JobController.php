@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
 use App\Models\Job;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $company = auth()->user()->company;
-        $statusFilter = request()->query('status', 'all');
+        $statusFilter = $request->query('status', 'all');
 
         if (!in_array($statusFilter, ['all', 'active', 'inactive'], true)) {
             $statusFilter = 'all';
@@ -36,6 +37,21 @@ class JobController extends Controller
         } elseif ($statusFilter === 'inactive') {
             $jobs = $jobs->filter(fn (Job $job) => !$job->is_active)->values();
         }
+
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $jobs->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $jobs = new LengthAwarePaginator(
+            $currentItems,
+            $jobs->count(),
+            $perPage,
+            $currentPage,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]
+        );
 
         return view('company.jobs.index', compact('jobs', 'statusFilter'));
     }

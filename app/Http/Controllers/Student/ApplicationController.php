@@ -13,13 +13,16 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        $applications = Application::with('job.company.user')
-            ->where('student_id', Auth::id())
-            ->latest()
-            ->get();
+        $applicationsQuery = Application::with('job.company.user')
+            ->where('student_id', Auth::id());
 
-        $applicationsCount = $applications->count();
-        $applicationsLatestTs = optional($applications->max('updated_at'))?->timestamp ?? 0;
+        $applicationsCount = (clone $applicationsQuery)->count();
+        $applicationsLatestTs = optional((clone $applicationsQuery)->max('updated_at'))?->timestamp ?? 0;
+
+        $applications = $applicationsQuery
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
 
         return view('student.applications.index', compact(
             'applications',

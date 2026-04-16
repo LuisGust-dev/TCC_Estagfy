@@ -11,7 +11,7 @@
         <p class="text-gray-600">Acompanhe atualizações de vagas e candidatos</p>
     </div>
 
-    @if($notifications->isNotEmpty())
+    @if($notifications->count() > 0)
         <div class="mb-6 flex justify-end">
             <form method="POST" action="{{ route('company.notifications.clearAll') }}"
                   onsubmit="return confirm('Deseja apagar todas as notificações? Esta ação não pode ser desfeita.');">
@@ -79,6 +79,45 @@
 
 
     </div>
+
+    @if($notifications->hasPages())
+        <div class="mt-6 flex justify-end">
+            <div class="flex flex-col items-end text-right">
+                <nav class="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm" aria-label="Paginação">
+                    @if($notifications->onFirstPage())
+                        <span class="px-3 py-2 text-sm text-gray-300">Anterior</span>
+                    @else
+                        <a href="{{ $notifications->previousPageUrl() }}"
+                           class="px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                            Anterior
+                        </a>
+                    @endif
+
+                    @foreach($notifications->getUrlRange(1, $notifications->lastPage()) as $page => $url)
+                        @if($page == $notifications->currentPage())
+                            <span class="border-x border-gray-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}"
+                               class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    @if($notifications->hasMorePages())
+                        <a href="{{ $notifications->nextPageUrl() }}"
+                           class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                            Próxima
+                        </a>
+                    @else
+                        <span class="border-l border-gray-200 px-3 py-2 text-sm text-gray-300">Próxima</span>
+                    @endif
+                </nav>
+            </div>
+        </div>
+    @endif
 </div>
 
 <script>

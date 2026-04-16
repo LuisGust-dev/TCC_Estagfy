@@ -159,7 +159,11 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
 
     // 📌 Lista de notificações
     Route::get('/notifications', function () {
-        $notifications = auth()->user()->notifications;
+        $notifications = auth()->user()
+            ->notifications()
+            ->latest()
+            ->paginate(5)
+            ->withQueryString();
 
         $companyUsersByJobId = \App\Models\Job::query()
             ->with('company.user')
@@ -169,7 +173,7 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
                 return [$job->id => $job->company?->user];
             });
 
-        $notifications = $notifications->map(function ($notification) use ($companyUsersByJobId) {
+        $notifications->getCollection()->transform(function ($notification) use ($companyUsersByJobId) {
             $sender = null;
             $senderName = $notification->data['company_name'] ?? null;
 
@@ -194,8 +198,8 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
 
         return view('student.notifications.index', [
             'notifications' => $notifications,
-            'notificationsCount' => $notifications->count(),
-            'notificationsLatestTs' => optional($notifications->max('updated_at'))?->timestamp ?? 0,
+            'notificationsCount' => auth()->user()->notifications()->count(),
+            'notificationsLatestTs' => optional(auth()->user()->notifications()->max('updated_at'))?->timestamp ?? 0,
         ]);
     })->name('notifications.index');
 
@@ -392,13 +396,18 @@ Route::middleware(['auth', 'active', 'company'])
 
              // 📌 Lista de notificações da empresa
         Route::get('/notifications', function () {
-            $notifications = auth()->user()->notifications;
+            $notifications = auth()->user()
+                ->notifications()
+                ->latest()
+                ->paginate(5)
+                ->withQueryString();
+
             $studentsById = \App\Models\User::query()
                 ->whereIn('id', $notifications->pluck('data.student_id')->filter()->unique()->values())
                 ->get()
                 ->keyBy('id');
 
-            $notifications = $notifications->map(function ($notification) use ($studentsById) {
+            $notifications->getCollection()->transform(function ($notification) use ($studentsById) {
                 $sender = null;
 
                 if (!empty($notification->data['student_id'])) {

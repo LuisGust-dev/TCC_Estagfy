@@ -43,7 +43,8 @@ class JobCandidateController extends Controller
         $applications = $applicationsQuery
             ->with(['student.student', 'job'])
             ->latest()
-            ->get();
+            ->paginate(5)
+            ->withQueryString();
 
         $job = null;
 
@@ -67,7 +68,9 @@ class JobCandidateController extends Controller
             $applicationsQuery->where('status', $status);
         }
 
-        $applications = $applicationsQuery->get();
+        $applications = $applicationsQuery
+            ->paginate(5)
+            ->withQueryString();
 
         return view('company.jobs.candidates', compact('job', 'applications', 'status'));
     }

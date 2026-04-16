@@ -204,4 +204,43 @@
 
 </div>
 
+@if($jobs->hasPages())
+    <div class="mt-8 flex justify-end">
+        <div class="flex flex-col items-end text-right">
+            <nav class="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm" aria-label="Paginação">
+                @if($jobs->onFirstPage())
+                    <span class="px-3 py-2 text-sm text-gray-300">Anterior</span>
+                @else
+                    <a href="{{ $jobs->previousPageUrl() }}"
+                       class="px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Anterior
+                    </a>
+                @endif
+
+                @foreach($jobs->getUrlRange(1, $jobs->lastPage()) as $page => $url)
+                    @if($page == $jobs->currentPage())
+                        <span class="border-x border-gray-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}"
+                           class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                @if($jobs->hasMorePages())
+                    <a href="{{ $jobs->nextPageUrl() }}"
+                       class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Próxima
+                    </a>
+                @else
+                    <span class="border-l border-gray-200 px-3 py-2 text-sm text-gray-300">Próxima</span>
+                @endif
+            </nav>
+        </div>
+    </div>
+@endif
+
 @endsection

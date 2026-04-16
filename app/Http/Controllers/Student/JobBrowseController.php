@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Models\Application;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,6 +64,21 @@ class JobBrowseController extends Controller
 
         $jobsCount = $jobs->count();
         $jobsLatestTs = optional($jobs->max('updated_at'))?->timestamp ?? 0;
+
+        $perPage = 5;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentItems = $jobs->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $jobs = new LengthAwarePaginator(
+            $currentItems,
+            $jobsCount,
+            $perPage,
+            $currentPage,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]
+        );
 
         return view('student.jobs.index', compact(
             'jobs',

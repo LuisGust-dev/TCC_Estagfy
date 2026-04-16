@@ -121,7 +121,7 @@ Vagas de Estágio
                 {{ $studentCourse ?? 'Curso não definido' }}
             </span>
             <span class="inline-flex items-center rounded-full bg-white px-3 py-1 text-gray-600 border border-gray-200">
-                {{ $jobs->count() }} vaga(s) encontrada(s)
+                {{ $jobs->total() }} vaga(s) encontrada(s)
             </span>
 
             @if(filled((string) $search) || filled((string) $keyword) || ($minVacancies ?? 0) > 0 || is_numeric($salaryMin) || is_numeric($salaryMax))
@@ -299,4 +299,41 @@ Vagas de Estágio
         </div>
     @endforelse
 </div>
+
+@if($jobs->hasPages())
+    <div class="mt-8 flex justify-end">
+        <nav class="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm" aria-label="Paginação">
+            @if($jobs->onFirstPage())
+                <span class="px-3 py-2 text-sm text-gray-300">Anterior</span>
+            @else
+                <a href="{{ $jobs->previousPageUrl() }}"
+                   class="px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                    Anterior
+                </a>
+            @endif
+
+            @foreach($jobs->getUrlRange(1, $jobs->lastPage()) as $page => $url)
+                @if($page == $jobs->currentPage())
+                    <span class="border-x border-gray-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700">
+                        {{ $page }}
+                    </span>
+                @else
+                    <a href="{{ $url }}"
+                       class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        {{ $page }}
+                    </a>
+                @endif
+            @endforeach
+
+            @if($jobs->hasMorePages())
+                <a href="{{ $jobs->nextPageUrl() }}"
+                   class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                    Próxima
+                </a>
+            @else
+                <span class="border-l border-gray-200 px-3 py-2 text-sm text-gray-300">Próxima</span>
+            @endif
+        </nav>
+    </div>
+@endif
 @endsection
