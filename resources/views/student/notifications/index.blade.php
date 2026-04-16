@@ -114,37 +114,4 @@
     </div>
 @endif
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const snapshot = {
-            notificationsCount: Number(@json($notificationsCount ?? 0)),
-            notificationsLatestTs: Number(@json($notificationsLatestTs ?? 0)),
-        };
-
-        const pollIfChanged = async () => {
-            if (document.hidden) return;
-
-            try {
-                const response = await fetch('{{ route('student.realtime.summary') }}', {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const changed = Number(data.notifications_count || 0) !== snapshot.notificationsCount
-                    || Number(data.notifications_latest_ts || 0) !== snapshot.notificationsLatestTs;
-
-                if (changed) {
-                    window.location.reload();
-                }
-            } catch (error) {
-                console.warn('Falha ao sincronizar notificações do aluno.', error);
-            }
-        };
-
-        setInterval(pollIfChanged, 6000);
-    });
-</script>
-
 @endsection

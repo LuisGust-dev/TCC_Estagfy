@@ -147,14 +147,6 @@
     </div>
 @endif
 
-@php
-    $count = auth()->user()->unreadNotifications->count();
-    $unreadMessagesCount = \App\Models\Message::where('student_id', auth()->id())
-        ->where('sender_id', '!=', auth()->id())
-        ->whereNull('read_at')
-        ->count();
-@endphp
-
 <div class="relative flex min-h-screen">
 
     {{-- SIDEBAR --}}
@@ -304,8 +296,8 @@
                 </span>
 
                 <span id="student-notification-badge"
-                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ $count > 0 ? '' : 'hidden' }}">
-                    {{ $count }}
+                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ ($studentUnreadNotificationsCount ?? 0) > 0 ? '' : 'hidden' }}">
+                    {{ $studentUnreadNotificationsCount ?? 0 }}
                 </span>
             </a>
 
@@ -325,8 +317,8 @@
                 </span>
 
                 <span id="student-message-badge"
-                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ $unreadMessagesCount > 0 ? '' : 'hidden' }}">
-                    {{ $unreadMessagesCount }}
+                      class="sidebar-badge bg-red-500 text-white text-xs px-2 py-0.5 rounded-full {{ ($studentUnreadMessagesCount ?? 0) > 0 ? '' : 'hidden' }}">
+                    {{ $studentUnreadMessagesCount ?? 0 }}
                 </span>
             </a>
 
@@ -448,6 +440,8 @@
         if (!notificationBadge && !messageBadge) return;
 
         const pollSummary = async () => {
+            if (document.hidden) return;
+
             try {
                 const response = await fetch('{{ route('student.realtime.summary') }}', {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -473,7 +467,7 @@
             }
         };
 
-        setInterval(pollSummary, 6000);
+        setInterval(pollSummary, 15000);
     });
 </script>
 @if(session('login_animation') === 'student')

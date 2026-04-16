@@ -147,39 +147,6 @@ Vagas de Estágio
     });
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const snapshot = {
-            jobsCount: Number(@json($jobsCount ?? 0)),
-            jobsLatestTs: Number(@json($jobsLatestTs ?? 0)),
-        };
-
-        const pollIfChanged = async () => {
-            if (document.hidden) return;
-
-            try {
-                const response = await fetch('{{ route('student.realtime.summary') }}', {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                });
-
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const changed = Number(data.jobs_count || 0) !== snapshot.jobsCount
-                    || Number(data.jobs_latest_ts || 0) !== snapshot.jobsLatestTs;
-
-                if (changed) {
-                    window.location.reload();
-                }
-            } catch (error) {
-                console.warn('Falha ao sincronizar vagas do aluno.', error);
-            }
-        };
-
-        setInterval(pollIfChanged, 6000);
-    });
-</script>
-
 <div class="space-y-6">
     @forelse($jobs as $job)
         <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-100">

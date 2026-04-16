@@ -218,17 +218,19 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
                 $query->whereRaw('1 = 0');
             });
 
-        $jobsCount = (clone $jobsQuery)->count();
-        $jobsLatest = (clone $jobsQuery)->max('updated_at');
+        $jobsSummary = (clone $jobsQuery)
+            ->selectRaw('COUNT(*) as total, MAX(updated_at) as latest_updated_at')
+            ->first();
 
-        $applicationsQuery = \App\Models\Application::query()
-            ->where('student_id', $user->id);
-        $applicationsCount = (clone $applicationsQuery)->count();
-        $applicationsLatest = (clone $applicationsQuery)->max('updated_at');
+        $applicationsSummary = \App\Models\Application::query()
+            ->where('student_id', $user->id)
+            ->selectRaw('COUNT(*) as total, MAX(updated_at) as latest_updated_at')
+            ->first();
 
-        $notificationsQuery = $user->notifications();
-        $notificationsCount = (clone $notificationsQuery)->count();
-        $notificationsLatest = (clone $notificationsQuery)->max('updated_at');
+        $notificationsSummary = $user->notifications()
+            ->selectRaw('COUNT(*) as total, MAX(updated_at) as latest_updated_at, SUM(CASE WHEN read_at IS NULL THEN 1 ELSE 0 END) as unread_total')
+            ->first();
+
         $unreadMessages = \App\Models\Message::query()
             ->where('student_id', $user->id)
             ->where('sender_id', '!=', $user->id)
@@ -236,14 +238,14 @@ Route::view('/fluxo-estagio', 'student.internship-flow')
             ->count();
 
         return response()->json([
-            'unread_notifications' => $user->unreadNotifications()->count(),
+            'unread_notifications' => (int) ($notificationsSummary->unread_total ?? 0),
             'unread_messages' => $unreadMessages,
-            'jobs_count' => $jobsCount,
-            'jobs_latest_ts' => $jobsLatest ? strtotime((string) $jobsLatest) : 0,
-            'applications_count' => $applicationsCount,
-            'applications_latest_ts' => $applicationsLatest ? strtotime((string) $applicationsLatest) : 0,
-            'notifications_count' => $notificationsCount,
-            'notifications_latest_ts' => $notificationsLatest ? strtotime((string) $notificationsLatest) : 0,
+            'jobs_count' => (int) ($jobsSummary->total ?? 0),
+            'jobs_latest_ts' => !empty($jobsSummary->latest_updated_at) ? strtotime((string) $jobsSummary->latest_updated_at) : 0,
+            'applications_count' => (int) ($applicationsSummary->total ?? 0),
+            'applications_latest_ts' => !empty($applicationsSummary->latest_updated_at) ? strtotime((string) $applicationsSummary->latest_updated_at) : 0,
+            'notifications_count' => (int) ($notificationsSummary->total ?? 0),
+            'notifications_latest_ts' => !empty($notificationsSummary->latest_updated_at) ? strtotime((string) $notificationsSummary->latest_updated_at) : 0,
         ]);
     })->name('realtime.summary');
 
@@ -434,10 +436,24 @@ Route::middleware(['auth', 'active', 'company'])
             $jobsQuery = \App\Models\Job::query()
                 ->where('company_id', $companyId);
 
-            $jobIds = (clone $jobsQuery)->pluck('id');
+            $jobsLatest = (clone $jobsQuery)->max('updated_at');
+            $activeJobsCount = (clone $jobsQuery)->openForApplications()->count();
 
-            $applicationsQuery = \App\Models\Application::query()
-                ->whereIn('job_id', $jobIds);
+            $applicationsSummary = \App\Models\Application::query()
+                ->whereHas('job', function ($query) use ($companyId) {
+                    $query->where('company_id', $companyId);
+                })
+                ->selectRaw("
+                    COUNT(*) as total,
+                    SUM(CASE WHEN status = 'aprovado' THEN 1 ELSE 0 END) as approved_total,
+                    SUM(CASE WHEN status = 'em_analise' THEN 1 ELSE 0 END) as in_analysis_total,
+                    MAX(updated_at) as latest_updated_at
+                ")
+                ->first();
+
+            $notificationsSummary = $user->notifications()
+                ->selectRaw('SUM(CASE WHEN read_at IS NULL THEN 1 ELSE 0 END) as unread_total')
+                ->first();
 
             $unreadMessages = \App\Models\Message::query()
                 ->where('company_id', $user->id)
@@ -446,14 +462,14 @@ Route::middleware(['auth', 'active', 'company'])
                 ->count();
 
             return response()->json([
-                'unread_notifications' => $user->unreadNotifications()->count(),
+                'unread_notifications' => (int) ($notificationsSummary->unread_total ?? 0),
                 'unread_messages' => $unreadMessages,
-                'dashboard_vagas_ativas' => (clone $jobsQuery)->openForApplications()->count(),
-                'dashboard_candidatos' => (clone $applicationsQuery)->count(),
-                'dashboard_contratacoes' => (clone $applicationsQuery)->where('status', 'aprovado')->count(),
-                'dashboard_em_analise' => (clone $applicationsQuery)->where('status', 'em_analise')->count(),
-                'dashboard_jobs_latest_ts' => (($latest = (clone $jobsQuery)->max('updated_at')) ? strtotime((string) $latest) : 0),
-                'dashboard_apps_latest_ts' => (($latest = (clone $applicationsQuery)->max('updated_at')) ? strtotime((string) $latest) : 0),
+                'dashboard_vagas_ativas' => $activeJobsCount,
+                'dashboard_candidatos' => (int) ($applicationsSummary->total ?? 0),
+                'dashboard_contratacoes' => (int) ($applicationsSummary->approved_total ?? 0),
+                'dashboard_em_analise' => (int) ($applicationsSummary->in_analysis_total ?? 0),
+                'dashboard_jobs_latest_ts' => $jobsLatest ? strtotime((string) $jobsLatest) : 0,
+                'dashboard_apps_latest_ts' => !empty($applicationsSummary->latest_updated_at) ? strtotime((string) $applicationsSummary->latest_updated_at) : 0,
             ]);
         })->name('realtime.summary');
 

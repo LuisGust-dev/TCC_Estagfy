@@ -120,13 +120,4 @@
     @endif
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        setInterval(() => {
-            if (document.hidden) return;
-            window.location.reload();
-        }, 6000);
-    });
-</script>
-
 @endsection

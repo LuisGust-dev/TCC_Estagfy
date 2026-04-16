@@ -144,11 +144,6 @@
 @endif
 
 @php
-    $unreadCount = auth()->user()->unreadNotifications->count();
-    $unreadMessagesCount = \App\Models\Message::where('company_id', auth()->id())
-        ->where('sender_id', '!=', auth()->id())
-        ->whereNull('read_at')
-        ->count();
     $isCandidatesRoute = request()->routeIs('company.candidates.*') || request()->routeIs('company.jobs.candidates');
     $isJobsRoute = request()->routeIs('company.jobs.*') && !$isCandidatesRoute;
 @endphp
@@ -245,8 +240,8 @@
                 </span>
 
                 <span id="company-message-badge"
-                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ $unreadMessagesCount > 0 ? '' : 'hidden' }}">
-                    {{ $unreadMessagesCount }}
+                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ ($companyUnreadMessagesCount ?? 0) > 0 ? '' : 'hidden' }}">
+                    {{ $companyUnreadMessagesCount ?? 0 }}
                 </span>
             </a>
 
@@ -264,8 +259,8 @@
                 </span>
 
                 <span id="company-notification-badge"
-                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ $unreadCount > 0 ? '' : 'hidden' }}">
-                    {{ $unreadCount }}
+                      class="sidebar-badge bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded-full {{ ($companyUnreadNotificationsCount ?? 0) > 0 ? '' : 'hidden' }}">
+                    {{ $companyUnreadNotificationsCount ?? 0 }}
                 </span>
             </a>
 
@@ -382,6 +377,8 @@
         if (!notificationBadge && !messageBadge) return;
 
         const pollSummary = async () => {
+            if (document.hidden) return;
+
             try {
                 const response = await fetch('{{ route('company.realtime.summary') }}', {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
@@ -407,7 +404,7 @@
             }
         };
 
-        setInterval(pollSummary, 6000);
+        setInterval(pollSummary, 15000);
     });
 </script>
 @if(session('login_animation') === 'company')
