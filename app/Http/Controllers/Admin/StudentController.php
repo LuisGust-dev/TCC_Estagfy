@@ -30,7 +30,7 @@ class StudentController extends Controller
 
         $students = $studentsQuery
             ->latest()
-            ->paginate(20)
+            ->paginate(5)
             ->withQueryString();
 
         return view('admin.students.index', compact('students', 'search'));

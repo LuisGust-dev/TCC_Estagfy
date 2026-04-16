@@ -22,7 +22,7 @@ class InternalRoleController extends Controller
                 });
             })
             ->latest()
-            ->paginate(20)
+            ->paginate(5)
             ->withQueryString();
 
         return view('admin.coordinators.index', compact('coordinators', 'search'));
@@ -41,7 +41,7 @@ class InternalRoleController extends Controller
                 });
             })
             ->latest()
-            ->paginate(20)
+            ->paginate(5)
             ->withQueryString();
 
         return view('admin.admins.index', compact('admins', 'search'));

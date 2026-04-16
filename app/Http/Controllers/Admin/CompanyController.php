@@ -30,7 +30,7 @@ class CompanyController extends Controller
 
         $companies = $companiesQuery
             ->latest('id')
-            ->paginate(20)
+            ->paginate(5)
             ->withQueryString();
 
         return view('admin.companies.index', compact('companies', 'search'));
