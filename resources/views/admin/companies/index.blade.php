@@ -113,9 +113,42 @@
         </div>
     </div>
 
-    <div class="mt-6">
-        {{ $companies->links() }}
-    </div>
+    @if($companies->hasPages())
+        <div class="mt-6 flex justify-end">
+            <nav class="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm" aria-label="Paginação">
+                @if($companies->onFirstPage())
+                    <span class="px-3 py-2 text-sm text-gray-300">Anterior</span>
+                @else
+                    <a href="{{ $companies->previousPageUrl() }}"
+                       class="px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Anterior
+                    </a>
+                @endif
+
+                @foreach($companies->getUrlRange(1, $companies->lastPage()) as $page => $url)
+                    @if($page == $companies->currentPage())
+                        <span class="border-x border-gray-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-700">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}"
+                           class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                @if($companies->hasMorePages())
+                    <a href="{{ $companies->nextPageUrl() }}"
+                       class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Próxima
+                    </a>
+                @else
+                    <span class="border-l border-gray-200 px-3 py-2 text-sm text-gray-300">Próxima</span>
+                @endif
+            </nav>
+        </div>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

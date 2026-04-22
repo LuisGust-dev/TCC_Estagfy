@@ -103,9 +103,42 @@
         </div>
     </div>
 
-    <div class="mt-6">
-        {{ $admins->links() }}
-    </div>
+    @if($admins->hasPages())
+        <div class="mt-6 flex justify-end">
+            <nav class="inline-flex overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm" aria-label="Paginação">
+                @if($admins->onFirstPage())
+                    <span class="px-3 py-2 text-sm text-gray-300">Anterior</span>
+                @else
+                    <a href="{{ $admins->previousPageUrl() }}"
+                       class="px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Anterior
+                    </a>
+                @endif
+
+                @foreach($admins->getUrlRange(1, $admins->lastPage()) as $page => $url)
+                    @if($page == $admins->currentPage())
+                        <span class="border-x border-gray-200 bg-indigo-50 px-3 py-2 text-sm font-semibold text-indigo-700">
+                            {{ $page }}
+                        </span>
+                    @else
+                        <a href="{{ $url }}"
+                           class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                            {{ $page }}
+                        </a>
+                    @endif
+                @endforeach
+
+                @if($admins->hasMorePages())
+                    <a href="{{ $admins->nextPageUrl() }}"
+                       class="border-l border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50">
+                        Próxima
+                    </a>
+                @else
+                    <span class="border-l border-gray-200 px-3 py-2 text-sm text-gray-300">Próxima</span>
+                @endif
+            </nav>
+        </div>
+    @endif
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

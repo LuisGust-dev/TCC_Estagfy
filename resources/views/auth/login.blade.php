@@ -74,18 +74,6 @@
         </div>
 
         <div class="estagfy-login-card rounded-3xl border border-white/80 bg-white/88 p-6 sm:p-8 backdrop-blur">
-            <div class="mb-5 flex items-center gap-3 rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
-                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow">
-                    <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none">
-                        <path d="M12 2L4 6v6c0 4.4 3.2 8.5 8 9.5 4.8-1 8-5.1 8-9.5V6l-8-4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-wide text-blue-700">Área segura</p>
-                    <p class="text-xs text-slate-600">Acesso para aluno, empresa e coordenação</p>
-                </div>
-            </div>
-
             <h1 class="text-2xl font-bold text-gray-900">Bem-vindo de volta</h1>
             <p class="text-gray-500 mb-8">
                 Entre com suas credenciais para acessar sua conta
@@ -226,7 +214,6 @@
     </div>
 </body>
 </html>
-
 
 
 

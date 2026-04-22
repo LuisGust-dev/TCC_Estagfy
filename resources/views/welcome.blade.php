@@ -671,19 +671,20 @@
             <article class="scroll-reveal rounded-[2rem] border border-emerald-100 bg-white p-8 shadow-sm lg:col-span-2" style="--reveal-delay: 220ms;">
                 <div class="flex flex-col gap-6">
                     <div class="flex items-start gap-5">
-                    <div class="flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-cyan-600 text-center text-white ring-4 ring-emerald-50 shadow-sm">
-                        <span class="text-3xl font-black tracking-tight">IF</span>
-                        <span class="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-50">Baiano</span>
-                        <span class="mt-2 text-[10px] leading-4 text-emerald-50/90">Campus<br>Guanambi</span>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
-                            Instituição
-                        </span>
-                        <h3 class="mt-4 text-[1.9rem] font-bold leading-tight tracking-tight text-slate-900">Instituto Federal Baiano</h3>
-                        <p class="mt-1 text-sm font-medium text-slate-500">Campus Guanambi</p>
+                        <div class="flex h-24 w-24 shrink-0 items-center justify-center rounded-3xl border border-emerald-100 bg-white ring-4 ring-emerald-50 shadow-sm">
+                            <img
+                                src="{{ asset('images/logo2.png') }}"
+                                alt="Logo do IF Baiano"
+                                class="h-16 w-16 object-contain"
+                            >
                         </div>
-                    </div>
+                        <div class="min-w-0 flex-1">
+                            <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                                Instituição
+                            </span>
+                            <h3 class="mt-4 text-[1.9rem] font-bold leading-tight tracking-tight text-slate-900">Instituto Federal Baiano</h3>
+                            <p class="mt-1 text-sm font-medium text-slate-500">Campus Guanambi</p>
+                        </div>
                     </div>
                     <p class="text-sm leading-7 text-slate-600">
                         Instituição de ensino vinculada à formação acadêmica e profissional dos estudantes, contexto em que o EstagFy foi pensado como apoio à organização, acompanhamento e valorização do estágio supervisionado.
