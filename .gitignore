@@ -17,3 +17,9 @@ yarn-error.log
 /.idea
 /.vscode
 /docs
+/out
+/composer-setup.php
+/composer.phar
+/start-dev.ps1
+/start-dev.psi
+/stop-dev.ps1
