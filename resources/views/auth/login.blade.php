@@ -105,10 +105,7 @@
                 <div class="flex justify-between items-center">
                     <label class="block text-sm font-medium text-gray-700">Senha</label>
 
-                    <a href="{{ url('/forgot-password') }}"
-                       class="text-sm text-blue-600 hover:underline">
-                        Esqueceu a senha?
-                    </a>
+                    
                 </div>
 
                 <input
